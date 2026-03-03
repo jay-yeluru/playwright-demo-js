@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright Test Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f9f9f9; color: #333; }
+    h1 { margin-bottom: 1.5rem; }
+    table { border-collapse: collapse; width: 100%; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border-radius: 6px; overflow: hidden; }
+    th { background: #24292f; color: white; padding: 10px 14px; text-align: left; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+    tr:last-child td { border-bottom: none; }
+    tr.pass:hover { background: #f0fff4; }
+    tr.fail:hover { background: #fff0f0; }
+    .pass-count { color: #2da44e; font-weight: bold; }
+    .fail-count { color: #cf222e; font-weight: bold; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>🎭 Playwright Test Dashboard</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Branch</th>
+        <th>Browser</th>
+        <th>Passed</th>
+        <th>Failed</th>
+        <th>Total</th>
+        <th>Report</th>
+      </tr>
+    </thead>
+    <tbody>
+  <tr class="fail">
+    <td>❌</td>
+    <td>2026-03-03 13:22:02 UTC</td>
+    <td><code>develop</code></td>
+    <td>Run Tests</td>
+    <td class="pass-count">0</td>
+    <td class="fail-count">1</td>
+    <td>1</td>
+    <td><a href="reports/develop/22624852819/index.html" target="_blank">View →</a></td>
+  </tr></tbody>
+  </table>
+</body>
+</html>

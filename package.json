@@ -1,7 +1,7 @@
 {
   "name": "playwright-demo-js",
   "version": "1.0.0",
-  "description": "Playwright demo with java script",
+  "description": "Playwright demo with JavaScript",
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://JayakrishnaYeluru@github.com/JayakrishnaYeluru/playwright-demo-js.git"
+    "url": "git+https://jay-yeluru@github.com/jay-yeluru/playwright-demo-js.git"
   },
   "keywords": [
     "Playwright",
@@ -24,23 +24,19 @@
   "author": "Jay Yeluru",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JayakrishnaYeluru/playwright-demo-js/issues"
+    "url": "https://github.com/jay-yeluru/playwright-demo-js/issues"
   },
-  "homepage": "https://github.com/JayakrishnaYeluru/playwright-demo-js#readme",
+  "homepage": "https://github.com/jay-yeluru/playwright-demo-js#readme",
   "dependencies": {
-    "allure-playwright": "^2.0.0-beta.16",
-    "fs": "^0.0.1-security",
-    "lts": "^1.2.0",
-    "n": "^9.0.0",
-    "playwright": "^1.24.2",
-    "prettier": "^2.6.2",
-    "prune": "^0.0.2"
+    "allure-playwright": "^3.4.5",    
+    "playwright": "^1.58.2",
+    "prettier": "^3.8.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.31.1",
-    "allure-playwright": "^2.0.0-beta.16",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "saucectl": "^0.133.0"
+    "@playwright/test": "^1.57.0",
+    "allure-playwright": "^3.4.5",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.2.3",
+    "saucectl": "^0.175.0"
   }
 }

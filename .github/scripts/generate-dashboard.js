@@ -1,22 +1,39 @@
+// @ts-check
 const fs = require("fs");
-const results = JSON.parse(
-  fs.readFileSync(`${process.env.REPORT_PATH}/test-results.json`, "utf8"),
+const path = require("path");
+
+/** @typedef {{ ok: boolean }} Spec */
+/** @typedef {{ specs: Spec[] }} Suite */
+/** @typedef {{ suites: Suite[] }} TestResults */
+
+/** @typedef {{ date: string, branch: string, browser: string, passed: number, failed: number, total: number, status: string, reportUrl: string, runId: string }} RunEntry */
+
+// ── Environment ───────────────────────────────────────────────────────────────
+
+const BRANCH = /** @type {string} */ (process.env.BRANCH);
+const RUN_ID = /** @type {string} */ (process.env.RUN_ID);
+const BROWSER = /** @type {string} */ (process.env.BROWSER);
+const REPORT_PATH = /** @type {string} */ (process.env.REPORT_PATH);
+const KEEP_RUNS = parseInt(process.env.KEEP_RUNS ?? "10", 10);
+
+// ── Parse test results ────────────────────────────────────────────────────────
+
+const results = /** @type {TestResults} */ (
+  JSON.parse(fs.readFileSync(`${REPORT_PATH}/test-results.json`, "utf8"))
 );
-const passed = results.suites
-  .flatMap((s) => s.specs)
-  .filter((s) => s.ok).length;
-const failed = results.suites
-  .flatMap((s) => s.specs)
-  .filter((s) => !s.ok).length;
+const specs = results.suites.flatMap(/** @param {Suite} s */ (s) => s.specs);
+const passed = specs.filter(/** @param {Spec} s */ (s) => s.ok).length;
+const failed = specs.filter(/** @param {Spec} s */ (s) => !s.ok).length;
 const total = passed + failed;
 const status = failed === 0 ? "✅" : "❌";
 const date =
   new Date().toISOString().replace("T", " ").substring(0, 19) + " UTC";
-
-const { BRANCH, RUN_ID, BROWSER } = process.env;
 const reportUrl = `reports/${BRANCH}/${RUN_ID}/index.html`;
 
+// ── Update history ────────────────────────────────────────────────────────────
+
 const historyFile = "dashboard.json";
+/** @type {RunEntry[]} */
 const history = fs.existsSync(historyFile)
   ? JSON.parse(fs.readFileSync(historyFile, "utf8"))
   : [];
@@ -35,9 +52,37 @@ history.unshift({
 if (history.length > 100) history.splice(100);
 fs.writeFileSync(historyFile, JSON.stringify(history, null, 2));
 
+// ── Clean up old runs ─────────────────────────────────────────────────────────
+
+const branchDir = path.join("reports", BRANCH);
+
+if (fs.existsSync(branchDir)) {
+  const runs = fs
+    .readdirSync(branchDir)
+    .filter((f) => fs.statSync(path.join(branchDir, f)).isDirectory())
+    .sort((a, b) => b.localeCompare(a));
+
+  const oldRuns = runs.slice(KEEP_RUNS);
+
+  if (oldRuns.length === 0) {
+    console.log(
+      `Nothing to clean up (≤ ${KEEP_RUNS} runs found for branch: ${BRANCH}).`,
+    );
+  } else {
+    for (const run of oldRuns) {
+      const runPath = path.join(branchDir, run);
+      fs.rmSync(runPath, { recursive: true, force: true });
+      console.log(`Removed old run: ${runPath}`);
+    }
+    console.log(`Kept latest ${KEEP_RUNS} runs for branch: ${BRANCH}.`);
+  }
+}
+
+// ── Generate dashboard HTML ───────────────────────────────────────────────────
+
 const rows = history
   .map(
-    (r) => `
+    /** @param {RunEntry} r */ (r) => `
   <tr class="${r.failed > 0 ? "fail" : "pass"}">
     <td>${r.status}</td>
     <td>${r.date}</td>

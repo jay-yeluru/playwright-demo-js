@@ -6,7 +6,7 @@ const isCI = !!process.env.CI;
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 const config = {
   testDir: "./e2e",
-  outputDir: "reports/test-artifacts",
+  outputDir: "test-artifacts",
   timeout: 30 * 1000,
   fullyParallel: true,
   forbidOnly: isCI,

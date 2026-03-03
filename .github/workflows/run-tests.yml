@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps ${{ inputs.browser }}
+        run: npx playwright install --with-deps
 
       - name: Run tests
         run: npm run test:${{ inputs.browser }}

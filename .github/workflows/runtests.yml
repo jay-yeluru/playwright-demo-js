@@ -5,7 +5,7 @@ on:
     inputs:
       browser:
         type: choice
-        description: 'Browser'
+        description: "Browser"
         default: chrome
         required: true
         options:
@@ -42,12 +42,12 @@ jobs:
       - name: Run tests
         run: npm run test:${{ inputs.browser }}
 
-      - name: Upload Playwright report
+      - name: Upload reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: reports
+          path: reports/
           retention-days: 30
 
   publish_report:
@@ -58,7 +58,7 @@ jobs:
     continue-on-error: true
 
     env:
-      REPORT_PATH: reports/${{ github.ref_name }}/${{ github.run_id }}/${{ github.run_attempt }}
+      REPORT_PATH: reports/${{ github.ref_name }}/${{ github.run_id }}
 
     steps:
       - name: Checkout gh-pages branch
@@ -66,27 +66,40 @@ jobs:
         with:
           ref: gh-pages
 
+      - name: Checkout main branch (for scripts)
+        uses: actions/checkout@v4
+        with:
+          path: source
+
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Download Playwright report artifact
+      - name: Download reports
         uses: actions/download-artifact@v4
         with:
-          name: playwright-report
+          name: reports
           path: ${{ env.REPORT_PATH }}
 
-      - name: Commit and push report
+      - name: Regenerate dashboard
+        env:
+          BRANCH: ${{ github.ref_name }}
+          RUN_ID: ${{ github.run_id }}
+          BROWSER: ${{ inputs.browser }}
+          REPORT_PATH: ${{ env.REPORT_PATH }}
+        run: node source/.github/scripts/generate-dashboard.js
+
+      - name: Commit and push
         timeout-minutes: 3
         run: |
           git add .
-          git commit -m "ci: add report for run ${{ github.run_id }} (attempt ${{ github.run_attempt }})"
+          git commit -m "ci: add report for run ${{ github.run_id }} (${{ inputs.browser }})"
 
           until git push; do
             git pull --rebase || { echo "Rebase failed. Manual review required."; exit 1; }
           done
 
-      - name: Annotate workflow with report URL
+      - name: Annotate workflow with dashboard URL
         run: |
-          echo "::notice title=📋 Published Playwright Report::https://jay-yeluru.github.io/playwright-demo-js/$REPORT_PATH"
+          echo "::notice title=📋 Playwright Dashboard::https://jay-yeluru.github.io/playwright-demo-js/"

@@ -1,0 +1,69 @@
+name: Publish Report
+
+on:
+  workflow_run:
+    workflows: ["Run Tests"]
+    types:
+      - completed
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  publish_report:
+    name: Publish Report to GitHub Pages
+    if: always()
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    env:
+      REPORT_PATH: reports/${{ github.event.workflow_run.head_branch }}/${{ github.event.workflow_run.id }}
+
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch dashboard script
+        run: |
+          curl -fsSL \
+            "https://raw.githubusercontent.com/jay-yeluru/playwright-demo-js/${{ github.event.workflow_run.head_sha }}/.github/scripts/generate-dashboard.js" \
+            -o generate-dashboard.js
+
+      - name: Download reports artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: reports
+          path: ${{ env.REPORT_PATH }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Regenerate dashboard
+        env:
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          BROWSER: ${{ github.event.workflow_run.name }}
+          REPORT_PATH: ${{ env.REPORT_PATH }}
+          KEEP_RUNS: 10
+        run: node generate-dashboard.js
+
+      - name: Commit and push
+        timeout-minutes: 3
+        run: |
+          git add index.html dashboard.json reports/
+          git commit -m "ci: add report for run ${{ github.event.workflow_run.id }}"
+
+          until git push; do
+            git pull --rebase || { echo "Rebase failed. Manual review required."; exit 1; }
+          done
+
+      - name: Annotate workflow with dashboard URL
+        run: |
+          echo "::notice title=📋 Playwright Dashboard::https://jay-yeluru.github.io/playwright-demo-js/"

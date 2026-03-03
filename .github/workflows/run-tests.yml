@@ -1,0 +1,51 @@
+name: Run Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      browser:
+        type: choice
+        description: "Browser"
+        default: chrome
+        required: true
+        options:
+          - chrome
+          - firefox
+          - safari
+          - edge
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: Run Tests (${{ inputs.browser }})
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ inputs.browser }}
+
+      - name: Run tests
+        run: npm run test:${{ inputs.browser }}
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports
+          path: reports/
+          retention-days: 30

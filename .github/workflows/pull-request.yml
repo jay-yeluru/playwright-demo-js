@@ -8,7 +8,6 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      
       # Check out the repository
       - uses: actions/checkout@v1
 

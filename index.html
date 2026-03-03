@@ -62,7 +62,7 @@
     .sparkline polyline { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .latest-banner {
       background: var(--surface); border: 1px solid var(--border);
-      border-left: 3px solid var(--fail);
+      border-left: 3px solid var(--pass);
       border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem;
       display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
       animation: slideUp 0.4s 0.25s ease both;
@@ -120,23 +120,23 @@
       </div>
       <div class="header-meta">
         <div><span class="live-dot"></span>Auto-updated on every run</div>
-        <div style="margin-top:4px">Last run: 2026-03-03 14:29:39 UTC</div>
+        <div style="margin-top:4px">Last run: 2026-03-03 14:44:43 UTC</div>
       </div>
     </header>
 
     <div class="stats-grid">
       <div class="stat-card card-total">
         <div class="stat-label">Total Runs</div>
-        <div class="stat-value">4</div>
+        <div class="stat-value">5</div>
         <div class="stat-sub">all time
           <svg class="sparkline" width="120" height="32" viewBox="0 0 120 32">
-            <polyline points="0,32 40,32 80,32 120,32" />
+            <polyline points="0,32 30,32 60,32 90,32 120,0" />
           </svg>
         </div>
       </div>
       <div class="stat-card card-pass">
         <div class="stat-label">Passed Runs</div>
-        <div class="stat-value">0</div>
+        <div class="stat-value">1</div>
         <div class="stat-sub">all tests green</div>
       </div>
       <div class="stat-card card-fail">
@@ -146,7 +146,7 @@
       </div>
       <div class="stat-card card-rate">
         <div class="stat-label">Pass Rate</div>
-        <div class="stat-value">0%</div>
+        <div class="stat-value">20%</div>
         <div class="stat-sub">across all runs</div>
       </div>
     </div>
@@ -155,19 +155,19 @@
     <div class="latest-banner">
       <div class="latest-label">Latest</div>
       <div class="latest-info">
-        <span class="latest-stat"><strong>master</strong></span>
+        <span class="latest-stat"><strong>develop</strong></span>
         <span class="latest-stat">Run Tests</span>
-        <span class="latest-stat" style="color:var(--pass)">✓ 0 passed</span>
-        <span class="latest-stat" style="color:var(--fail)">✗ 1 failed</span>
-        <span class="latest-stat">2026-03-03 14:29:39 UTC</span>
+        <span class="latest-stat" style="color:var(--pass)">✓ 1 passed</span>
+        
+        <span class="latest-stat">2026-03-03 14:44:43 UTC</span>
       </div>
-      <a class="view-btn" href="reports/master/22627515061/index.html" target="_blank">Latest Report <span>→</span></a>
+      <a class="view-btn" href="reports/develop/22628154305/index.html" target="_blank">Latest Report <span>→</span></a>
     </div>
 
     <div class="table-wrap">
       <div class="table-header">
         <span class="table-title">Run History</span>
-        <span class="run-count">4 runs</span>
+        <span class="run-count">5 runs</span>
       </div>
       <table>
         <thead>
@@ -177,7 +177,22 @@
           </tr>
         </thead>
         <tbody>
-    <tr class="fail" style="animation-delay:0s">
+    <tr class="pass" style="animation-delay:0s">
+      <td><span class="badge badge-pass">PASS</span></td>
+      <td class="date-cell">2026-03-03 14:44:43 UTC</td>
+      <td><span class="branch-tag">develop</span></td>
+      <td>🌐 Run Tests</td>
+      <td class="pass-count">1</td>
+      <td class="fail-count zero">0</td>
+      <td>
+        <div class="progress-wrap">
+          <div class="progress-bar progress-pass" style="width:100%"></div>
+          <span class="progress-label">100%</span>
+        </div>
+      </td>
+      <td><a class="view-btn" href="reports/develop/22628154305/index.html" target="_blank">View <span>→</span></a></td>
+    </tr>
+    <tr class="fail" style="animation-delay:0.04s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-03 14:29:39 UTC</td>
       <td><span class="branch-tag">master</span></td>
@@ -192,7 +207,7 @@
       </td>
       <td><a class="view-btn" href="reports/master/22627515061/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.04s">
+    <tr class="fail" style="animation-delay:0.08s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-03 14:13:54 UTC</td>
       <td><span class="branch-tag">master</span></td>
@@ -207,7 +222,7 @@
       </td>
       <td><a class="view-btn" href="reports/master/22626877306/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.08s">
+    <tr class="fail" style="animation-delay:0.12s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-03 14:13:14 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -222,7 +237,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22626860445/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.12s">
+    <tr class="fail" style="animation-delay:0.16s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-03 13:22:02 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -240,7 +255,7 @@
       </table>
     </div>
 
-    <footer>Generated by playwright-demo-js · 2026-03-03 14:29:39 UTC</footer>
+    <footer>Generated by playwright-demo-js · 2026-03-03 14:44:43 UTC</footer>
   </div>
 </body>
 </html>

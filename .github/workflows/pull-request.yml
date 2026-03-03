@@ -19,4 +19,7 @@ jobs:
 
       # Install your dependencies
       - run: npm ci
+      # Install Playwright browsers
+      - run: npx playwright install --with-deps
+      # Run tests
       - run: npm run test:chrome

@@ -50,7 +50,7 @@ const config = {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        headless: false,
+        headless: true,
       },
     },
 
@@ -58,6 +58,7 @@ const config = {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
+        headless: true,
       },
     },
 
@@ -65,6 +66,7 @@ const config = {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
+        headless: true,
       },
     },
 

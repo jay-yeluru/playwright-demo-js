@@ -42,6 +42,10 @@ const config = {
       name: "webkit",
       use: { ...devices["Desktop Safari"], headless: true },
     },
+    {
+      name: "edge",
+      use: { ...devices["Desktop Edge"], channel: "msedge", headless: true },
+    },
   ],
 };
 

@@ -55,13 +55,14 @@ jobs:
           KEEP_RUNS: 10
           KEEP_FAILED_RUNS: 30
         run: |
-          BROWSER=$(echo "$BROWSER" | grep -oP '(?<=\().*(?=\))')
+          BROWSER=$(echo "$BROWSER" | sed 's/.*(\(.*\)).*/\1/')
           BROWSER=$BROWSER node generate-dashboard.js
 
       - name: Commit and push
         timeout-minutes: 3
         run: |
-          git add index.html dashboard.json reports/ failure-archive/
+          git add index.html dashboard.json reports/
+          [ -d failure-archive ] && git add failure-archive/ || true
           git commit -m "ci: add report for run ${{ github.event.workflow_run.id }}"
 
           until git push; do

@@ -37,15 +37,14 @@ function parseResults() {
   const results = /** @type {TestResults} */ (
     readJSON(`${ENV.REPORT_PATH}/test-results.json`)
   );
-  const specs = results.suites.flatMap(/** @param {Suite} s */ (s) => s.specs);
-  const passed = specs.filter(/** @param {Spec} s */ (s) => s.ok).length;
-  const failed = specs.filter(/** @param {Spec} s */ (s) => !s.ok).length;
-  const flaky = specs.filter(
-    /** @param {Spec} s */ (s) =>
-      s.ok && s.tests?.some((t) => (t.results?.length ?? 0) > 1),
-  ).length;
+  const specs = results.suites.flatMap(/** @param {Suite} s */(s) => s.specs);
+  const passed = specs.filter(/** @param {Spec} s */(s) => s.ok).length;
+  const failed = specs.filter(/** @param {Spec} s */(s) => !s.ok).length;
+  const flaky = specs
+    .flatMap(/** @param {Spec} s */(s) => (s.ok ? s.tests ?? [] : []))
+    .filter((/** @type {any} */ t) => (t.results?.length ?? 0) > 1).length;
   const duration = specs
-    .flatMap(/** @param {Spec} s */ (s) => s.tests ?? [])
+    .flatMap(/** @param {Spec} s */(s) => s.tests ?? [])
     .reduce(
       (sum, /** @type {any} */ t) => sum + (t.results?.[0]?.duration ?? 0),
       0,
@@ -85,17 +84,17 @@ function archiveFailureSummary(runPath, runId, branch) {
 
   const results = /** @type {TestResults} */ (readJSON(resultsFile));
   const failures = results.suites
-    .flatMap(/** @param {Suite} s */ (s) => s.specs)
-    .filter(/** @param {Spec} s */ (s) => !s.ok)
+    .flatMap(/** @param {Suite} s */(s) => s.specs)
+    .filter(/** @param {Spec} s */(s) => !s.ok)
     .map(
-      /** @param {any} s */ (s) => ({
+      /** @param {any} s */(s) => ({
         title: s.title,
         errors:
           s.tests?.flatMap(
-            /** @param {any} t */ (t) =>
+            /** @param {any} t */(t) =>
               t.results?.flatMap(
-                /** @param {any} r */ (r) =>
-                  r.errors?.map(/** @param {any} e */ (e) => e.message) ?? [],
+                /** @param {any} r */(r) =>
+                  r.errors?.map(/** @param {any} e */(e) => e.message) ?? [],
               ) ?? [],
           ) ?? [],
       }),
@@ -167,7 +166,7 @@ function renderRow(r, i) {
   const isCancelled = r.conclusion === "cancelled";
   const browserIcon =
     { chrome: "🌐", firefox: "🦊", safari: "🧭", edge: "🔷" }[
-      r.browser?.toLowerCase()
+    r.browser?.toLowerCase()
     ] ?? "🌐";
   const badgeClass = isCancelled
     ? "badge-cancelled"
@@ -402,9 +401,8 @@ function generateDashboard(history) {
       </div>
     </div>
 
-    ${
-      latestRun
-        ? `
+    ${latestRun
+      ? `
     <div class="latest-banner">
       <div class="latest-label">Latest</div>
       <div class="latest-info">
@@ -418,7 +416,7 @@ function generateDashboard(history) {
       </div>
       <a class="view-btn" href="${latestRun.reportUrl}" target="_blank">Latest Report <span>→</span></a>
     </div>`
-        : ""
+      : ""
     }
 
     <div class="table-wrap">

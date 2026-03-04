@@ -1,0 +1,279 @@
+{
+  "config": {
+    "configFile": "/Users/runner/work/playwright-demo-js/playwright-demo-js/playwright.config.js",
+    "rootDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+    "forbidOnly": true,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/d753f905f4198237fca5cc96235bbd25eb691587",
+        "commitHash": "d753f905f4198237fca5cc96235bbd25eb691587",
+        "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659153090"
+      },
+      "gitCommit": {
+        "shortHash": "d753f90",
+        "hash": "d753f905f4198237fca5cc96235bbd25eb691587",
+        "subject": "Develop (#24)",
+        "body": "Develop (#24)\n\n* Update README.md\n\n* added failure archive\n\n* design changes\n\n* feat: Add Edge browser support, improve CI report publishing workflow, and refine dashboard metrics.\n\n* feat: Implement a failure archive section on the dashboard, enhance test result parsing to support nested Playwright suites, and refine browser name extraction in the workflow.\n\n* chore: sync package-lock.json with package.json (eslint v9)",
+        "author": {
+          "name": "jay-yeluru",
+          "email": "24775245+jay-yeluru@users.noreply.github.com",
+          "time": 1772608478000
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com",
+          "time": 1772608478000
+        },
+        "branch": "master"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/d753f905f4198237fca5cc96235bbd25eb691587",
+            "commitHash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659153090"
+          },
+          "gitCommit": {
+            "shortHash": "d753f90",
+            "hash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "subject": "Develop (#24)",
+            "body": "Develop (#24)\n\n* Update README.md\n\n* added failure archive\n\n* design changes\n\n* feat: Add Edge browser support, improve CI report publishing workflow, and refine dashboard metrics.\n\n* feat: Implement a failure archive section on the dashboard, enhance test result parsing to support nested Playwright suites, and refine browser name extraction in the workflow.\n\n* chore: sync package-lock.json with package.json (eslint v9)",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772608478000
+            },
+            "committer": {
+              "name": "GitHub",
+              "email": "noreply@github.com",
+              "time": 1772608478000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/d753f905f4198237fca5cc96235bbd25eb691587",
+            "commitHash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659153090"
+          },
+          "gitCommit": {
+            "shortHash": "d753f90",
+            "hash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "subject": "Develop (#24)",
+            "body": "Develop (#24)\n\n* Update README.md\n\n* added failure archive\n\n* design changes\n\n* feat: Add Edge browser support, improve CI report publishing workflow, and refine dashboard metrics.\n\n* feat: Implement a failure archive section on the dashboard, enhance test result parsing to support nested Playwright suites, and refine browser name extraction in the workflow.\n\n* chore: sync package-lock.json with package.json (eslint v9)",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772608478000
+            },
+            "committer": {
+              "name": "GitHub",
+              "email": "noreply@github.com",
+              "time": 1772608478000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/d753f905f4198237fca5cc96235bbd25eb691587",
+            "commitHash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659153090"
+          },
+          "gitCommit": {
+            "shortHash": "d753f90",
+            "hash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "subject": "Develop (#24)",
+            "body": "Develop (#24)\n\n* Update README.md\n\n* added failure archive\n\n* design changes\n\n* feat: Add Edge browser support, improve CI report publishing workflow, and refine dashboard metrics.\n\n* feat: Implement a failure archive section on the dashboard, enhance test result parsing to support nested Playwright suites, and refine browser name extraction in the workflow.\n\n* chore: sync package-lock.json with package.json (eslint v9)",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772608478000
+            },
+            "committer": {
+              "name": "GitHub",
+              "email": "noreply@github.com",
+              "time": 1772608478000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/d753f905f4198237fca5cc96235bbd25eb691587",
+            "commitHash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659153090"
+          },
+          "gitCommit": {
+            "shortHash": "d753f90",
+            "hash": "d753f905f4198237fca5cc96235bbd25eb691587",
+            "subject": "Develop (#24)",
+            "body": "Develop (#24)\n\n* Update README.md\n\n* added failure archive\n\n* design changes\n\n* feat: Add Edge browser support, improve CI report publishing workflow, and refine dashboard metrics.\n\n* feat: Implement a failure archive section on the dashboard, enhance test result parsing to support nested Playwright suites, and refine browser name extraction in the workflow.\n\n* chore: sync package-lock.json with package.json (eslint v9)",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772608478000
+            },
+            "committer": {
+              "name": "GitHub",
+              "email": "noreply@github.com",
+              "time": 1772608478000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "edge",
+        "name": "edge",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "reports",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reports/test-results.json"
+        }
+      ],
+      [
+        "github",
+        {}
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "example.spec.js",
+      "file": "example.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "playwright.dev homepage has title and links to intro page",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1358,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-04T07:17:41.623Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-ddac7991eb8f17671cf2",
+          "file": "example.spec.js",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-04T07:17:40.680Z",
+    "duration": 3927.2880000000005,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

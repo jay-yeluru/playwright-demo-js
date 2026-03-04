@@ -12,24 +12,24 @@
     "maxFailures": 0,
     "metadata": {
       "ci": {
-        "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/ec90a74ae802aeb3c66c744300635c76154775ff",
-        "commitHash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-        "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659684977"
+        "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/47c0716238729db4056baf1b31a2ba7b7d702e97",
+        "commitHash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+        "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22665464526"
       },
       "gitCommit": {
-        "shortHash": "ec90a74",
-        "hash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-        "subject": "test: update example E2E test suite.",
-        "body": "test: update example E2E test suite.\n",
+        "shortHash": "47c0716",
+        "hash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+        "subject": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.",
+        "body": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.\n",
         "author": {
           "name": "jay-yeluru",
           "email": "24775245+jay-yeluru@users.noreply.github.com",
-          "time": 1772609022000
+          "time": 1772620265000
         },
         "committer": {
           "name": "jay-yeluru",
           "email": "24775245+jay-yeluru@users.noreply.github.com",
-          "time": 1772609022000
+          "time": 1772620265000
         },
         "branch": "develop"
       },
@@ -43,24 +43,24 @@
         "retries": 2,
         "metadata": {
           "ci": {
-            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/ec90a74ae802aeb3c66c744300635c76154775ff",
-            "commitHash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659684977"
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "commitHash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22665464526"
           },
           "gitCommit": {
-            "shortHash": "ec90a74",
-            "hash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "subject": "test: update example E2E test suite.",
-            "body": "test: update example E2E test suite.\n",
+            "shortHash": "47c0716",
+            "hash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "subject": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.",
+            "body": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.\n",
             "author": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "committer": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "branch": "develop"
           },
@@ -81,24 +81,24 @@
         "retries": 2,
         "metadata": {
           "ci": {
-            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/ec90a74ae802aeb3c66c744300635c76154775ff",
-            "commitHash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659684977"
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "commitHash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22665464526"
           },
           "gitCommit": {
-            "shortHash": "ec90a74",
-            "hash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "subject": "test: update example E2E test suite.",
-            "body": "test: update example E2E test suite.\n",
+            "shortHash": "47c0716",
+            "hash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "subject": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.",
+            "body": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.\n",
             "author": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "committer": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "branch": "develop"
           },
@@ -119,24 +119,24 @@
         "retries": 2,
         "metadata": {
           "ci": {
-            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/ec90a74ae802aeb3c66c744300635c76154775ff",
-            "commitHash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659684977"
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "commitHash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22665464526"
           },
           "gitCommit": {
-            "shortHash": "ec90a74",
-            "hash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "subject": "test: update example E2E test suite.",
-            "body": "test: update example E2E test suite.\n",
+            "shortHash": "47c0716",
+            "hash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "subject": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.",
+            "body": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.\n",
             "author": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "committer": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "branch": "develop"
           },
@@ -157,24 +157,24 @@
         "retries": 2,
         "metadata": {
           "ci": {
-            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/ec90a74ae802aeb3c66c744300635c76154775ff",
-            "commitHash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22659684977"
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "commitHash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22665464526"
           },
           "gitCommit": {
-            "shortHash": "ec90a74",
-            "hash": "ec90a74ae802aeb3c66c744300635c76154775ff",
-            "subject": "test: update example E2E test suite.",
-            "body": "test: update example E2E test suite.\n",
+            "shortHash": "47c0716",
+            "hash": "47c0716238729db4056baf1b31a2ba7b7d702e97",
+            "subject": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.",
+            "body": "feat: Detect browser from test results JSON and remove explicit environment variable passing to the dashboard script.\n",
             "author": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "committer": {
               "name": "jay-yeluru",
               "email": "24775245+jay-yeluru@users.noreply.github.com",
-              "time": 1772609022000
+              "time": 1772620265000
             },
             "branch": "develop"
           },
@@ -248,12 +248,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 860,
+                  "duration": 1119,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:43:13.949Z",
+                  "startTime": "2026-03-04T10:32:02.818Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -284,12 +284,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 287,
+                  "duration": 289,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:43:15.597Z",
+                  "startTime": "2026-03-04T10:32:04.844Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -318,7 +318,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 5258,
+                  "duration": 5226,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('link', { name: /more information/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /more information/i })\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('link', { name: /more information/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /more information/i })\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:27:22",
@@ -342,7 +342,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:43:15.891Z",
+                  "startTime": "2026-03-04T10:32:05.142Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -361,7 +361,7 @@
                   "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 5356,
+                  "duration": 5272,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('link', { name: /more information/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /more information/i })\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('link', { name: /more information/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /more information/i })\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:27:22",
@@ -385,7 +385,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 1,
-                  "startTime": "2026-03-04T07:43:21.797Z",
+                  "startTime": "2026-03-04T10:32:10.940Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -409,7 +409,7 @@
                   "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 5306,
+                  "duration": 5256,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('link', { name: /more information/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /more information/i })\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('link', { name: /more information/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /more information/i })\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:27:22",
@@ -433,7 +433,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 2,
-                  "startTime": "2026-03-04T07:43:28.103Z",
+                  "startTime": "2026-03-04T10:32:17.042Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -473,7 +473,7 @@
                   "workerIndex": 3,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3291,
+                  "duration": 3238,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:38:22",
@@ -497,7 +497,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:43:34.340Z",
+                  "startTime": "2026-03-04T10:32:23.223Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -516,7 +516,7 @@
                   "workerIndex": 4,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3327,
+                  "duration": 3379,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:38:22",
@@ -540,7 +540,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 1,
-                  "startTime": "2026-03-04T07:43:38.666Z",
+                  "startTime": "2026-03-04T10:32:27.588Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -564,7 +564,7 @@
                   "workerIndex": 5,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3352,
+                  "duration": 3293,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:38:22",
@@ -588,7 +588,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 2,
-                  "startTime": "2026-03-04T07:43:43.011Z",
+                  "startTime": "2026-03-04T10:32:32.189Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -628,7 +628,7 @@
                   "workerIndex": 6,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3293,
+                  "duration": 3356,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:44:47",
@@ -652,7 +652,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:43:47.140Z",
+                  "startTime": "2026-03-04T10:32:36.437Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -671,7 +671,7 @@
                   "workerIndex": 7,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3340,
+                  "duration": 3336,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:44:47",
@@ -695,7 +695,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 1,
-                  "startTime": "2026-03-04T07:43:51.268Z",
+                  "startTime": "2026-03-04T10:32:41.066Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -719,7 +719,7 @@
                   "workerIndex": 8,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3289,
+                  "duration": 3279,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:44:47",
@@ -743,7 +743,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 2,
-                  "startTime": "2026-03-04T07:43:55.689Z",
+                  "startTime": "2026-03-04T10:32:45.381Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -783,7 +783,7 @@
                   "workerIndex": 9,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3338,
+                  "duration": 3280,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mWrong\u001b[27m Domain\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mExample\u001b[27m Domain\"\u001b[39m\nTimeout:  3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    7 × locator resolved to <h1>Example Domain</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Example Domain\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mWrong\u001b[27m Domain\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mExample\u001b[27m Domain\"\u001b[39m\nTimeout:  3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    7 × locator resolved to <h1>Example Domain</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Example Domain\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:36",
@@ -807,7 +807,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:43:59.890Z",
+                  "startTime": "2026-03-04T10:32:49.590Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -826,7 +826,7 @@
                   "workerIndex": 10,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3354,
+                  "duration": 3309,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mWrong\u001b[27m Domain\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mExample\u001b[27m Domain\"\u001b[39m\nTimeout:  3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    7 × locator resolved to <h1>Example Domain</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Example Domain\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mWrong\u001b[27m Domain\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mExample\u001b[27m Domain\"\u001b[39m\nTimeout:  3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    7 × locator resolved to <h1>Example Domain</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Example Domain\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:36",
@@ -850,7 +850,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 1,
-                  "startTime": "2026-03-04T07:44:04.270Z",
+                  "startTime": "2026-03-04T10:32:53.722Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -874,7 +874,7 @@
                   "workerIndex": 11,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 3267,
+                  "duration": 3272,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mWrong\u001b[27m Domain\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mExample\u001b[27m Domain\"\u001b[39m\nTimeout:  3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    7 × locator resolved to <h1>Example Domain</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Example Domain\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mWrong\u001b[27m Domain\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mExample\u001b[27m Domain\"\u001b[39m\nTimeout:  3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    7 × locator resolved to <h1>Example Domain</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Example Domain\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:36",
@@ -898,7 +898,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 2,
-                  "startTime": "2026-03-04T07:44:08.561Z",
+                  "startTime": "2026-03-04T10:32:57.996Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -938,12 +938,12 @@
                   "workerIndex": 12,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 286,
+                  "duration": 242,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:44:12.719Z",
+                  "startTime": "2026-03-04T10:33:02.145Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -972,7 +972,7 @@
                   "workerIndex": 12,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 5332,
+                  "duration": 5216,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('p').first()\nExpected substring: \u001b[32m\"\u001b[7millustr\u001b[27mati\u001b[7mve\u001b[27m examples\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mThis domain is for use in document\u001b[27mati\u001b[7mon\u001b[27m examples\u001b[7m without needing permission. Avoid use in operations.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('p').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <p>This domain is for use in documentation examples …</p>\u001b[22m\n\u001b[2m      - unexpected value \"This domain is for use in documentation examples without needing permission. Avoid use in operations.\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('p').first()\nExpected substring: \u001b[32m\"\u001b[7millustr\u001b[27mati\u001b[7mve\u001b[27m examples\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mThis domain is for use in document\u001b[27mati\u001b[7mon\u001b[27m examples\u001b[7m without needing permission. Avoid use in operations.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('p').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <p>This domain is for use in documentation examples …</p>\u001b[22m\n\u001b[2m      - unexpected value \"This domain is for use in documentation examples without needing permission. Avoid use in operations.\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:73:45",
@@ -996,7 +996,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T07:44:13.345Z",
+                  "startTime": "2026-03-04T10:33:02.672Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1015,7 +1015,7 @@
                   "workerIndex": 13,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 5336,
+                  "duration": 5320,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('p').first()\nExpected substring: \u001b[32m\"\u001b[7millustr\u001b[27mati\u001b[7mve\u001b[27m examples\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mThis domain is for use in document\u001b[27mati\u001b[7mon\u001b[27m examples\u001b[7m without needing permission. Avoid use in operations.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('p').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <p>This domain is for use in documentation examples …</p>\u001b[22m\n\u001b[2m      - unexpected value \"This domain is for use in documentation examples without needing permission. Avoid use in operations.\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('p').first()\nExpected substring: \u001b[32m\"\u001b[7millustr\u001b[27mati\u001b[7mve\u001b[27m examples\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mThis domain is for use in document\u001b[27mati\u001b[7mon\u001b[27m examples\u001b[7m without needing permission. Avoid use in operations.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('p').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <p>This domain is for use in documentation examples …</p>\u001b[22m\n\u001b[2m      - unexpected value \"This domain is for use in documentation examples without needing permission. Avoid use in operations.\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:73:45",
@@ -1039,7 +1039,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 1,
-                  "startTime": "2026-03-04T07:44:19.232Z",
+                  "startTime": "2026-03-04T10:33:08.538Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1063,7 +1063,7 @@
                   "workerIndex": 14,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 5299,
+                  "duration": 5280,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('p').first()\nExpected substring: \u001b[32m\"\u001b[7millustr\u001b[27mati\u001b[7mve\u001b[27m examples\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mThis domain is for use in document\u001b[27mati\u001b[7mon\u001b[27m examples\u001b[7m without needing permission. Avoid use in operations.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('p').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <p>This domain is for use in documentation examples …</p>\u001b[22m\n\u001b[2m      - unexpected value \"This domain is for use in documentation examples without needing permission. Avoid use in operations.\"\u001b[22m\n",
                     "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('p').first()\nExpected substring: \u001b[32m\"\u001b[7millustr\u001b[27mati\u001b[7mve\u001b[27m examples\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mThis domain is for use in document\u001b[27mati\u001b[7mon\u001b[27m examples\u001b[7m without needing permission. Avoid use in operations.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('p').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <p>This domain is for use in documentation examples …</p>\u001b[22m\n\u001b[2m      - unexpected value \"This domain is for use in documentation examples without needing permission. Avoid use in operations.\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:73:45",
@@ -1087,7 +1087,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 2,
-                  "startTime": "2026-03-04T07:44:25.491Z",
+                  "startTime": "2026-03-04T10:33:14.744Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1116,8 +1116,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-03-04T07:43:13.311Z",
-    "duration": 77769.944,
+    "startTime": "2026-03-04T10:32:01.783Z",
+    "duration": 78627.973,
     "expected": 3,
     "skipped": 0,
     "unexpected": 5,

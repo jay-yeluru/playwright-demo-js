@@ -37,7 +37,6 @@ function parseResults() {
   const results = /** @type {TestResults} */ (
     readJSON(`${ENV.REPORT_PATH}/test-results.json`)
   );
-  // Use recursive flattening — Playwright nests suites for files/describes.
   const specs = flattenSpecs(results.suites);
   const passed = specs.filter(/** @param {Spec} s */(s) => s.ok).length;
   const failed = specs.filter(/** @param {Spec} s */(s) => !s.ok).length;
@@ -74,8 +73,6 @@ function flattenSpecs(suites) {
 // ── Update history ────────────────────────────────────────────────────────────
 
 const HISTORY_FILE = "dashboard.json";
-// Keep at most KEEP_RUNS passing + KEEP_FAILED_RUNS failing entries so that
-// every row in the dashboard has a live report link.
 const MAX_HISTORY = ENV.KEEP_RUNS + ENV.KEEP_FAILED_RUNS;
 
 /** @param {RunEntry} entry @returns {RunEntry[]} */
@@ -88,7 +85,7 @@ function updateHistory(entry) {
   return history;
 }
 
-// ── Archive failure summary (Option 2) ───────────────────────────────────────
+// ── Archive failure summary ───────────────────────────────────────────────────
 
 /** @param {string} runPath @param {string} runId @param {string} branch */
 function archiveFailureSummary(runPath, runId, branch) {
@@ -114,8 +111,6 @@ function archiveFailureSummary(runPath, runId, branch) {
 
   if (failures.length === 0) return;
 
-  // Store flat at failure-archive/{runId}.json — no branch subfolder needed
-  // since each entry already carries the branch field inside the JSON.
   const archiveDir = "failure-archive";
   fs.mkdirSync(archiveDir, { recursive: true });
 
@@ -129,7 +124,7 @@ function archiveFailureSummary(runPath, runId, branch) {
   console.log(`Archived failure summary for run: ${runId}`);
 }
 
-// ── Clean up old runs (Option 3 — tiered retention) ──────────────────────────
+// ── Clean up old runs ─────────────────────────────────────────────────────────
 
 /** @param {string} branch @param {number} keepPassing @param {number} keepFailing @param {RunEntry[]} history */
 function cleanOldRuns(branch, keepPassing, keepFailing, history) {
@@ -159,7 +154,6 @@ function cleanOldRuns(branch, keepPassing, keepFailing, history) {
 
   for (const run of runsToDelete) {
     const runPath = path.join(branchDir, run);
-    // Archive already done in main() — just delete here
     fs.rmSync(runPath, { recursive: true, force: true });
     console.log(
       `Pruned ${failedRunIds.has(run) ? "failing" : "passing"} run: ${runPath}`,
@@ -220,9 +214,184 @@ function loadFailureArchive() {
     .readdirSync(archiveDir)
     .filter((f) => f.endsWith(".json"))
     .map((f) => /** @type {FailureArchive} */(readJSON(path.join(archiveDir, f))))
-    // Most-recent first
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 20); // show at most 20 recent failure runs
+    .slice(0, 50);
+}
+
+// ── Build per-test history from archive ──────────────────────────────────────
+
+/**
+ * @typedef {{ title: string, totalFailures: number, runHistory: Array<{runId: string, branch: string, date: string, errors: string[]}> }} TestHistoryEntry
+ */
+
+/** @param {FailureArchive[]} archive @returns {TestHistoryEntry[]} */
+function buildTestHistory(archive) {
+  /** @type {Map<string, TestHistoryEntry>} */
+  const map = new Map();
+
+  for (const run of archive) {
+    for (const failure of run.failures) {
+      if (!map.has(failure.title)) {
+        map.set(failure.title, {
+          title: failure.title,
+          totalFailures: 0,
+          runHistory: [],
+        });
+      }
+      const entry = /** @type {TestHistoryEntry} */ (map.get(failure.title));
+      entry.totalFailures += 1;
+      entry.runHistory.push({
+        runId: run.runId,
+        branch: run.branch,
+        date: run.date,
+        errors: failure.errors,
+      });
+    }
+  }
+
+  // Sort by most failures first
+  return Array.from(map.values()).sort(
+    (a, b) => b.totalFailures - a.totalFailures,
+  );
+}
+
+// ── Render Detailed failure history section ───────────────────────────────
+
+/** @param {FailureArchive[]} failureArchive @param {RunEntry[]} history @returns {string} */
+function renderFailureHistory(failureArchive, history) {
+  if (failureArchive.length === 0) return "";
+
+  const testHistory = buildTestHistory(failureArchive);
+  const totalFailedTests = testHistory.reduce((s, t) => s + t.totalFailures, 0);
+  const branches = [...new Set(failureArchive.map((a) => a.branch))];
+
+  // Build a lookup: runId -> reportUrl from history
+  /** @type {Map<string, string>} */
+  const runReportMap = new Map(history.map((r) => [r.runId, r.reportUrl]));
+
+  // For each test, build a sparkline of last N runs (pass = grey pill, fail = red pill)
+  // We need all known run IDs sorted newest first (from run history)
+  const allRunIds = failureArchive.map((a) => a.runId); // already sorted newest-first
+
+  /** @param {TestHistoryEntry} test @returns {string} */
+  const renderTrendDots = (test) => {
+    const failedRunIds = new Set(test.runHistory.map((r) => r.runId));
+    // Show last 10 archive runs as trend dots
+    return allRunIds
+      .slice(0, 10)
+      .map((runId) => {
+        const isFail = failedRunIds.has(runId);
+        return `<span class="trend-dot ${isFail ? "trend-fail" : "trend-pass"}" title="Run ${runId.substring(0, 8)}"></span>`;
+      })
+      .join("");
+  };
+
+  /** @param {TestHistoryEntry} test @returns {string} */
+  const renderTestCard = (test) => {
+    const safeId = test.title.replace(/[^a-zA-Z0-9]/g, "_").substring(0, 40);
+    const failRate = Math.round(
+      (test.totalFailures / failureArchive.length) * 100,
+    );
+    const lastFailed = test.runHistory[0];
+    const lastFailedDate = lastFailed
+      ? lastFailed.date.replace("T", " ").substring(0, 16) + " UTC"
+      : "—";
+
+    // Severity class
+    const severityClass =
+      failRate >= 70 ? "severity-critical" : failRate >= 40 ? "severity-high" : "severity-medium";
+    const severityLabel =
+      failRate >= 70 ? "Critical" : failRate >= 40 ? "High" : "Medium";
+
+    return `
+    <div class="th-card" id="thcard_${safeId}" data-branch="" data-title="${test.title.replace(/"/g, "&quot;")}">
+      <div class="th-card-header" onclick="toggleTestHistory('${safeId}')">
+        <div class="th-card-left">
+          <span class="th-severity ${severityClass}">${severityLabel}</span>
+          <div class="th-title">${test.title}</div>
+        </div>
+        <div class="th-card-right">
+          <div class="th-trend">${renderTrendDots(test)}</div>
+          <div class="th-stats">
+            <span class="th-stat-fail" title="Total failures">✗ ${test.totalFailures}</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">${failRate}%</span>
+            <span class="th-stat-date" title="Last failed">${lastFailedDate}</span>
+          </div>
+          <span class="th-toggle-icon" id="thicon_${safeId}">▸</span>
+        </div>
+      </div>
+      <div class="th-card-body" id="thbody_${safeId}" style="display:none">
+        <div class="th-timeline-label">Run-by-run history (newest first)</div>
+        <div class="th-timeline">
+          ${test.runHistory
+        .map((r, idx) => {
+          const reportUrl = runReportMap.get(r.runId);
+          const shortDate = r.date.replace("T", " ").substring(0, 16) + " UTC";
+          const errPreview = r.errors[0]
+            ? r.errors[0].toString().substring(0, 400)
+            : "No error message captured.";
+          return `
+          <div class="th-run ${idx === 0 ? "th-run-latest" : ""}">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">${idx === 0 ? "Latest" : `#${idx + 1}`}</span>
+              <span class="branch-tag">${r.branch}</span>
+              <span class="th-run-date">${shortDate}</span>
+              ${reportUrl ? `<a class="view-btn view-btn-sm" href="${reportUrl}" target="_blank">Report →</a>` : ""}
+            </div>
+            <pre class="th-error">${errPreview}</pre>
+          </div>`;
+        })
+        .join("")}
+        </div>
+      </div>
+    </div>`;
+  };
+
+  const branchFilterOptions = branches
+    .map((b) => `<option value="${b}">${b}</option>`)
+    .join("");
+
+  return `
+  <div class="failure-section" id="failureHistorySection">
+    <div class="fh-header">
+      <div class="fh-header-left">
+        <span class="fh-icon">🔴</span>
+        <div>
+          <div class="fh-title">Failure History</div>
+          <div class="fh-subtitle">Per-test breakdown across the last ${failureArchive.length} failed run${failureArchive.length !== 1 ? "s" : ""}</div>
+        </div>
+      </div>
+      <div class="fh-header-right">
+        <div class="fh-summary-chips">
+          <span class="fh-chip fh-chip-tests"><span class="fh-chip-val">${testHistory.length}</span><span class="fh-chip-lbl">Unique Failures</span></span>
+          <span class="fh-chip fh-chip-runs"><span class="fh-chip-val">${failureArchive.length}</span><span class="fh-chip-lbl">Failed Runs</span></span>
+          <span class="fh-chip fh-chip-total"><span class="fh-chip-val">${totalFailedTests}</span><span class="fh-chip-lbl">Total Failures</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fh-controls">
+      <div class="fh-search-wrap">
+        <span class="fh-search-icon">🔍</span>
+        <input class="fh-search" id="thSearch" type="text" placeholder="Search test name…" oninput="filterTestHistory()" />
+      </div>
+      <select class="filter-select" id="thBranchFilter" onchange="filterTestHistory()">
+        <option value="all">All branches</option>
+        ${branchFilterOptions}
+      </select>
+      <select class="filter-select" id="thSortFilter" onchange="filterTestHistory()">
+        <option value="failures">Sort: Most failures</option>
+        <option value="rate">Sort: Failure rate</option>
+        <option value="recent">Sort: Most recent</option>
+      </select>
+      <span class="run-count" id="thCount">${testHistory.length} tests</span>
+    </div>
+
+    <div class="fh-body" id="thList">
+      ${testHistory.map(renderTestCard).join("")}
+    </div>
+  </div>`;
 }
 
 // ── Generate dashboard HTML ───────────────────────────────────────────────────
@@ -261,6 +430,8 @@ function generateDashboard(history, failureArchive) {
   const browserOptions = browsers
     .map((b) => `<option value="${b}">${b}</option>`)
     .join("");
+
+  const failureHistoryHTML = renderFailureHistory(failureArchive, history);
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -369,34 +540,166 @@ function generateDashboard(history, failureArchive) {
 
     .view-btn { display: inline-flex; align-items: center; gap: 4px; color: var(--accent); text-decoration: none; font-size: 0.78rem; font-family: var(--font-mono); padding: 4px 10px; border: 1px solid rgba(0,229,255,0.2); border-radius: 6px; transition: all 0.2s ease; background: rgba(0,229,255,0.05); }
     .view-btn:hover { background: rgba(0,229,255,0.12); border-color: var(--accent); box-shadow: 0 0 12px rgba(0,229,255,0.2); transform: translateX(2px); }
-    .view-btn span { transition: transform 0.2s ease; }
-    .view-btn:hover span { transform: translateX(3px); }
+    .view-btn-sm { font-size: 0.68rem; padding: 2px 8px; }
 
     footer { text-align: center; padding: 2rem 0 1rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
 
+    /* ── Failure History (Detailed Failure Summary style) ──────────────────────────────── */
+    .failure-section {
+      background: var(--surface);
+      border: 1px solid rgba(244,63,94,0.2);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+      animation: slideUp 0.5s 0.35s ease both;
+    }
 
-    .failure-section { background: var(--surface); border: 1px solid rgba(244,63,94,0.25); border-radius: 14px; overflow: hidden; margin-top: 1.5rem; animation: slideUp 0.5s 0.35s ease both; }
-    .section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background 0.15s ease; }
-    .section-header:hover { background: rgba(244,63,94,0.05); }
-    .section-title { font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fail); font-weight: 600; flex: 1; }
-    .section-meta { font-size: 0.72rem; font-family: var(--font-mono); color: var(--muted); background: var(--surface2); padding: 2px 10px; border-radius: 20px; border: 1px solid var(--border); }
-    .toggle-icon { font-size: 1rem; color: var(--muted); transition: transform 0.2s ease; }
-    .failure-list { padding: 0.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
-    .failure-run { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-    .failure-run-header { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; padding: 0.65rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); }
-    .failure-run-id { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
-    .failure-run-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-left: auto; }
-    .failure-count-badge { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600; background: rgba(244,63,94,0.15); color: var(--fail); border: 1px solid rgba(244,63,94,0.3); padding: 2px 8px; border-radius: 4px; }
-    .failure-tests { padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .failure-test { border-left: 2px solid var(--fail); padding-left: 0.75rem; }
-    .failure-test-title { font-size: 0.83rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
-    .failure-error { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 0.75rem; white-space: pre-wrap; word-break: break-all; max-height: 120px; overflow-y: auto; }
+    /* header bar */
+    .fh-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(90deg, rgba(244,63,94,0.08), transparent);
+      border-bottom: 1px solid rgba(244,63,94,0.15);
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .fh-header-left { display: flex; align-items: center; gap: 0.85rem; }
+    .fh-icon { font-size: 1.4rem; }
+    .fh-title { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+    .fh-subtitle { font-size: 0.7rem; font-family: var(--font-mono); color: var(--muted); margin-top: 2px; }
+    .fh-header-right { display: flex; align-items: center; gap: 0.75rem; }
+    .fh-summary-chips { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .fh-chip { display: flex; flex-direction: column; align-items: center; padding: 0.4rem 0.85rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); min-width: 72px; }
+    .fh-chip-tests { border-color: rgba(244,63,94,0.3); }
+    .fh-chip-runs  { border-color: rgba(124,58,237,0.3); }
+    .fh-chip-total { border-color: rgba(245,158,11,0.3); }
+    .fh-chip-val   { font-size: 1.15rem; font-weight: 800; line-height: 1; }
+    .fh-chip-tests .fh-chip-val { color: var(--fail); }
+    .fh-chip-runs  .fh-chip-val { color: var(--accent2); }
+    .fh-chip-total .fh-chip-val { color: var(--flaky); }
+    .fh-chip-lbl   { font-size: 0.6rem; font-family: var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+    /* controls */
+    .fh-controls {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+      flex-wrap: wrap;
+    }
+    .fh-search-wrap { position: relative; flex: 1; min-width: 200px; }
+    .fh-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; pointer-events: none; }
+    .fh-search {
+      width: 100%; padding: 5px 10px 5px 30px;
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 6px;
+      font-family: var(--font-mono); font-size: 0.78rem; outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .fh-search:focus { border-color: var(--accent); }
+    .fh-search::placeholder { color: var(--muted); }
+
+    /* body list */
+    .fh-body { padding: 1rem 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    /* test card */
+    .th-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .th-card:hover { border-color: rgba(244,63,94,0.35); box-shadow: 0 2px 16px rgba(244,63,94,0.08); }
+
+    .th-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.7rem 1rem; cursor: pointer; background: var(--surface2);
+      gap: 0.75rem; flex-wrap: wrap;
+      transition: background 0.15s ease;
+    }
+    .th-card-header:hover { background: rgba(244,63,94,0.06); }
+
+    .th-card-left  { display: flex; align-items: center; gap: 0.65rem; flex: 1; min-width: 0; }
+    .th-card-right { display: flex; align-items: center; gap: 0.85rem; flex-shrink: 0; flex-wrap: wrap; }
+
+    .th-title { font-size: 0.85rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
+
+    /* severity badge */
+    .th-severity {
+      font-size: 0.6rem; font-family: var(--font-mono); font-weight: 700;
+      padding: 2px 7px; border-radius: 4px; letter-spacing: 0.06em;
+      flex-shrink: 0; text-transform: uppercase;
+    }
+    .severity-critical { background: rgba(244,63,94,0.2);  color: #fb7185; border: 1px solid rgba(244,63,94,0.4); }
+    .severity-high     { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35); }
+    .severity-medium   { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+
+    /* trend dots */
+    .th-trend { display: flex; align-items: center; gap: 3px; }
+    .trend-dot {
+      width: 10px; height: 10px; border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .trend-fail { background: var(--fail); box-shadow: 0 0 4px rgba(244,63,94,0.5); }
+    .trend-pass { background: #1e3a2b; border: 1px solid #2d5a40; }
+
+    /* stats */
+    .th-stats { display: flex; align-items: center; gap: 0.7rem; }
+    .th-stat-fail { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--fail); }
+    .th-stat-rate { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 1px 7px; border-radius: 10px; }
+    .th-stat-date { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); }
+    .th-toggle-icon { font-size: 0.85rem; color: var(--muted); transition: transform 0.2s ease; flex-shrink: 0; }
+
+    /* expanded body */
+    .th-card-body { border-top: 1px solid var(--border); }
+    .th-timeline-label {
+      font-size: 0.65rem; font-family: var(--font-mono); color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 0.7rem 1rem 0.3rem;
+    }
+    .th-timeline { display: flex; flex-direction: column; gap: 0; }
+
+    /* individual run inside expanded card */
+    .th-run {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--border);
+      transition: background 0.1s ease;
+    }
+    .th-run:first-child { border-top: none; }
+    .th-run:hover { background: rgba(244,63,94,0.04); }
+    .th-run-latest { background: rgba(244,63,94,0.04); }
+
+    .th-run-meta {
+      display: flex; align-items: center; gap: 0.6rem;
+      margin-bottom: 0.45rem; flex-wrap: wrap;
+    }
+    .th-run-badge {
+      font-size: 0.6rem; font-family: var(--font-mono); font-weight: 700;
+      padding: 1px 6px; border-radius: 3px; letter-spacing: 0.05em;
+      background: rgba(244,63,94,0.15); color: var(--fail); border: 1px solid rgba(244,63,94,0.3);
+    }
+    .th-run-num  { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); min-width: 40px; }
+    .th-run-date { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-left: auto; }
+
+    .th-error {
+      font-family: var(--font-mono); font-size: 0.7rem; color: #fca5a5;
+      background: rgba(244,63,94,0.06); border: 1px solid rgba(244,63,94,0.15);
+      border-radius: 6px; padding: 0.6rem 0.85rem;
+      white-space: pre-wrap; word-break: break-all;
+      max-height: 140px; overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    /* empty state */
+    .th-empty { text-align: center; padding: 2.5rem 1rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
 
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       td:nth-child(2), th:nth-child(2),
       td:nth-child(8), th:nth-child(8) { display: none; }
       .progress-wrap { width: 60px; }
+      .fh-controls { flex-direction: column; align-items: stretch; }
+      .th-title { max-width: 200px; }
+      .th-stat-date { display: none; }
     }
   </style>
 </head>
@@ -500,37 +803,13 @@ function generateDashboard(history, failureArchive) {
       </table>
     </div>
 
-    ${failureArchive.length > 0 ? `
-    <div class="failure-section">
-      <div class="section-header" onclick="toggleFailures()">
-        <span class="section-title">🔴 Recent Failure Archive</span>
-        <span class="section-meta">${failureArchive.length} failed run${failureArchive.length !== 1 ? 's' : ''}</span>
-        <span class="toggle-icon" id="failureToggleIcon">▾</span>
-      </div>
-      <div class="failure-list" id="failureList">
-        ${failureArchive.map((arc) => `
-        <div class="failure-run">
-          <div class="failure-run-header">
-            <span class="branch-tag">${arc.branch}</span>
-            <span class="failure-run-id">run #${arc.runId}</span>
-            <span class="failure-run-date">${arc.date.replace('T', ' ').substring(0, 19)} UTC</span>
-            <span class="failure-count-badge">${arc.failures.length} test${arc.failures.length !== 1 ? 's' : ''} failed</span>
-          </div>
-          <div class="failure-tests">
-            ${arc.failures.map((f) => `
-            <div class="failure-test">
-              <div class="failure-test-title">✗ ${f.title}</div>
-              ${f.errors.length > 0 ? `<pre class="failure-error">${f.errors.map(e => (e ?? '').toString().substring(0, 300)).join('\n---\n')}</pre>` : ''}
-            </div>`).join('')}
-          </div>
-        </div>`).join('')}
-      </div>
-    </div>` : ''}
+    ${failureHistoryHTML}
 
     <footer>Generated by playwright-demo-js · ${new Date().toISOString().replace("T", " ").substring(0, 19)} UTC</footer>
   </div>
 
   <script>
+    // ── Run history table filters ────────────────────────────────────────────
     function applyFilters() {
       const branch  = document.getElementById('branchFilter').value;
       const browser = document.getElementById('browserFilter').value;
@@ -550,13 +829,76 @@ function generateDashboard(history, failureArchive) {
       document.getElementById('runCount').textContent = visible + ' runs';
     }
 
-    function toggleFailures() {
-      const list = document.getElementById('failureList');
-      const icon = document.getElementById('failureToggleIcon');
+    // ── Failure history: toggle individual test card ────────────────────────
+    function toggleTestHistory(id) {
+      const body = document.getElementById('thbody_' + id);
+      const icon = document.getElementById('thicon_' + id);
+      if (!body) return;
+      const open = body.style.display !== 'none';
+      body.style.display = open ? 'none' : '';
+      if (icon) icon.textContent = open ? '▸' : '▾';
+    }
+
+    // ── Failure history: search + branch filter + sort ──────────────────────
+    function filterTestHistory() {
+      const query  = (document.getElementById('thSearch')?.value ?? '').toLowerCase().trim();
+      const branch = document.getElementById('thBranchFilter')?.value ?? 'all';
+      const sort   = document.getElementById('thSortFilter')?.value ?? 'failures';
+      const list   = document.getElementById('thList');
       if (!list) return;
-      const collapsed = list.style.display === 'none';
-      list.style.display = collapsed ? '' : 'none';
-      if (icon) icon.textContent = collapsed ? '▾' : '▸';
+
+      const cards = Array.from(list.querySelectorAll('.th-card'));
+      let visible = 0;
+
+      cards.forEach(card => {
+        const title  = (card.getAttribute('data-title') ?? '').toLowerCase();
+        const matchQ = !query  || title.includes(query);
+
+        // branch match: check if any run entry inside the card has this branch
+        let matchB = branch === 'all';
+        if (!matchB) {
+          const tags = card.querySelectorAll('.branch-tag');
+          tags.forEach(t => { if (t.textContent?.trim() === branch) matchB = true; });
+        }
+
+        const show = matchQ && matchB;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      // Sorting (re-order DOM nodes)
+      const visibleCards = cards.filter(c => c.style.display !== 'none');
+      const sorted = visibleCards.slice().sort((a, b) => {
+        if (sort === 'failures') {
+          // cards already rendered in failure-count order; keep stable by reading stat text
+          const fa = parseInt(a.querySelector('.th-stat-fail')?.textContent?.replace(/[^0-9]/g,'') ?? '0', 10);
+          const fb = parseInt(b.querySelector('.th-stat-fail')?.textContent?.replace(/[^0-9]/g,'') ?? '0', 10);
+          return fb - fa;
+        } else if (sort === 'rate') {
+          const ra = parseInt(a.querySelector('.th-stat-rate')?.textContent?.replace(/[^0-9]/g,'') ?? '0', 10);
+          const rb = parseInt(b.querySelector('.th-stat-rate')?.textContent?.replace(/[^0-9]/g,'') ?? '0', 10);
+          return rb - ra;
+        } else if (sort === 'recent') {
+          const da = a.querySelector('.th-run-date')?.textContent ?? '';
+          const db = b.querySelector('.th-run-date')?.textContent ?? '';
+          return db.localeCompare(da);
+        }
+        return 0;
+      });
+
+      sorted.forEach(card => list.appendChild(card));
+
+      const countEl = document.getElementById('thCount');
+      if (countEl) countEl.textContent = visible + ' test' + (visible !== 1 ? 's' : '');
+
+      if (visible === 0 && !list.querySelector('.th-empty')) {
+        const empty = document.createElement('div');
+        empty.className = 'th-empty';
+        empty.textContent = 'No tests match your filters.';
+        list.appendChild(empty);
+      } else {
+        list.querySelector('.th-empty')?.remove();
+      }
     }
   </script>
 </body>
@@ -568,7 +910,6 @@ function generateDashboard(history, failureArchive) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 function main() {
-  // Validate required environment variables up-front for a clear error message.
   for (const key of /** @type {(keyof typeof ENV)[]} */ (["BRANCH", "RUN_ID", "BROWSER", "REPORT_PATH"])) {
     if (!ENV[key]) throw new Error(`Missing required environment variable: ${key}`);
   }
@@ -602,7 +943,6 @@ function main() {
 
   const history = updateHistory(entry);
 
-  // Always archive failures immediately — don't wait for pruning
   if (failed > 0) {
     archiveFailureSummary(REPORT_PATH, RUN_ID, BRANCH);
   }

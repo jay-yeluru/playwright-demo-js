@@ -50,10 +50,13 @@ jobs:
           BRANCH: ${{ github.event.workflow_run.head_branch }}
           RUN_ID: ${{ github.event.workflow_run.id }}
           BROWSER: ${{ github.event.workflow_run.name }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           REPORT_PATH: ${{ env.REPORT_PATH }}
           KEEP_RUNS: 10
           KEEP_FAILED_RUNS: 30
-        run: node generate-dashboard.js
+        run: |
+          BROWSER=$(echo "$BROWSER" | grep -oP '(?<=\().*(?=\))')
+          BROWSER=$BROWSER node generate-dashboard.js
 
       - name: Commit and push
         timeout-minutes: 3

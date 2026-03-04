@@ -14,7 +14,7 @@
       "ci": {
         "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/b98cdd3aa038317b902e52bcd193e00052560dbe",
         "commitHash": "b98cdd3aa038317b902e52bcd193e00052560dbe",
-        "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22655898518"
+        "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22656189337"
       },
       "gitCommit": {
         "shortHash": "b98cdd3",
@@ -45,7 +45,7 @@
           "ci": {
             "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/b98cdd3aa038317b902e52bcd193e00052560dbe",
             "commitHash": "b98cdd3aa038317b902e52bcd193e00052560dbe",
-            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22655898518"
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22656189337"
           },
           "gitCommit": {
             "shortHash": "b98cdd3",
@@ -83,7 +83,7 @@
           "ci": {
             "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/b98cdd3aa038317b902e52bcd193e00052560dbe",
             "commitHash": "b98cdd3aa038317b902e52bcd193e00052560dbe",
-            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22655898518"
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22656189337"
           },
           "gitCommit": {
             "shortHash": "b98cdd3",
@@ -121,7 +121,7 @@
           "ci": {
             "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/b98cdd3aa038317b902e52bcd193e00052560dbe",
             "commitHash": "b98cdd3aa038317b902e52bcd193e00052560dbe",
-            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22655898518"
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22656189337"
           },
           "gitCommit": {
             "shortHash": "b98cdd3",
@@ -208,12 +208,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1123,
+                  "duration": 1082,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-03-04T05:04:31.850Z",
+                  "startTime": "2026-03-04T05:18:38.316Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -231,8 +231,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-03-04T05:04:30.928Z",
-    "duration": 3030.959,
+    "startTime": "2026-03-04T05:18:37.409Z",
+    "duration": 3239.5710000000004,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

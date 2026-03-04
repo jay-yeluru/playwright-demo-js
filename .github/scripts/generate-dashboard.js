@@ -6,6 +6,8 @@ const path = require("path");
 /** @typedef {{ specs: Spec[] }} Suite */
 /** @typedef {{ suites: Suite[] }} TestResults */
 /** @typedef {{ date: string, branch: string, browser: string, passed: number, failed: number, total: number, status: string, reportUrl: string, runId: string }} RunEntry */
+/** @typedef {{ title: string, errors: string[] }} FailureSummary */
+/** @typedef {{ runId: string, branch: string, date: string, failures: FailureSummary[] }} FailureArchive */
 
 // ── Environment ───────────────────────────────────────────────────────────────
 
@@ -15,6 +17,7 @@ const ENV = {
   BROWSER: /** @type {string} */ (process.env.BROWSER),
   REPORT_PATH: /** @type {string} */ (process.env.REPORT_PATH),
   KEEP_RUNS: parseInt(process.env.KEEP_RUNS ?? "10", 10),
+  KEEP_FAILED_RUNS: parseInt(process.env.KEEP_FAILED_RUNS ?? "30", 10),
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -59,32 +62,89 @@ function updateHistory(entry) {
   return history;
 }
 
-// ── Clean up old runs ─────────────────────────────────────────────────────────
+// ── Archive failure summary (Option 2) ───────────────────────────────────────
 
-/** @param {string} branch @param {number} keepRuns */
-function cleanOldRuns(branch, keepRuns) {
+/** @param {string} runPath @param {string} runId @param {string} branch */
+function archiveFailureSummary(runPath, runId, branch) {
+  const resultsFile = path.join(runPath, "test-results.json");
+  if (!fs.existsSync(resultsFile)) return;
+
+  const results = /** @type {TestResults} */ (readJSON(resultsFile));
+  const failures = results.suites
+    .flatMap(/** @param {Suite} s */ (s) => s.specs)
+    .filter(/** @param {Spec} s */ (s) => !s.ok)
+    .map(
+      /** @param {any} s */ (s) => ({
+        title: s.title,
+        errors:
+          s.tests?.flatMap(
+            /** @param {any} t */ (t) =>
+              t.results?.flatMap(
+                /** @param {any} r */ (r) =>
+                  r.errors?.map(/** @param {any} e */ (e) => e.message) ?? [],
+              ) ?? [],
+          ) ?? [],
+      }),
+    );
+
+  if (failures.length === 0) return;
+
+  const archiveDir = path.join("failure-archive", branch);
+  fs.mkdirSync(archiveDir, { recursive: true });
+
+  writeJSON(path.join(archiveDir, `${runId}.json`), {
+    runId,
+    branch,
+    date: new Date().toISOString(),
+    failures,
+  });
+
+  console.log(`Archived failure summary for run: ${runId}`);
+}
+
+// ── Clean up old runs (Option 3 — tiered retention) ──────────────────────────
+
+/** @param {string} branch @param {number} keepPassing @param {number} keepFailing @param {RunEntry[]} history */
+function cleanOldRuns(branch, keepPassing, keepFailing, history) {
   const branchDir = path.join("reports", branch);
   if (!fs.existsSync(branchDir)) return;
 
-  const oldRuns = fs
+  const failedRunIds = new Set(
+    history.filter((r) => r.failed > 0).map((r) => r.runId),
+  );
+
+  const runs = fs
     .readdirSync(branchDir)
     .filter((f) => fs.statSync(path.join(branchDir, f)).isDirectory())
-    .sort((a, b) => b.localeCompare(a))
-    .slice(keepRuns);
+    .sort((a, b) => b.localeCompare(a));
 
-  if (oldRuns.length === 0) {
-    console.log(
-      `Nothing to clean up (≤ ${keepRuns} runs for branch: ${branch}).`,
-    );
+  const passingRuns = runs.filter((r) => !failedRunIds.has(r));
+  const failingRuns = runs.filter((r) => failedRunIds.has(r));
+
+  const runsToDelete = [
+    ...passingRuns.slice(keepPassing),
+    ...failingRuns.slice(keepFailing),
+  ];
+
+  if (runsToDelete.length === 0) {
+    console.log(`Nothing to clean up for branch: ${branch}.`);
     return;
   }
 
-  for (const run of oldRuns) {
+  for (const run of runsToDelete) {
     const runPath = path.join(branchDir, run);
+    if (failedRunIds.has(run)) {
+      archiveFailureSummary(runPath, run, branch);
+    }
     fs.rmSync(runPath, { recursive: true, force: true });
-    console.log(`Removed old run: ${runPath}`);
+    console.log(
+      `Pruned ${failedRunIds.has(run) ? "failing" : "passing"} run: ${runPath}`,
+    );
   }
-  console.log(`Kept latest ${keepRuns} runs for branch: ${branch}.`);
+
+  console.log(
+    `Kept latest ${keepPassing} passing and ${keepFailing} failing runs for branch: ${branch}.`,
+  );
 }
 
 // ── Render table row ──────────────────────────────────────────────────────────
@@ -164,19 +224,9 @@ function generateDashboard(history) {
     .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem; }
     header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
     .logo { display: flex; align-items: center; gap: 0.75rem; }
-    .logo-icon {
-      width: 44px; height: 44px; background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; animation: pulse 3s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(0,229,255,0.3); }
-      50%       { box-shadow: 0 0 35px rgba(0,229,255,0.6); }
-    }
-    .logo-text h1 {
-      font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em;
-      background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+    .logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; animation: pulse 3s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { box-shadow: 0 0 20px rgba(0,229,255,0.3); } 50% { box-shadow: 0 0 35px rgba(0,229,255,0.6); } }
+    .logo-text h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .logo-text p { font-size: 0.75rem; color: var(--muted); font-family: var(--font-mono); margin-top: 2px; }
     .header-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); text-align: right; }
     .live-dot { display: inline-block; width: 7px; height: 7px; background: var(--pass); border-radius: 50%; margin-right: 5px; animation: blink 1.5s ease-in-out infinite; }
@@ -201,13 +251,7 @@ function generateDashboard(history) {
     .card-rate  .stat-value { color: var(--text); }
     .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; font-family: var(--font-mono); display: flex; align-items: center; gap: 8px; }
     .sparkline polyline { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    .latest-banner {
-      background: var(--surface); border: 1px solid var(--border);
-      border-left: 3px solid ${latestRun?.failed === 0 ? "var(--pass)" : "var(--fail)"};
-      border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem;
-      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-      animation: slideUp 0.4s 0.25s ease both;
-    }
+    .latest-banner { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid ${latestRun?.failed === 0 ? "var(--pass)" : "var(--fail)"}; border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; animation: slideUp 0.4s 0.25s ease both; }
     .latest-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
     .latest-info { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
     .latest-stat { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text); }
@@ -226,7 +270,7 @@ function generateDashboard(history) {
     td { padding: 0.8rem 1rem; font-size: 0.82rem; vertical-align: middle; }
     .badge { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 0.65rem; font-family: var(--font-mono); font-weight: 600; letter-spacing: 0.05em; }
     .badge-pass { background: rgba(16,185,129,0.15); color: var(--pass); border: 1px solid rgba(16,185,129,0.3); }
-    .badge-fail { background: rgba(244,63,94,0.15);  color: var(--fail); border: 1px solid rgba(244,63,94,0.3); }
+    .badge-fail { background: rgba(244,63,94,0.15); color: var(--fail); border: 1px solid rgba(244,63,94,0.3); }
     .date-cell { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
     .branch-tag { font-family: var(--font-mono); font-size: 0.75rem; background: var(--surface2); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; color: var(--accent); }
     .pass-count { color: var(--pass); font-family: var(--font-mono); font-weight: 600; }
@@ -336,7 +380,8 @@ function generateDashboard(history) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 function main() {
-  const { BRANCH, RUN_ID, BROWSER, REPORT_PATH, KEEP_RUNS } = ENV;
+  const { BRANCH, RUN_ID, BROWSER, REPORT_PATH, KEEP_RUNS, KEEP_FAILED_RUNS } =
+    ENV;
   const { passed, failed, total, status } = parseResults();
 
   /** @type {RunEntry} */
@@ -353,7 +398,7 @@ function main() {
   };
 
   const history = updateHistory(entry);
-  cleanOldRuns(BRANCH, KEEP_RUNS);
+  cleanOldRuns(BRANCH, KEEP_RUNS, KEEP_FAILED_RUNS, history);
   generateDashboard(history);
 
   console.log(`Dashboard regenerated with ${history.length} runs.`);

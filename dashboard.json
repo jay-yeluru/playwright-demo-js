@@ -1,5 +1,19 @@
 [
   {
+    "date": "2026-03-04 07:37:52 UTC",
+    "branch": "develop",
+    "browser": "Run Tests",
+    "passed": 3,
+    "failed": 5,
+    "flaky": 0,
+    "total": 8,
+    "duration": 19243,
+    "status": "❌",
+    "conclusion": "failure",
+    "reportUrl": "reports/develop/22659672200/index.html",
+    "runId": "22659672200"
+  },
+  {
     "date": "2026-03-04 07:26:10 UTC",
     "branch": "develop",
     "browser": "Run Tests",
@@ -442,16 +456,5 @@
     "status": "✅",
     "reportUrl": "reports/master/22656181942/index.html",
     "runId": "22656181942"
-  },
-  {
-    "date": "2026-03-04 05:17:23 UTC",
-    "branch": "master",
-    "browser": "Run Tests",
-    "passed": 1,
-    "failed": 0,
-    "total": 1,
-    "status": "✅",
-    "reportUrl": "reports/master/22656180665/index.html",
-    "runId": "22656180665"
   }
 ]

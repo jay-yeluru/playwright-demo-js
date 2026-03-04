@@ -55,7 +55,12 @@ jobs:
           KEEP_RUNS: 10
           KEEP_FAILED_RUNS: 30
         run: |
-          BROWSER=$(echo "$BROWSER" | sed 's/.*(\(.*\)).*/\1/')
+          # Extract browser from "Run Tests (chrome)" -> "chrome" using bash
+          # parameter expansion - avoids sed regex escaping issues in YAML.
+          if [[ "$BROWSER" == *"("*")"* ]]; then
+            BROWSER="${BROWSER##*(}"
+            BROWSER="${BROWSER%)*}"
+          fi
           BROWSER=$BROWSER node generate-dashboard.js
 
       - name: Commit and push

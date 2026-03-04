@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 /** @typedef {{ ok: boolean, tests?: any[] }} Spec */
-/** @typedef {{ specs: Spec[] }} Suite */
+/** @typedef {{ specs: Spec[], suites?: Suite[] }} Suite */
 /** @typedef {{ suites: Suite[] }} TestResults */
 /** @typedef {{ date: string, branch: string, browser: string, passed: number, failed: number, flaky: number, total: number, duration: number, status: string, conclusion: string, reportUrl: string, runId: string }} RunEntry */
 /** @typedef {{ title: string, errors: string[] }} FailureSummary */
@@ -37,7 +37,8 @@ function parseResults() {
   const results = /** @type {TestResults} */ (
     readJSON(`${ENV.REPORT_PATH}/test-results.json`)
   );
-  const specs = results.suites.flatMap(/** @param {Suite} s */(s) => s.specs);
+  // Use recursive flattening — Playwright nests suites for files/describes.
+  const specs = flattenSpecs(results.suites);
   const passed = specs.filter(/** @param {Spec} s */(s) => s.ok).length;
   const failed = specs.filter(/** @param {Spec} s */(s) => !s.ok).length;
   const flaky = specs
@@ -60,10 +61,22 @@ function parseResults() {
   };
 }
 
+// ── Helpers: recursive spec flattening ───────────────────────────────────────
+
+/** @param {Suite[]} suites @returns {Spec[]} */
+function flattenSpecs(suites) {
+  return suites.flatMap((s) => [
+    ...(s.specs ?? []),
+    ...flattenSpecs(/** @type {any[]} */(s.suites ?? [])),
+  ]);
+}
+
 // ── Update history ────────────────────────────────────────────────────────────
 
 const HISTORY_FILE = "dashboard.json";
-const MAX_HISTORY = 100;
+// Keep at most KEEP_RUNS passing + KEEP_FAILED_RUNS failing entries so that
+// every row in the dashboard has a live report link.
+const MAX_HISTORY = ENV.KEEP_RUNS + ENV.KEEP_FAILED_RUNS;
 
 /** @param {RunEntry} entry @returns {RunEntry[]} */
 function updateHistory(entry) {
@@ -83,8 +96,7 @@ function archiveFailureSummary(runPath, runId, branch) {
   if (!fs.existsSync(resultsFile)) return;
 
   const results = /** @type {TestResults} */ (readJSON(resultsFile));
-  const failures = results.suites
-    .flatMap(/** @param {Suite} s */(s) => s.specs)
+  const failures = flattenSpecs(results.suites)
     .filter(/** @param {Spec} s */(s) => !s.ok)
     .map(
       /** @param {any} s */(s) => ({
@@ -102,7 +114,9 @@ function archiveFailureSummary(runPath, runId, branch) {
 
   if (failures.length === 0) return;
 
-  const archiveDir = path.join("failure-archive", branch);
+  // Store flat at failure-archive/{runId}.json — no branch subfolder needed
+  // since each entry already carries the branch field inside the JSON.
+  const archiveDir = "failure-archive";
   fs.mkdirSync(archiveDir, { recursive: true });
 
   writeJSON(path.join(archiveDir, `${runId}.json`), {
@@ -196,10 +210,25 @@ function renderRow(r, i) {
     </tr>`;
 }
 
+// ── Load failure archive ──────────────────────────────────────────────────────
+
+/** @returns {FailureArchive[]} */
+function loadFailureArchive() {
+  const archiveDir = "failure-archive";
+  if (!fs.existsSync(archiveDir)) return [];
+  return fs
+    .readdirSync(archiveDir)
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => /** @type {FailureArchive} */(readJSON(path.join(archiveDir, f))))
+    // Most-recent first
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 20); // show at most 20 recent failure runs
+}
+
 // ── Generate dashboard HTML ───────────────────────────────────────────────────
 
-/** @param {RunEntry[]} history */
-function generateDashboard(history) {
+/** @param {RunEntry[]} history @param {FailureArchive[]} failureArchive */
+function generateDashboard(history, failureArchive) {
   const totalRuns = history.length;
   const passedRuns = history.filter(
     (r) => r.failed === 0 && r.conclusion !== "cancelled",
@@ -345,6 +374,24 @@ function generateDashboard(history) {
 
     footer { text-align: center; padding: 2rem 0 1rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
 
+
+    .failure-section { background: var(--surface); border: 1px solid rgba(244,63,94,0.25); border-radius: 14px; overflow: hidden; margin-top: 1.5rem; animation: slideUp 0.5s 0.35s ease both; }
+    .section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background 0.15s ease; }
+    .section-header:hover { background: rgba(244,63,94,0.05); }
+    .section-title { font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fail); font-weight: 600; flex: 1; }
+    .section-meta { font-size: 0.72rem; font-family: var(--font-mono); color: var(--muted); background: var(--surface2); padding: 2px 10px; border-radius: 20px; border: 1px solid var(--border); }
+    .toggle-icon { font-size: 1rem; color: var(--muted); transition: transform 0.2s ease; }
+    .failure-list { padding: 0.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+    .failure-run { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .failure-run-header { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; padding: 0.65rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); }
+    .failure-run-id { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+    .failure-run-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-left: auto; }
+    .failure-count-badge { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600; background: rgba(244,63,94,0.15); color: var(--fail); border: 1px solid rgba(244,63,94,0.3); padding: 2px 8px; border-radius: 4px; }
+    .failure-tests { padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .failure-test { border-left: 2px solid var(--fail); padding-left: 0.75rem; }
+    .failure-test-title { font-size: 0.83rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+    .failure-error { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 0.75rem; white-space: pre-wrap; word-break: break-all; max-height: 120px; overflow-y: auto; }
+
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       td:nth-child(2), th:nth-child(2),
@@ -453,6 +500,33 @@ function generateDashboard(history) {
       </table>
     </div>
 
+    ${failureArchive.length > 0 ? `
+    <div class="failure-section">
+      <div class="section-header" onclick="toggleFailures()">
+        <span class="section-title">🔴 Recent Failure Archive</span>
+        <span class="section-meta">${failureArchive.length} failed run${failureArchive.length !== 1 ? 's' : ''}</span>
+        <span class="toggle-icon" id="failureToggleIcon">▾</span>
+      </div>
+      <div class="failure-list" id="failureList">
+        ${failureArchive.map((arc) => `
+        <div class="failure-run">
+          <div class="failure-run-header">
+            <span class="branch-tag">${arc.branch}</span>
+            <span class="failure-run-id">run #${arc.runId}</span>
+            <span class="failure-run-date">${arc.date.replace('T', ' ').substring(0, 19)} UTC</span>
+            <span class="failure-count-badge">${arc.failures.length} test${arc.failures.length !== 1 ? 's' : ''} failed</span>
+          </div>
+          <div class="failure-tests">
+            ${arc.failures.map((f) => `
+            <div class="failure-test">
+              <div class="failure-test-title">✗ ${f.title}</div>
+              ${f.errors.length > 0 ? `<pre class="failure-error">${f.errors.map(e => (e ?? '').toString().substring(0, 300)).join('\n---\n')}</pre>` : ''}
+            </div>`).join('')}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
+
     <footer>Generated by playwright-demo-js · ${new Date().toISOString().replace("T", " ").substring(0, 19)} UTC</footer>
   </div>
 
@@ -475,6 +549,15 @@ function generateDashboard(history) {
 
       document.getElementById('runCount').textContent = visible + ' runs';
     }
+
+    function toggleFailures() {
+      const list = document.getElementById('failureList');
+      const icon = document.getElementById('failureToggleIcon');
+      if (!list) return;
+      const collapsed = list.style.display === 'none';
+      list.style.display = collapsed ? '' : 'none';
+      if (icon) icon.textContent = collapsed ? '▾' : '▸';
+    }
   </script>
 </body>
 </html>`;
@@ -485,6 +568,11 @@ function generateDashboard(history) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 function main() {
+  // Validate required environment variables up-front for a clear error message.
+  for (const key of /** @type {(keyof typeof ENV)[]} */ (["BRANCH", "RUN_ID", "BROWSER", "REPORT_PATH"])) {
+    if (!ENV[key]) throw new Error(`Missing required environment variable: ${key}`);
+  }
+
   const {
     BRANCH,
     RUN_ID,
@@ -520,9 +608,10 @@ function main() {
   }
 
   cleanOldRuns(BRANCH, KEEP_RUNS, KEEP_FAILED_RUNS, history);
-  generateDashboard(history);
+  const failureArchive = loadFailureArchive();
+  generateDashboard(history, failureArchive);
 
-  console.log(`Dashboard regenerated with ${history.length} runs.`);
+  console.log(`Dashboard regenerated with ${history.length} runs, ${failureArchive.length} failure archive entries.`);
 }
 
 main();

@@ -1,8 +1,22 @@
 [
   {
+    "date": "2026-03-04 10:44:59 UTC",
+    "branch": "develop",
+    "browser": "Run Tests",
+    "passed": 2,
+    "failed": 6,
+    "flaky": 0,
+    "total": 8,
+    "duration": 24327,
+    "status": "❌",
+    "conclusion": "failure",
+    "reportUrl": "reports/develop/22665839135/index.html",
+    "runId": "22665839135"
+  },
+  {
     "date": "2026-03-04 10:43:47 UTC",
     "branch": "master",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -16,7 +30,7 @@
   {
     "date": "2026-03-04 10:33:38 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -30,7 +44,7 @@
   {
     "date": "2026-03-04 08:26:24 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -44,7 +58,7 @@
   {
     "date": "2026-03-04 07:56:54 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -58,7 +72,7 @@
   {
     "date": "2026-03-04 07:55:48 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -72,7 +86,7 @@
   {
     "date": "2026-03-04 07:55:33 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -86,7 +100,7 @@
   {
     "date": "2026-03-04 07:54:54 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -100,7 +114,7 @@
   {
     "date": "2026-03-04 07:54:26 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -114,7 +128,7 @@
   {
     "date": "2026-03-04 07:54:16 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -128,7 +142,7 @@
   {
     "date": "2026-03-04 07:53:37 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -142,7 +156,7 @@
   {
     "date": "2026-03-04 07:53:28 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -156,7 +170,7 @@
   {
     "date": "2026-03-04 07:53:12 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -170,7 +184,7 @@
   {
     "date": "2026-03-04 07:52:44 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -184,7 +198,7 @@
   {
     "date": "2026-03-04 07:52:27 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -198,7 +212,7 @@
   {
     "date": "2026-03-04 07:51:43 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -212,7 +226,7 @@
   {
     "date": "2026-03-04 07:51:11 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -226,7 +240,7 @@
   {
     "date": "2026-03-04 07:50:52 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -240,7 +254,7 @@
   {
     "date": "2026-03-04 07:50:27 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -254,7 +268,7 @@
   {
     "date": "2026-03-04 07:50:01 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -268,7 +282,7 @@
   {
     "date": "2026-03-04 07:49:55 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -282,7 +296,7 @@
   {
     "date": "2026-03-04 07:49:16 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 2,
     "failed": 6,
     "flaky": 0,
@@ -296,7 +310,7 @@
   {
     "date": "2026-03-04 07:49:05 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -310,7 +324,7 @@
   {
     "date": "2026-03-04 07:48:35 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -324,7 +338,7 @@
   {
     "date": "2026-03-04 07:48:07 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -338,7 +352,7 @@
   {
     "date": "2026-03-04 07:47:31 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -352,7 +366,7 @@
   {
     "date": "2026-03-04 07:46:51 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -366,7 +380,7 @@
   {
     "date": "2026-03-04 07:46:18 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -380,7 +394,7 @@
   {
     "date": "2026-03-04 07:45:47 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -394,7 +408,7 @@
   {
     "date": "2026-03-04 07:45:42 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 2,
     "failed": 6,
     "flaky": 0,
@@ -408,7 +422,7 @@
   {
     "date": "2026-03-04 07:45:11 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -422,7 +436,7 @@
   {
     "date": "2026-03-04 07:44:59 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -436,7 +450,7 @@
   {
     "date": "2026-03-04 07:44:48 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -450,7 +464,7 @@
   {
     "date": "2026-03-04 07:43:58 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -464,7 +478,7 @@
   {
     "date": "2026-03-04 07:43:43 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -478,7 +492,7 @@
   {
     "date": "2026-03-04 07:43:20 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 0,
@@ -492,7 +506,7 @@
   {
     "date": "2026-03-04 07:43:08 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 2,
     "failed": 6,
     "flaky": 0,
@@ -506,7 +520,7 @@
   {
     "date": "2026-03-04 07:42:51 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -520,7 +534,7 @@
   {
     "date": "2026-03-04 07:42:22 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -534,7 +548,7 @@
   {
     "date": "2026-03-04 07:41:51 UTC",
     "branch": "develop",
-    "browser": "Run Tests",
+    "browser": "chrome",
     "passed": 3,
     "failed": 5,
     "flaky": 1,
@@ -544,19 +558,5 @@
     "conclusion": "failure",
     "reportUrl": "reports/develop/22659680093/index.html",
     "runId": "22659680093"
-  },
-  {
-    "date": "2026-03-04 07:41:18 UTC",
-    "branch": "develop",
-    "browser": "Run Tests",
-    "passed": 3,
-    "failed": 5,
-    "flaky": 0,
-    "total": 8,
-    "duration": 20076,
-    "status": "❌",
-    "conclusion": "failure",
-    "reportUrl": "reports/develop/22659678641/index.html",
-    "runId": "22659678641"
   }
 ]

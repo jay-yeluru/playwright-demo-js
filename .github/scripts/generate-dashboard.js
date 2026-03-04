@@ -92,6 +92,14 @@ const MAX_HISTORY = ENV.KEEP_RUNS + ENV.KEEP_FAILED_RUNS;
 function updateHistory(entry) {
   /** @type {RunEntry[]} */
   const history = fs.existsSync(HISTORY_FILE) ? readJSON(HISTORY_FILE) : [];
+
+  // Clean up legacy badly-recorded browser names from history
+  history.forEach(r => {
+    if (r.browser === "Run Tests") {
+      r.browser = "chrome"; // fallback guess for legacy runs
+    }
+  });
+
   history.unshift(entry);
   if (history.length > MAX_HISTORY) history.splice(MAX_HISTORY);
   writeJSON(HISTORY_FILE, history);

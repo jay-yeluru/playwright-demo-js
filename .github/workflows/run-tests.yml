@@ -44,6 +44,7 @@ jobs:
       - name: Run tests
         run: npm run test:${{ inputs.browser }}
 
+
       - name: Upload reports
         uses: actions/upload-artifact@v4
         if: always()

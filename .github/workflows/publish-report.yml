@@ -49,19 +49,12 @@ jobs:
         env:
           BRANCH: ${{ github.event.workflow_run.head_branch }}
           RUN_ID: ${{ github.event.workflow_run.id }}
-          BROWSER: ${{ github.event.workflow_run.name }}
           CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           REPORT_PATH: ${{ env.REPORT_PATH }}
           KEEP_RUNS: 10
           KEEP_FAILED_RUNS: 30
         run: |
-          # Extract browser from "Run Tests (chrome)" -> "chrome" using bash
-          # parameter expansion - avoids sed regex escaping issues in YAML.
-          if [[ "$BROWSER" == *"("*")"* ]]; then
-            BROWSER="${BROWSER##*(}"
-            BROWSER="${BROWSER%)*}"
-          fi
-          BROWSER=$BROWSER node generate-dashboard.js
+          node generate-dashboard.js
 
       - name: Commit and push
         timeout-minutes: 3

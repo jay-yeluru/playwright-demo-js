@@ -32,7 +32,7 @@ const writeJSON = (filePath, data) =>
 
 // ── Parse test results ────────────────────────────────────────────────────────
 
-/** @returns {Pick<RunEntry, 'passed' | 'failed' | 'flaky' | 'total' | 'status' | 'duration'>} */
+/** @returns {Pick<RunEntry, 'passed' | 'failed' | 'flaky' | 'total' | 'status' | 'duration'> & { detectedBrowser: string }} */
 function parseResults() {
   const results = /** @type {TestResults} */ (
     readJSON(`${ENV.REPORT_PATH}/test-results.json`)
@@ -43,12 +43,24 @@ function parseResults() {
   const flaky = specs
     .flatMap(/** @param {Spec} s */(s) => (s.ok ? s.tests ?? [] : []))
     .filter((/** @type {any} */ t) => (t.results?.length ?? 0) > 1).length;
+  const browsers = new Set();
   const duration = specs
     .flatMap(/** @param {Spec} s */(s) => s.tests ?? [])
     .reduce(
-      (sum, /** @type {any} */ t) => sum + (t.results?.[0]?.duration ?? 0),
+      (sum, /** @type {any} */ t) => {
+        if (t.projectName) browsers.add(t.projectName);
+        return sum + (t.results?.[0]?.duration ?? 0);
+      },
       0,
     );
+
+  // Map playwright project names to friendly browser names
+  const browsersArr = Array.from(browsers).map(b => {
+    b = String(b).toLowerCase();
+    if (b.includes("chrom")) return "chrome";
+    if (b.includes("webkit")) return "safari";
+    return b; // firefox, edge, etc.
+  });
 
   return {
     passed,
@@ -57,6 +69,7 @@ function parseResults() {
     total: passed + failed,
     duration,
     status: failed === 0 ? "✅" : "❌",
+    detectedBrowser: browsersArr.join(", ") || "unknown",
   };
 }
 
@@ -931,20 +944,23 @@ function generateDashboard(history, failureArchive) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 function main() {
-  for (const key of /** @type {(keyof typeof ENV)[]} */ (["BRANCH", "RUN_ID", "BROWSER", "REPORT_PATH"])) {
+  // Validate required environment variables up-front for a clear error message.
+  for (const key of /** @type {(keyof typeof ENV)[]} */ (["BRANCH", "RUN_ID", "REPORT_PATH"])) {
     if (!ENV[key]) throw new Error(`Missing required environment variable: ${key}`);
   }
 
   const {
     BRANCH,
     RUN_ID,
-    BROWSER,
     CONCLUSION,
     REPORT_PATH,
     KEEP_RUNS,
     KEEP_FAILED_RUNS,
   } = ENV;
-  const { passed, failed, flaky, total, duration, status } = parseResults();
+  const { passed, failed, flaky, total, duration, status, detectedBrowser } = parseResults();
+
+  // Use passed BROWSER env var, fallback to detected from JSON
+  const BROWSER = ENV.BROWSER || detectedBrowser;
 
   /** @type {RunEntry} */
   const entry = {

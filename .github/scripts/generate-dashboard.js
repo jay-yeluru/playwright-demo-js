@@ -968,7 +968,8 @@ function main() {
   const { passed, failed, flaky, total, duration, status, detectedBrowser } = parseResults();
 
   // Use passed BROWSER env var, fallback to detected from JSON
-  const BROWSER = ENV.BROWSER || detectedBrowser;
+  let BROWSER = ENV.BROWSER || detectedBrowser;
+  if (BROWSER === "Run Tests") BROWSER = detectedBrowser || "chrome";
 
   /** @type {RunEntry} */
   const entry = {

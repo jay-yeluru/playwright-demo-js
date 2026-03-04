@@ -131,9 +131,20 @@ function cleanOldRuns(branch, keepPassing, keepFailing, history) {
   const branchDir = path.join("reports", branch);
   if (!fs.existsSync(branchDir)) return;
 
+  // Seed from in-memory history (recent runs).
   const failedRunIds = new Set(
     history.filter((r) => r.failed > 0).map((r) => r.runId),
   );
+
+  // IMPORTANT: history is capped at MAX_HISTORY entries, so older failing runs
+  // may have scrolled out of dashboard.json. Supplement from failure-archive/,
+  // which retains a file per failing run indefinitely until we prune it here.
+  const archiveDir = "failure-archive";
+  if (fs.existsSync(archiveDir)) {
+    fs.readdirSync(archiveDir)
+      .filter((f) => f.endsWith(".json"))
+      .forEach((f) => failedRunIds.add(f.replace(/\.json$/, "")));
+  }
 
   const runs = fs
     .readdirSync(branchDir)
@@ -154,10 +165,20 @@ function cleanOldRuns(branch, keepPassing, keepFailing, history) {
 
   for (const run of runsToDelete) {
     const runPath = path.join(branchDir, run);
+    const isFailing = failedRunIds.has(run);
     fs.rmSync(runPath, { recursive: true, force: true });
-    console.log(
-      `Pruned ${failedRunIds.has(run) ? "failing" : "passing"} run: ${runPath}`,
-    );
+
+    // If the run had failures, remove its failure-archive entry too so the
+    // archive stays in sync and doesn't accumulate ghost entries forever.
+    if (isFailing) {
+      const archiveFile = path.join(archiveDir, `${run}.json`);
+      if (fs.existsSync(archiveFile)) {
+        fs.rmSync(archiveFile);
+        console.log(`Removed failure-archive entry: ${run}.json`);
+      }
+    }
+
+    console.log(`Pruned ${isFailing ? "failing" : "passing"} run: ${runPath}`);
   }
 
   console.log(

@@ -8,7 +8,7 @@ const path = require("path");
 /** @typedef {{ date: string, branch: string, browser: string, passed: number, failed: number, flaky: number, total: number, duration: number, status: string, conclusion: string, reportUrl: string, runId: string }} RunEntry */
 /** @typedef {{ title: string, errors: string[] }} FailureSummary */
 /** @typedef {{ runId: string, branch: string, date: string, failures: FailureSummary[] }} FailureArchive */
-/** @typedef {{ title: string, file: string, group: string, status: 'passed'|'failed'|'flaky', duration: number, errors: string[] }} TestCaseResult */
+/** @typedef {{ title: string, file: string, group: string, tags: string[], status: 'passed'|'failed'|'flaky', duration: number, errors: string[] }} TestCaseResult */
 /** @typedef {{ runId: string, branch: string, browser: string, date: string, reportUrl: string, tests: TestCaseResult[] }} TestRunEntry */
 
 // ── Environment ───────────────────────────────────────────────────────────────
@@ -111,7 +111,8 @@ function updateHistory(entry) {
 // ── Archive failure summary ───────────────────────────────────────────────────
 
 /** @param {string} runPath @param {string} runId @param {string} branch */
-function archiveFailureSummary(runPath, runId, branch) {
+/** @param {string} runPath @param {string} runId @param {string} branch @param {string} browser */
+function archiveFailureSummary(runPath, runId, branch, browser) {
   const resultsFile = path.join(runPath, "test-results.json");
   if (!fs.existsSync(resultsFile)) return;
 
@@ -137,9 +138,12 @@ function archiveFailureSummary(runPath, runId, branch) {
   const archiveDir = "failure-archive";
   fs.mkdirSync(archiveDir, { recursive: true });
 
+  // Stored permanently — acts as a long-term failure ledger even after
+  // the corresponding report folder and test-runs entry are pruned.
   writeJSON(path.join(archiveDir, `${runId}.json`), {
     runId,
     branch,
+    browser,   // stored so archive entries can feed browser breakdown
     date: new Date().toISOString(),
     failures,
   });
@@ -177,7 +181,11 @@ function archiveTestRun(runPath, runId, branch, browser, reportUrl) {
       (/** @type {number} */ sum, /** @type {any} */ t) => sum + (t.results?.[0]?.duration ?? 0),
       0
     );
-    tests.push({ title: spec.title, file, group, status, duration, errors: errors.slice(0, 2) });
+    // Extract tags: from annotations (tag: [] API) + @word in title
+    const annotationTags = (allTests[0]?.annotations ?? []).filter((/** @type {any} */ a) => a.type === 'tag').map((/** @type {any} */ a) => a.description ?? a.type);
+    const titleTags = (spec.title.match(/@[\w-]+/g) ?? []);
+    const tags = [...new Set([...annotationTags, ...titleTags])];
+    tests.push({ title: spec.title, file, group, tags, status, duration, errors: errors.slice(0, 2) });
   };
 
   /** @param {any} suite @param {string} file @param {string} group */
@@ -214,7 +222,7 @@ function loadTestRuns() {
 
 /**
  * @typedef {{
- *   title: string, file: string, group: string,
+ *   title: string, file: string, group: string, tags: string[],
  *   totalRuns: number, passed: number, failed: number, flaky: number, passRate: number,
  *   avgDuration: number, lastStatus: string, lastDate: string,
  *   browsers: Object.<string,{runs:number,passed:number,failed:number,flaky:number}>,
@@ -223,20 +231,32 @@ function loadTestRuns() {
  * }} PerTestStat
  */
 
-/** @param {TestRunEntry[]} runs @returns {PerTestStat[]} */
-function buildPerTestAnalytics(runs) {
+/**
+ * Merge test-runs (detailed, short window) with failure-archive (failures only, permanent).
+ * Failure-archive entries for runs whose test-runs file was already pruned are synthesised
+ * as lightweight "failed" history entries so trends stay accurate long-term.
+ *
+ * @param {TestRunEntry[]} runs
+ * @param {FailureArchive[]} failureArchive
+ * @returns {PerTestStat[]}
+ */
+function buildPerTestAnalytics(runs, failureArchive) {
   /** @type {Map<string, PerTestStat>} */
   const map = new Map();
 
+  // Track which runIds are already covered by full test-runs data
+  const coveredRunIds = new Set(runs.map(r => r.runId));
+
+  // ── 1. Process detailed test-runs (recent window) ─────────────────────────
   for (const run of runs) {
     for (const t of run.tests) {
-      // Key by file + title to avoid collisions across spec files
       const key = `${t.file ?? ''}::${t.title}`;
       if (!map.has(key)) {
         map.set(key, {
           title: t.title,
           file: t.file ?? 'unknown',
           group: t.group ?? '',
+          tags: t.tags ?? [],
           totalRuns: 0, passed: 0, failed: 0, flaky: 0, passRate: 0,
           avgDuration: 0, lastStatus: t.status, lastDate: run.date,
           browsers: {}, branches: {}, history: [],
@@ -255,11 +275,11 @@ function buildPerTestAnalytics(runs) {
 
       if (!stat.browsers[run.browser]) stat.browsers[run.browser] = { runs: 0, passed: 0, failed: 0, flaky: 0 };
       stat.browsers[run.browser].runs++;
-      stat.browsers[run.browser][t.status]++;
+      (/** @type {any} */ (stat.browsers[run.browser]))[t.status]++;
 
       if (!stat.branches[run.branch]) stat.branches[run.branch] = { runs: 0, passed: 0, failed: 0, flaky: 0 };
       stat.branches[run.branch].runs++;
-      stat.branches[run.branch][t.status]++;
+      (/** @type {any} */ (stat.branches[run.branch]))[t.status]++;
 
       if (stat.history.length < 20) {
         stat.history.push({
@@ -271,6 +291,52 @@ function buildPerTestAnalytics(runs) {
     }
   }
 
+  // ── 2. Supplement with failure-archive (runs pruned from test-runs) ────────
+  // Sort oldest-first so history entries append in chronological order.
+  const archiveSorted = (failureArchive ?? [])
+    .filter(a => !coveredRunIds.has(a.runId))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  for (const entry of archiveSorted) {
+    const browser = (/** @type {any} */ (entry)).browser ?? 'unknown';
+    for (const f of entry.failures) {
+      // Try to match an existing stat by title (best-effort, no file in archive)
+      let stat = /** @type {PerTestStat|undefined} */ (undefined);
+      for (const [, s] of map) { if (s.title === f.title) { stat = s; break; } }
+
+      if (!stat) {
+        const key = `archive::${f.title}`;
+        map.set(key, {
+          title: f.title, file: 'unknown', group: '', tags: [],
+          totalRuns: 0, passed: 0, failed: 0, flaky: 0, passRate: 0,
+          avgDuration: 0, lastStatus: 'failed', lastDate: entry.date,
+          browsers: {}, branches: {}, history: [],
+        });
+        stat = /** @type {PerTestStat} */ (map.get(key));
+      }
+
+      stat.totalRuns++;
+      stat.failed++;
+
+      if (!stat.browsers[browser]) stat.browsers[browser] = { runs: 0, passed: 0, failed: 0, flaky: 0 };
+      stat.browsers[browser].runs++;
+      stat.browsers[browser].failed++;
+
+      if (!stat.branches[entry.branch]) stat.branches[entry.branch] = { runs: 0, passed: 0, failed: 0, flaky: 0 };
+      stat.branches[entry.branch].runs++;
+      stat.branches[entry.branch].failed++;
+
+      if (stat.history.length < 40) {
+        stat.history.push({
+          runId: entry.runId, branch: entry.branch, browser,
+          date: entry.date, status: 'failed', duration: 0,
+          errors: f.errors.slice(0, 2), reportUrl: '',
+        });
+      }
+    }
+  }
+
+  // ── 3. Compute pass rates and sort ────────────────────────────────────────
   for (const stat of map.values()) {
     stat.passRate = stat.totalRuns > 0 ? Math.round((stat.passed / stat.totalRuns) * 100) : 0;
   }
@@ -283,373 +349,361 @@ function buildPerTestAnalytics(runs) {
 function generateTestsPage(testStats, allBrowsers, allBranches) {
   const browserIcon = (/** @type {string} */ b) =>
     ({ chrome: "🌐", firefox: "🦊", safari: "🧭", edge: "🔷" })[b.toLowerCase()] ?? "🌐";
-  const statusIcon = (/** @type {string} */ s) =>
-    ({ passed: "✅", failed: "❌", flaky: "⚠️" })[s] ?? "—";
-  const statusClass = (/** @type {string} */ s) =>
-    ({ passed: "ts-pass", failed: "ts-fail", flaky: "ts-flaky" })[s] ?? "";
 
-  // Group by spec file → describe group
-  /** @type {Map<string, Map<string, PerTestStat[]>>} */
-  const byFile = new Map();
-  for (const stat of testStats) {
-    const f = stat.file || "unknown.spec.js";
-    const g = stat.group || "";
-    if (!byFile.has(f)) byFile.set(f, new Map());
-    const fileMap = /** @type {Map<string,PerTestStat[]>} */ (byFile.get(f));
-    if (!fileMap.has(g)) fileMap.set(g, []);
-    /** @type {PerTestStat[]} */ (fileMap.get(g)).push(stat);
-  }
-
-  const branchOptions = allBranches.map((b) => `<option value="${b}">${b}</option>`).join("");
-  const browserOptions = allBrowsers.map((b) => `<option value="${b}">${browserIcon(b)} ${b}</option>`).join("");
+  const statusIcon = (/** @type {string} */ s) => ({ passed: "✅", failed: "❌", flaky: "⚠️" })[s] ?? "—";
+  const statusClass = (/** @type {string} */ s) => ({ passed: "ts-passed", failed: "ts-failed", flaky: "ts-flaky" })[s] ?? "";
+  const sevClass = (/** @type {PerTestStat} */ t) => t.passRate < 50 ? "sev-c" : t.passRate < 80 ? "sev-h" : t.failed > 0 ? "sev-m" : "sev-s";
+  const sevLabel = (/** @type {PerTestStat} */ t) => t.passRate < 50 ? "Critical" : t.passRate < 80 ? "High" : t.failed > 0 ? "Medium" : "Stable";
+  const rateColor = (/** @type {number} */ r) => r >= 80 ? "var(--pass)" : r >= 50 ? "var(--flaky)" : "var(--fail)";
+  const fmtDur = (/** @type {number} */ ms) => ms >= 1000 ? (ms / 1000).toFixed(1) + "s" : ms + "ms";
 
   const totalTests = testStats.length;
-  const avgPassRate = totalTests > 0
-    ? Math.round(testStats.reduce((s, t) => s + t.passRate, 0) / totalTests)
-    : 0;
+  const avgPassRate = totalTests > 0 ? Math.round(testStats.reduce((s, t) => s + t.passRate, 0) / totalTests) : 0;
   const mostFlaky = testStats.slice().sort((a, b) => b.flaky - a.flaky)[0];
   const mostFailing = testStats[0];
 
-  /** @param {PerTestStat} stat */
-  const renderTestCard = (stat) => {
-    const safeId = (stat.file + stat.title).replace(/[^a-zA-Z0-9]/g, "_").substring(0, 50);
-    const severityClass = stat.passRate < 50 ? "sev-critical" : stat.passRate < 80 ? "sev-high" : stat.failed > 0 ? "sev-medium" : "sev-good";
-    const severityLabel = stat.passRate < 50 ? "Critical" : stat.passRate < 80 ? "High" : stat.failed > 0 ? "Medium" : "Stable";
+  const branchOptions = allBranches.map(b => `<option value="${b}">${b}</option>`).join("");
+  const browserOptions = allBrowsers.map(b => `<option value="${b}">${browserIcon(b)} ${b}</option>`).join("");
 
-    const trendDots = stat.history.slice(0, 10).reverse()
-      .map((h) => `<span class="ts-dot ts-dot-${h.status}" title="${h.browser} / ${h.date.substring(0, 10)}"></span>`)
-      .join("");
+  // ── Suite health strip ─────────────────────────────────────────────────────
+  const byFile = new Map();
+  for (const s of testStats) {
+    if (!byFile.has(s.file)) byFile.set(s.file, []);
+    byFile.get(s.file).push(s);
+  }
+  const suiteCards = Array.from(byFile.entries()).map(([file, stats]) => {
+    const fp = stats.reduce((s, t) => s + t.passed, 0);
+    const ff = stats.reduce((s, t) => s + t.failed, 0);
+    const ffl = stats.reduce((s, t) => s + t.flaky, 0);
+    const fr = stats.length ? Math.round(stats.reduce((s, t) => s + t.passRate, 0) / stats.length) : 0;
+    const lastSt = ff > 0 ? "failed" : ffl > 0 ? "flaky" : "passed";
+    const fileTrend = stats.flatMap(s => s.history).slice(0, 10).reverse()
+      .map(h => `<span class="td td-${h.status}"></span>`).join("");
+    return `<div class="sc" onclick="filterByFile('${file.replace(/'/g, "\\'")}')" title="Click to filter All Tests to this file">
+      <div class="sc-name"><span class="file-icon">📄</span>${file}</div>
+      <div class="sc-stats">
+        <span class="sbadge ${statusClass(lastSt)}">${lastSt.toUpperCase()}</span>
+        <span class="sc-count">${stats.length} tests</span>
+        <span class="p-txt">${fp}✓</span><span class="f-txt">${ff}✗</span>${ffl ? `<span class="fl-txt">${ffl}⚠</span>` : ""}
+      </div>
+      <div class="sc-bar-wrap"><div class="sc-bar" style="width:${fr}%;background:${rateColor(fr)}"></div></div>
+      <div class="sc-footer"><span style="color:${rateColor(fr)};font-weight:700">${fr}%</span><div class="trend-wrap">${fileTrend}</div></div>
+    </div>`;
+  }).join("");
+
+  // ── Test table rows ────────────────────────────────────────────────────────
+  const rows = testStats.map((stat, idx) => {
+    const id = `t${idx}`;
+    const trendDots = stat.history.slice(0, 12).reverse()
+      .map(h => `<span class="td td-${h.status}" title="${h.date.substring(0, 10)}"></span>`).join("");
+    const tagChips = stat.tags.map(tag => `<span class="tag-chip">${tag}</span>`).join("");
 
     const browserRows = Object.entries(stat.browsers).map(([br, b]) => {
-      const rate = b.runs > 0 ? Math.round((b.passed / b.runs) * 100) : 0;
-      return `<div class="ts-brow"><span class="ts-brow-name">${browserIcon(br)} ${br}</span><span class="ts-brow-stat ts-pass-txt">${b.passed}P</span><span class="ts-brow-stat ts-fail-txt">${b.failed}F</span><span class="ts-brow-stat ts-flaky-txt">${b.flaky}FL</span><div class="ts-mini-bar"><div class="ts-mini-fill" style="width:${rate}%"></div></div><span class="ts-brow-rate">${rate}%</span></div>`;
+      const r = b.runs > 0 ? Math.round((b.passed / b.runs) * 100) : 0;
+      return `<div class="brow"><span class="brow-name">${browserIcon(br)} ${br}</span><span class="p-txt">${b.passed}P</span><span class="f-txt">${b.failed}F</span><span class="fl-txt">${b.flaky}FL</span><div class="mbar"><div class="mfill" style="width:${r}%"></div></div><span class="brow-r">${r}%</span></div>`;
     }).join("");
-
     const branchRows = Object.entries(stat.branches).map(([br, b]) => {
-      const rate = b.runs > 0 ? Math.round((b.passed / b.runs) * 100) : 0;
-      return `<div class="ts-brow"><span class="ts-brow-name"><span class="branch-tag">${br}</span></span><span class="ts-brow-stat ts-pass-txt">${b.passed}P</span><span class="ts-brow-stat ts-fail-txt">${b.failed}F</span><span class="ts-brow-stat ts-flaky-txt">${b.flaky}FL</span><div class="ts-mini-bar"><div class="ts-mini-fill" style="width:${rate}%"></div></div><span class="ts-brow-rate">${rate}%</span></div>`;
+      const r = b.runs > 0 ? Math.round((b.passed / b.runs) * 100) : 0;
+      return `<div class="brow"><span class="brow-name"><span class="btag">${br}</span></span><span class="p-txt">${b.passed}P</span><span class="f-txt">${b.failed}F</span><span class="fl-txt">${b.flaky}FL</span><div class="mbar"><div class="mfill" style="width:${r}%"></div></div><span class="brow-r">${r}%</span></div>`;
     }).join("");
-
-    const historyRows = stat.history.map((h, idx) => {
-      const shortDate = h.date.replace("T", " ").substring(0, 16) + " UTC";
-      const errHtml = h.errors.length > 0
-        ? `<pre class="ts-error">${h.errors[0].toString().substring(0, 350)}</pre>` : "";
-      return `<div class="ts-hist-row ${statusClass(h.status)}"><div class="ts-hist-meta"><span class="ts-status-badge ts-${h.status}">${h.status.toUpperCase()}</span><span class="ts-run-num">${idx === 0 ? "Latest" : "#" + (idx + 1)}</span><span class="branch-tag">${h.branch}</span><span class="ts-hist-browser">${browserIcon(h.browser)} ${h.browser}</span><span class="ts-hist-dur">${(h.duration / 1000).toFixed(1)}s</span><span class="ts-hist-date">${shortDate}</span>${h.reportUrl ? `<a class="view-btn view-btn-sm" href="${h.reportUrl}" target="_blank">Report →</a>` : ""}</div>${errHtml}</div>`;
+    const histRows = stat.history.map((h, i) => {
+      const dt = h.date.replace("T", " ").substring(0, 16) + " UTC";
+      const err = h.errors.length ? `<pre class="herr">${h.errors[0].substring(0, 300)}</pre>` : "";
+      return `<div class="hrow ${statusClass(h.status)}"><div class="hrow-meta"><span class="sbadge ${statusClass(h.status)}">${h.status.toUpperCase()}</span><span class="hnum">${i === 0 ? "Latest" : "#" + (i + 1)}</span><span class="btag">${h.branch}</span><span class="hbr">${browserIcon(h.browser)} ${h.browser}</span><span class="hdur">${fmtDur(h.duration)}</span><span class="hdate">${dt}</span>${h.reportUrl ? `<a class="vbtn" href="${h.reportUrl}" target="_blank">Report →</a>` : ""}</div>${err}</div>`;
     }).join("");
 
     return `
-    <div class="ts-card" id="tscard_${safeId}"
-         data-title="${stat.title.replace(/"/g, "&quot;")}"
-         data-file="${stat.file}"
-         data-status="${stat.lastStatus}"
-         data-passrate="${stat.passRate}">
-      <div class="ts-card-head" onclick="toggleCard('${safeId}')">
-        <div class="ts-card-left">
-          <span class="ts-sev ${severityClass}">${severityLabel}</span>
-          <span class="ts-status-icon">${statusIcon(stat.lastStatus)}</span>
-          <span class="ts-title">${stat.title}</span>
+    <tr class="test-row" data-id="${id}"
+        data-title="${stat.title.replace(/"/g, "&quot;").toLowerCase()}"
+        data-file="${stat.file.toLowerCase()}"
+        data-tags="${stat.tags.join(" ").toLowerCase()}"
+        data-status="${stat.lastStatus}"
+        data-passrate="${stat.passRate}"
+        data-failed="${stat.failed}"
+        data-flaky="${stat.flaky}"
+        data-dur="${stat.avgDuration}"
+        onclick="toggleRow('${id}')">
+      <td class="tc-test">
+        <div class="tc-name-wrap">
+          <span class="sev ${sevClass(stat)}">${sevLabel(stat)}</span>
+          <span class="tc-icon">${statusIcon(stat.lastStatus)}</span>
+          <span class="tc-name">${stat.title}</span>
         </div>
-        <div class="ts-card-right">
-          <div class="ts-trend">${trendDots}</div>
-          <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">${stat.passed}</span>
-            <span class="ts-met-sep">/</span>
-            <span class="ts-met ts-fail-txt" title="Failed">${stat.failed}</span>
-            <span class="ts-met-sep">/</span>
-            <span class="ts-met ts-flaky-txt" title="Flaky">${stat.flaky}</span>
-            <span class="ts-rate" title="Pass rate">${stat.passRate}%</span>
-            <span class="ts-dur">${(stat.avgDuration / 1000).toFixed(1)}s</span>
+        ${tagChips ? `<div class="tag-row">${tagChips}</div>` : ""}
+      </td>
+      <td class="tc-file"><span class="file-pill">${stat.file}</span></td>
+      <td class="tc-status"><span class="sbadge ${statusClass(stat.lastStatus)}">${stat.lastStatus.toUpperCase()}</span></td>
+      <td class="tc-trend"><div class="trend-wrap">${trendDots}</div></td>
+      <td class="tc-num p-txt">${stat.passed}</td>
+      <td class="tc-num f-txt">${stat.failed}</td>
+      <td class="tc-num fl-txt">${stat.flaky}</td>
+      <td class="tc-rate" style="color:${rateColor(stat.passRate)}">${stat.passRate}%</td>
+      <td class="tc-dur">${fmtDur(stat.avgDuration)}</td>
+      <td class="tc-arr" id="arr-${id}">▸</td>
+    </tr>
+    <tr class="detail-row" id="dr-${id}" style="display:none">
+      <td colspan="10">
+        <div class="detail-inner">
+          <div class="detail-cols">
+            <div class="dcol"><div class="dcol-title">Browser Breakdown</div>${browserRows || "<span class='muted'>No data</span>"}</div>
+            <div class="dcol"><div class="dcol-title">Branch Breakdown</div>${branchRows || "<span class='muted'>No data</span>"}</div>
           </div>
-          <span class="ts-toggle" id="tstoggle_${safeId}">▸</span>
+          <div class="dcol-title" style="padding:.6rem 1rem .25rem">Run History</div>
+          <div class="hist-wrap">${histRows}</div>
         </div>
-      </div>
-      <div class="ts-card-body" id="tsbody_${safeId}" style="display:none">
-        <div class="ts-detail-grid">
-          <div class="ts-detail-col"><div class="ts-detail-title">Browser Breakdown</div>${browserRows || "<div class=\"ts-no-data\">No data</div>"}</div>
-          <div class="ts-detail-col"><div class="ts-detail-title">Branch Breakdown</div>${branchRows || "<div class=\"ts-no-data\">No data</div>"}</div>
-        </div>
-        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
-        <div class="ts-history">${historyRows}</div>
-      </div>
-    </div>`;
-  };
+      </td>
+    </tr>`;
+  }).join("");
 
-  /** @param {string} file @param {Map<string,PerTestStat[]>} groups */
-  const renderFileGroup = (file, groups) => {
-    const allStats = Array.from(groups.values()).flat();
-    const fileId = file.replace(/[^a-zA-Z0-9]/g, "_");
-    const fp = allStats.reduce((s, t) => s + t.passed, 0);
-    const ff = allStats.reduce((s, t) => s + t.failed, 0);
-    const ffl = allStats.reduce((s, t) => s + t.flaky, 0);
-    const fr = allStats.length > 0 ? Math.round(allStats.reduce((s, t) => s + t.passRate, 0) / allStats.length) : 0;
-    const fcolor = fr >= 80 ? "var(--pass)" : fr >= 50 ? "var(--flaky)" : "var(--fail)";
-
-    const groupsHtml = Array.from(groups.entries()).map(([group, stats]) => {
-      const groupHeader = group
-        ? `<div class="describe-hdr"><span class="describe-icon">🔸</span>${group}</div>`
-        : "";
-      return `<div class="describe-group">${groupHeader}${stats.map(renderTestCard).join("")}</div>`;
-    }).join("");
-
-    return `
-    <div class="file-group" id="fg_${fileId}" data-file="${file}">
-      <div class="file-hdr" onclick="toggleFileGroup('${fileId}')">
-        <span class="file-icon">📄</span>
-        <span class="file-name">${file}</span>
-        <div class="file-chips">
-          <span class="fc">${allStats.length} tests</span>
-          <span class="fc fc-p">${fp}✓</span>
-          <span class="fc fc-f">${ff}✗</span>
-          ${ffl > 0 ? `<span class="fc fc-fl">${ffl}⚠</span>` : ""}
-          <span class="fc fc-r" style="color:${fcolor}">${fr}%</span>
-        </div>
-        <span class="file-toggle" id="ftog_${fileId}">▾</span>
-      </div>
-      <div class="file-body" id="fb_${fileId}">${groupsHtml}</div>
-    </div>`;
-  };
-
-  const filesHtml = byFile.size > 0
-    ? Array.from(byFile.entries()).map(([f, g]) => renderFileGroup(f, g)).join("")
-    : `<div class="empty-state">No test run data yet. Runs are recorded after each CI execution.</div>`;
-
-
-
-  // ── HTML ─────────────────────────────────────────────────────────────────────
+  // ── HTML ───────────────────────────────────────────────────────────────────
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Test Analytics — Playwright Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:#0a0e1a; --surface:#111827; --surface2:#1a2235; --border:#1e2d45;
-      --accent:#00e5ff; --accent2:#7c3aed; --pass:#10b981; --fail:#f43f5e;
-      --flaky:#f59e0b; --text:#e2e8f0; --muted:#64748b;
-      --font-display:'Syne',sans-serif; --font-mono:'JetBrains Mono',monospace;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0a0e1a;--sf:#111827;--sf2:#1a2235;--bd:#1e2d45;--ac:#00e5ff;--ac2:#7c3aed;--pass:#10b981;--fail:#f43f5e;--flaky:#f59e0b;--txt:#e2e8f0;--mu:#64748b;--fm:'Syne',sans-serif;--mo:'JetBrains Mono',monospace}
+    body{font-family:var(--fm);background:var(--bg);color:var(--txt);min-height:100vh}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+    .wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:2rem}
+    .nav{display:flex;align-items:center;gap:.5rem;padding-bottom:1rem;border-bottom:1px solid var(--bd);margin-bottom:1.5rem;flex-wrap:wrap}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;margin-right:auto}
+    .nav-logo-i{width:34px;height:34px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .nav-logo h1{font-size:1rem;font-weight:800;background:linear-gradient(90deg,#fff,var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .ntab{font-family:var(--mo);font-size:.72rem;padding:5px 14px;border-radius:6px;border:1px solid var(--bd);color:var(--mu);text-decoration:none;background:var(--sf2);transition:all .15s}
+    .ntab:hover{border-color:var(--ac);color:var(--ac)} .ntab.active{background:rgba(0,229,255,.1);border-color:var(--ac);color:var(--ac)}
+    .sum-bar{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .chip{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:.85rem 1.25rem;min-width:130px;position:relative;overflow:hidden}
+    .chip::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .chip-t::before{background:var(--ac)} .chip-r::before{background:linear-gradient(90deg,var(--pass),var(--ac))} .chip-f::before{background:var(--fail)} .chip-fl::before{background:var(--flaky)}
+    .chip-lbl{font-size:.6rem;font-family:var(--mo);color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem}
+    .chip-val{font-size:1.7rem;font-weight:800;line-height:1}
+    .chip-t .chip-val{color:var(--ac)} .chip-f .chip-val{color:var(--fail)} .chip-fl .chip-val{color:var(--flaky)}
+    .chip-sub{font-size:.63rem;font-family:var(--mo);color:var(--mu);margin-top:.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
+    .vt{display:flex;gap:.5rem;margin-bottom:1rem}
+    .vt-btn{font-family:var(--mo);font-size:.75rem;padding:6px 18px;border-radius:8px;border:1px solid var(--bd);color:var(--mu);background:var(--sf2);cursor:pointer;transition:all .15s}
+    .vt-btn.active{background:rgba(0,229,255,.1);border-color:var(--ac);color:var(--ac)}
+    .ctrl{display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:var(--sf);border:1px solid var(--bd);border-radius:10px;margin-bottom:1.25rem;flex-wrap:wrap}
+    .srch-w{position:relative;flex:1;min-width:180px}
+    .srch-i{position:absolute;left:9px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:.8rem}
+    .srch{width:100%;padding:6px 8px 6px 28px;background:var(--sf2);color:var(--txt);border:1px solid var(--bd);border-radius:6px;font-family:var(--mo);font-size:.75rem;outline:none;transition:border-color .15s}
+    .srch:focus{border-color:var(--ac)} .srch::placeholder{color:var(--mu)}
+    .sel{font-family:var(--mo);font-size:.72rem;background:var(--sf2);color:var(--txt);border:1px solid var(--bd);border-radius:6px;padding:5px 9px;cursor:pointer;outline:none}
+    .sel:focus{border-color:var(--ac)}
+    .cnt{font-size:.7rem;font-family:var(--mo);color:var(--mu);background:var(--sf2);padding:2px 10px;border-radius:20px;border:1px solid var(--bd);margin-left:auto}
+    .suite-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.75rem;margin-bottom:1.5rem}
+    .sc{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:.9rem 1rem;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+    .sc:hover{border-color:rgba(0,229,255,.3);box-shadow:0 2px 14px rgba(0,229,255,.07)}
+    .sc-name{font-family:var(--mo);font-size:.78rem;font-weight:700;color:var(--ac);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem;word-break:break-all}
+    .sc-stats{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem;font-family:var(--mo);font-size:.65rem}
+    .sc-count{color:var(--mu)}
+    .sc-bar-wrap{height:4px;background:var(--sf2);border-radius:2px;overflow:hidden;margin-bottom:.4rem}
+    .sc-bar{height:100%;border-radius:2px}
+    .sc-footer{display:flex;align-items:center;justify-content:space-between;font-family:var(--mo);font-size:.65rem}
+    .tbl-wrap{overflow-x:auto;border:1px solid var(--bd);border-radius:10px}
+    table{width:100%;border-collapse:collapse}
+    thead tr{background:var(--sf2)}
+    th{font-family:var(--mo);font-size:.63rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;padding:.65rem .85rem;white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid var(--bd);text-align:left}
+    th:hover{color:var(--ac)} .th-sort{color:var(--ac)}
+    .test-row{cursor:pointer;transition:background .1s}
+    .test-row:hover{background:rgba(0,229,255,.025)}
+    .test-row td{padding:.55rem .85rem;border-bottom:1px solid rgba(30,45,69,.5);vertical-align:middle}
+    .detail-row td{padding:0;border-bottom:1px solid var(--bd)}
+    .tc-test{max-width:400px}
+    .tc-name-wrap{display:flex;align-items:center;gap:.4rem;margin-bottom:.18rem;flex-wrap:wrap}
+    .tc-name{font-size:.81rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:310px}
+    .tc-icon{flex-shrink:0}
+    .tag-row{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.15rem}
+    .tag-chip{font-family:var(--mo);font-size:.57rem;padding:1px 6px;border-radius:3px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.28);color:#a78bfa}
+    .file-pill{font-family:var(--mo);font-size:.63rem;padding:2px 7px;border-radius:4px;background:var(--sf2);border:1px solid var(--bd);color:var(--mu);white-space:nowrap}
+    .tc-num{font-family:var(--mo);font-size:.76rem;font-weight:700;text-align:right;white-space:nowrap}
+    .tc-rate{font-family:var(--mo);font-size:.76rem;font-weight:700;text-align:right}
+    .tc-dur{font-family:var(--mo);font-size:.68rem;color:var(--mu);text-align:right;white-space:nowrap}
+    .tc-arr{font-size:.78rem;color:var(--mu);text-align:center;width:28px}
+    .trend-wrap{display:flex;align-items:center;gap:2px}
+    .td{width:8px;height:8px;border-radius:2px;flex-shrink:0;display:inline-block}
+    .td-passed{background:var(--pass)} .td-failed{background:var(--fail)} .td-flaky{background:var(--flaky)}
+    .sev{font-size:.57rem;font-family:var(--mo);font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+    .sev-c{background:rgba(244,63,94,.18);color:#fb7185;border:1px solid rgba(244,63,94,.3)}
+    .sev-h{background:rgba(245,158,11,.13);color:#fbbf24;border:1px solid rgba(245,158,11,.28)}
+    .sev-m{background:rgba(124,58,237,.13);color:#a78bfa;border:1px solid rgba(124,58,237,.25)}
+    .sev-s{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.22)}
+    .sbadge{font-family:var(--mo);font-size:.58rem;font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
+    .ts-passed{background:rgba(16,185,129,.15);color:var(--pass);border:1px solid rgba(16,185,129,.28)}
+    .ts-failed{background:rgba(244,63,94,.15);color:var(--fail);border:1px solid rgba(244,63,94,.28)}
+    .ts-flaky{background:rgba(245,158,11,.15);color:var(--flaky);border:1px solid rgba(245,158,11,.28)}
+    .p-txt{color:var(--pass)} .f-txt{color:var(--fail)} .fl-txt{color:var(--flaky)}
+    .btag{font-family:var(--mo);font-size:.68rem;background:var(--sf2);border:1px solid var(--bd);padding:2px 6px;border-radius:4px;color:var(--ac)}
+    .detail-inner{background:rgba(10,14,26,.7);padding:.75rem}
+    .detail-cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.7rem}
+    .dcol-title{font-family:var(--mo);font-size:.6rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
+    .brow{display:flex;align-items:center;gap:.4rem;margin-bottom:.28rem;flex-wrap:wrap}
+    .brow-name{font-family:var(--mo);font-size:.7rem;min-width:90px}
+    .mbar{flex:1;height:5px;background:var(--sf);border-radius:2px;overflow:hidden;min-width:40px;border:1px solid var(--bd)}
+    .mfill{height:100%;background:linear-gradient(90deg,var(--pass),#34d399)}
+    .brow-r{font-family:var(--mo);font-size:.63rem;color:var(--mu);min-width:30px;text-align:right}
+    .hrow{padding:.45rem 1rem;border-top:1px solid var(--bd);transition:background .1s}
+    .hrow:first-child{border-top:none} .hrow:hover{background:rgba(0,229,255,.025)}
+    .hrow-meta{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:.18rem}
+    .hnum{font-family:var(--mo);font-size:.68rem;color:var(--mu);min-width:36px}
+    .hbr{font-family:var(--mo);font-size:.68rem}
+    .hdur{font-family:var(--mo);font-size:.65rem;color:var(--mu)}
+    .hdate{font-family:var(--mo);font-size:.65rem;color:var(--mu);margin-left:auto}
+    .herr{font-family:var(--mo);font-size:.66rem;color:#fca5a5;background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.15);border-radius:5px;padding:.35rem .6rem;white-space:pre-wrap;word-break:break-all;max-height:90px;overflow-y:auto;line-height:1.5;margin-top:.2rem}
+    .vbtn{font-family:var(--mo);font-size:.63rem;padding:2px 7px;border:1px solid rgba(0,229,255,.2);border-radius:4px;color:var(--ac);text-decoration:none;background:rgba(0,229,255,.05)}
+    .vbtn:hover{background:rgba(0,229,255,.12);border-color:var(--ac)}
+    .muted{font-family:var(--mo);font-size:.7rem;color:var(--mu)}
+    .empty{text-align:center;padding:3rem;font-family:var(--mo);font-size:.8rem;color:var(--mu)}
+    footer{text-align:center;padding:1.5rem 0 1rem;font-family:var(--mo);font-size:.65rem;color:var(--mu)}
+    @media(max-width:900px){
+      .tc-file,.tc-dur{display:none}
+      .detail-cols{grid-template-columns:1fr}
+      .tc-name{max-width:180px}
     }
-    body { font-family:var(--font-display); background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
-    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px); background-size:40px 40px; animation:gridPan 20s linear infinite; pointer-events:none; z-index:0; }
-    @keyframes gridPan { 0%{background-position:0 0} 100%{background-position:40px 40px} }
-    .container { position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:2.5rem 2rem; }
-
-    /* ── Nav ── */
-    .nav { display:flex; align-items:center; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; border-bottom:1px solid var(--border); padding-bottom:1rem; }
-    .nav-logo { display:flex; align-items:center; gap:0.75rem; margin-right:auto; }
-    .nav-logo-icon { width:38px; height:38px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
-    .nav-logo h1 { font-size:1.1rem; font-weight:800; background:linear-gradient(90deg,#fff,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .nav-tab { font-family:var(--font-mono); font-size:0.75rem; padding:6px 16px; border-radius:6px; border:1px solid var(--border); color:var(--muted); text-decoration:none; transition:all 0.15s; background:var(--surface2); }
-    .nav-tab:hover { border-color:var(--accent); color:var(--accent); }
-    .nav-tab.active { background:rgba(0,229,255,0.1); border-color:var(--accent); color:var(--accent); }
-
-    /* ── Summary ── */
-    .summary-bar { display:flex; gap:1rem; margin-bottom:2rem; flex-wrap:wrap; }
-    .sum-chip { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1rem 1.5rem; min-width:140px; position:relative; overflow:hidden; }
-    .sum-chip::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
-    .sum-chip.chip-total::before { background:var(--accent); }
-    .sum-chip.chip-pass::before  { background:var(--pass); }
-    .sum-chip.chip-fail::before  { background:var(--fail); }
-    .sum-chip.chip-flaky::before { background:var(--flaky); }
-    .sum-chip.chip-rate::before  { background:linear-gradient(90deg,var(--pass),var(--accent)); }
-    .sum-label { font-size:0.65rem; font-family:var(--font-mono); color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem; }
-    .sum-val { font-size:2rem; font-weight:800; line-height:1; }
-    .chip-total .sum-val { color:var(--accent); } .chip-pass .sum-val { color:var(--pass); }
-    .chip-fail  .sum-val { color:var(--fail);  } .chip-flaky .sum-val { color:var(--flaky); }
-    .chip-rate  .sum-val { color:var(--text);  }
-    .sum-sub { font-size:0.68rem; font-family:var(--font-mono); color:var(--muted); margin-top:0.3rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px; }
-
-    /* ── Controls ── */
-    .controls { display:flex; align-items:center; gap:0.75rem; padding:0.85rem 1.25rem; background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:1.25rem; flex-wrap:wrap; }
-    .search-wrap { position:relative; flex:1; min-width:200px; }
-    .search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); pointer-events:none; }
-    .search-input { width:100%; padding:6px 10px 6px 30px; background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:6px; font-family:var(--font-mono); font-size:0.78rem; outline:none; transition:border-color 0.15s; }
-    .search-input:focus { border-color:var(--accent); }
-    .search-input::placeholder { color:var(--muted); }
-    .filter-select { font-family:var(--font-mono); font-size:0.75rem; background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:5px 10px; cursor:pointer; outline:none; }
-    .filter-select:focus { border-color:var(--accent); }
-    .count-badge { font-size:0.72rem; font-family:var(--font-mono); color:var(--muted); background:var(--surface2); padding:2px 10px; border-radius:20px; border:1px solid var(--border); }
-
-    /* ── File group ── */
-    .file-group { margin-bottom:1rem; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
-    .file-hdr { display:flex; align-items:center; gap:0.75rem; padding:0.85rem 1.25rem; cursor:pointer; background:var(--surface2); transition:background 0.15s; flex-wrap:wrap; gap:0.5rem; }
-    .file-hdr:hover { background:rgba(0,229,255,0.05); }
-    .file-icon { font-size:1rem; flex-shrink:0; }
-    .file-name { font-family:var(--font-mono); font-size:0.9rem; font-weight:700; color:var(--accent); flex:1; }
-    .file-chips { display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; }
-    .fc { font-family:var(--font-mono); font-size:0.68rem; padding:2px 8px; border-radius:4px; background:var(--surface); border:1px solid var(--border); color:var(--muted); }
-    .fc-p { color:var(--pass); border-color:rgba(16,185,129,0.3); }
-    .fc-f { color:var(--fail); border-color:rgba(244,63,94,0.3); }
-    .fc-fl { color:var(--flaky); border-color:rgba(245,158,11,0.3); }
-    .fc-r { font-weight:700; }
-    .file-toggle { font-size:0.85rem; color:var(--muted); flex-shrink:0; transition:transform 0.2s; }
-    .file-body { padding:0.5rem; display:flex; flex-direction:column; gap:0.35rem; }
-
-    /* ── Describe group ── */
-    .describe-group { margin-bottom:0.25rem; }
-    .describe-hdr { font-family:var(--font-mono); font-size:0.72rem; color:var(--muted); padding:0.4rem 0.5rem 0.25rem; text-transform:uppercase; letter-spacing:0.06em; display:flex; align-items:center; gap:0.4rem; }
-    .describe-icon { font-size:0.8rem; }
-
-    /* ── Test card ── */
-    .ts-card { border:1px solid var(--border); border-radius:8px; overflow:hidden; transition:border-color 0.15s,box-shadow 0.15s; background:var(--surface); }
-    .ts-card:hover { border-color:rgba(0,229,255,0.25); box-shadow:0 2px 12px rgba(0,229,255,0.06); }
-    .ts-card-head { display:flex; align-items:center; justify-content:space-between; padding:0.65rem 1rem; cursor:pointer; background:var(--surface2); gap:0.75rem; flex-wrap:wrap; transition:background 0.15s; }
-    .ts-card-head:hover { background:rgba(0,229,255,0.04); }
-    .ts-card-left { display:flex; align-items:center; gap:0.55rem; flex:1; min-width:0; }
-    .ts-card-right { display:flex; align-items:center; gap:0.75rem; flex-shrink:0; flex-wrap:wrap; }
-    .ts-title { font-size:0.83rem; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:520px; }
-    .ts-status-icon { font-size:0.9rem; flex-shrink:0; }
-    .ts-sev { font-size:0.6rem; font-family:var(--font-mono); font-weight:700; padding:2px 7px; border-radius:4px; letter-spacing:0.06em; text-transform:uppercase; flex-shrink:0; }
-    .sev-critical { background:rgba(244,63,94,0.2); color:#fb7185; border:1px solid rgba(244,63,94,0.4); }
-    .sev-high { background:rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.35); }
-    .sev-medium { background:rgba(124,58,237,0.15); color:#a78bfa; border:1px solid rgba(124,58,237,0.3); }
-    .sev-good { background:rgba(16,185,129,0.12); color:#34d399; border:1px solid rgba(16,185,129,0.3); }
-    .ts-trend { display:flex; align-items:center; gap:3px; }
-    .ts-dot { width:9px; height:9px; border-radius:2px; flex-shrink:0; }
-    .ts-dot-passed { background:var(--pass); } .ts-dot-failed { background:var(--fail); } .ts-dot-flaky { background:var(--flaky); }
-    .ts-metrics { display:flex; align-items:center; gap:0.45rem; font-family:var(--font-mono); }
-    .ts-met { font-size:0.78rem; font-weight:700; } .ts-met-sep { font-size:0.7rem; color:var(--muted); }
-    .ts-pass-txt { color:var(--pass); } .ts-fail-txt { color:var(--fail); } .ts-flaky-txt { color:var(--flaky); }
-    .ts-rate { font-size:0.7rem; color:var(--muted); background:var(--surface); border:1px solid var(--border); padding:1px 7px; border-radius:10px; }
-    .ts-dur { font-size:0.68rem; color:var(--muted); }
-    .ts-toggle { font-size:0.85rem; color:var(--muted); transition:transform 0.2s; flex-shrink:0; }
-
-    /* ── Card body ── */
-    .ts-card-body { border-top:1px solid var(--border); }
-    .ts-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; border-bottom:1px solid var(--border); }
-    .ts-detail-col { padding:0.85rem 1rem; }
-    .ts-detail-col:first-child { border-right:1px solid var(--border); }
-    .ts-detail-title { font-size:0.65rem; font-family:var(--font-mono); color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem; }
-    .ts-no-data { font-size:0.72rem; font-family:var(--font-mono); color:var(--muted); }
-    .ts-brow { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.35rem; flex-wrap:wrap; }
-    .ts-brow-name { font-family:var(--font-mono); font-size:0.75rem; min-width:100px; }
-    .ts-brow-stat { font-family:var(--font-mono); font-size:0.68rem; font-weight:700; min-width:28px; }
-    .ts-mini-bar { flex:1; height:6px; background:var(--surface); border-radius:3px; overflow:hidden; min-width:50px; border:1px solid var(--border); }
-    .ts-mini-fill { height:100%; background:linear-gradient(90deg,var(--pass),#34d399); border-radius:3px; }
-    .ts-brow-rate { font-family:var(--font-mono); font-size:0.68rem; color:var(--muted); min-width:32px; text-align:right; }
-
-    /* ── History ── */
-    .ts-hist-row { padding:0.6rem 1rem; border-top:1px solid var(--border); transition:background 0.1s; }
-    .ts-hist-row:first-child { border-top:none; }
-    .ts-hist-row:hover { background:rgba(0,229,255,0.03); }
-    .ts-hist-meta { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem; flex-wrap:wrap; }
-    .ts-status-badge { font-size:0.6rem; font-family:var(--font-mono); font-weight:700; padding:1px 6px; border-radius:3px; letter-spacing:0.05em; }
-    .ts-passed { background:rgba(16,185,129,0.15); color:var(--pass); border:1px solid rgba(16,185,129,0.3); }
-    .ts-failed { background:rgba(244,63,94,0.15); color:var(--fail); border:1px solid rgba(244,63,94,0.3); }
-    .ts-flaky  { background:rgba(245,158,11,0.15); color:var(--flaky); border:1px solid rgba(245,158,11,0.3); }
-    .ts-run-num { font-family:var(--font-mono); font-size:0.72rem; color:var(--muted); min-width:40px; }
-    .ts-hist-browser { font-family:var(--font-mono); font-size:0.72rem; color:var(--text); }
-    .ts-hist-dur { font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); }
-    .ts-hist-date { font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); margin-left:auto; }
-    .ts-error { font-family:var(--font-mono); font-size:0.7rem; color:#fca5a5; background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.15); border-radius:6px; padding:0.5rem 0.75rem; white-space:pre-wrap; word-break:break-all; max-height:110px; overflow-y:auto; line-height:1.5; }
-
-    /* ── Shared ── */
-    .branch-tag { font-family:var(--font-mono); font-size:0.72rem; background:var(--surface2); border:1px solid var(--border); padding:2px 7px; border-radius:4px; color:var(--accent); }
-    .view-btn { display:inline-flex; align-items:center; gap:4px; color:var(--accent); text-decoration:none; font-size:0.75rem; font-family:var(--font-mono); padding:3px 9px; border:1px solid rgba(0,229,255,0.2); border-radius:5px; transition:all 0.2s; background:rgba(0,229,255,0.05); }
-    .view-btn:hover { background:rgba(0,229,255,0.12); border-color:var(--accent); }
-    .view-btn-sm { font-size:0.66rem; padding:1px 7px; }
-    .empty-state { text-align:center; padding:3rem; font-family:var(--font-mono); font-size:0.8rem; color:var(--muted); }
-    footer { text-align:center; padding:2rem 0 1rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); }
-
-    @media(max-width:768px) {
-      .ts-detail-grid { grid-template-columns:1fr; }
-      .ts-title { max-width:200px; }
-      .ts-hist-date { display:none; }
-      .breakdown-row { grid-template-columns:1fr; }
+    @media(max-width:600px){
+      .tc-trend{display:none}
+      .suite-strip{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
 <body>
-<div class="container">
+<div class="wrap">
   <nav class="nav">
-    <div class="nav-logo"><div class="nav-logo-icon">🎭</div><h1>Playwright Dashboard</h1></div>
-    <a href="index.html" class="nav-tab">📊 Overview</a>
-    <a href="tests.html" class="nav-tab active">🧪 Test Analytics</a>
+    <div class="nav-logo"><div class="nav-logo-i">🎭</div><h1>Playwright Dashboard</h1></div>
+    <a href="index.html" class="ntab">📊 Overview</a>
+    <a href="tests.html" class="ntab active">🧪 Test Analytics</a>
   </nav>
 
-  <div class="summary-bar">
-    <div class="sum-chip chip-total"><div class="sum-label">Unique Tests</div><div class="sum-val">${totalTests}</div><div class="sum-sub">tracked across all runs</div></div>
-    <div class="sum-chip chip-rate"><div class="sum-label">Avg Pass Rate</div><div class="sum-val">${avgPassRate}%</div><div class="sum-sub">across all tests &amp; runs</div></div>
-    <div class="sum-chip chip-fail"><div class="sum-label">Most Failing</div><div class="sum-val">${mostFailing ? mostFailing.failed : 0}</div><div class="sum-sub">${mostFailing ? mostFailing.title.substring(0, 30) + '…' : '—'}</div></div>
-    <div class="sum-chip chip-flaky"><div class="sum-label">Most Flaky</div><div class="sum-val">${mostFlaky ? mostFlaky.flaky : 0}</div><div class="sum-sub">${mostFlaky ? mostFlaky.title.substring(0, 30) + '…' : '—'}</div></div>
+  <div class="sum-bar">
+    <div class="chip chip-t"><div class="chip-lbl">Unique Tests</div><div class="chip-val">${totalTests}</div><div class="chip-sub">tracked across all runs</div></div>
+    <div class="chip chip-r"><div class="chip-lbl">Avg Pass Rate</div><div class="chip-val">${avgPassRate}%</div><div class="chip-sub">all tests &amp; runs</div></div>
+    <div class="chip chip-f"><div class="chip-lbl">Most Failing</div><div class="chip-val">${mostFailing ? mostFailing.failed : 0}</div><div class="chip-sub">${mostFailing ? mostFailing.title.substring(0, 28) + "…" : "—"}</div></div>
+    <div class="chip chip-fl"><div class="chip-lbl">Most Flaky</div><div class="chip-val">${mostFlaky ? mostFlaky.flaky : 0}</div><div class="chip-sub">${mostFlaky ? mostFlaky.title.substring(0, 28) + "…" : "—"}</div></div>
   </div>
 
-  <div class="controls">
-    <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="tsSearch" type="text" placeholder="Search test or spec file…" oninput="filter()" /></div>
-    <select class="filter-select" id="fBrowser" onchange="filter()"><option value="all">All browsers</option>${browserOptions}</select>
-    <select class="filter-select" id="fBranch" onchange="filter()"><option value="all">All branches</option>${branchOptions}</select>
-    <select class="filter-select" id="fStatus" onchange="filter()">
-      <option value="all">All statuses</option>
+  <div class="vt">
+    <button class="vt-btn active" id="vbtn-all"   onclick="setView('all')">📋 All Tests</button>
+    <button class="vt-btn"        id="vbtn-suite"  onclick="setView('suite')">🧩 By Suite</button>
+  </div>
+
+  <div class="ctrl">
+    <div class="srch-w"><span class="srch-i">🔍</span><input class="srch" id="q" type="text" placeholder="Search test, file or @tag…" oninput="applyFilters()"></div>
+    <select class="sel" id="fBrow" onchange="applyFilters()"><option value="">All browsers</option>${browserOptions}</select>
+    <select class="sel" id="fBran" onchange="applyFilters()"><option value="">All branches</option>${branchOptions}</select>
+    <select class="sel" id="fSt"   onchange="applyFilters()">
+      <option value="">All statuses</option>
       <option value="passed">✅ Passed last</option>
       <option value="failed">❌ Failed last</option>
       <option value="flaky">⚠️ Flaky last</option>
     </select>
-    <span class="count-badge" id="tsCount">${totalTests} tests</span>
+    <select class="sel" id="fSort" onchange="applyFilters()">
+      <option value="failures">▼ Most failures</option>
+      <option value="rate-asc">▲ Pass rate (worst first)</option>
+      <option value="rate-desc">▼ Pass rate (best first)</option>
+      <option value="name">A → Z</option>
+      <option value="file">By file</option>
+      <option value="duration">Slowest first</option>
+    </select>
+    <span class="cnt" id="cnt">${totalTests} tests</span>
   </div>
 
-  <div id="fileList">${filesHtml}</div>
+  <div id="v-suite" style="display:none">
+    <div class="suite-strip">${suiteCards || '<div class="empty">No data yet.</div>'}</div>
+  </div>
+
+  <div id="v-all">
+    ${testStats.length > 0 ? `<div class="tbl-wrap"><table><thead><tr>
+      <th id="th-name" onclick="sortBy('name')">Test</th>
+      <th id="th-file" onclick="sortBy('file')">File</th>
+      <th onclick="sortBy('status')">Last Status</th>
+      <th>Trend</th>
+      <th class="tc-num" onclick="sortBy('passed')">Pass</th>
+      <th class="tc-num th-sort" onclick="sortBy('failures')">Fail ↓</th>
+      <th class="tc-num" onclick="sortBy('flaky')">Flaky</th>
+      <th class="tc-num" onclick="sortBy('rate-asc')">Rate</th>
+      <th class="tc-num" onclick="sortBy('duration')">Avg Dur</th>
+      <th></th>
+    </tr></thead><tbody id="tbody">${rows}</tbody></table></div>`
+      : '<div class="empty">No test run data yet. Runs are recorded after each CI execution.</div>'}
+  </div>
 
   <footer>Playwright Test Analytics · ${new Date().toISOString().replace("T", " ").substring(0, 19)} UTC</footer>
 </div>
-
 <script>
-  function toggleCard(id) {
-    const body = document.getElementById('tsbody_' + id);
-    const tog  = document.getElementById('tstoggle_' + id);
-    if (!body) return;
-    const open = body.style.display !== 'none';
-    body.style.display = open ? 'none' : '';
-    if (tog) tog.textContent = open ? '▸' : '▾';
+  function setView(v) {
+    document.getElementById('v-all').style.display   = v==='all'   ? '' : 'none';
+    document.getElementById('v-suite').style.display  = v==='suite' ? '' : 'none';
+    document.getElementById('vbtn-all').classList.toggle('active',  v==='all');
+    document.getElementById('vbtn-suite').classList.toggle('active', v==='suite');
   }
 
-  function toggleFileGroup(id) {
-    const body = document.getElementById('fb_' + id);
-    const tog  = document.getElementById('ftog_' + id);
-    if (!body) return;
-    const open = body.style.display !== 'none';
-    body.style.display = open ? 'none' : '';
-    if (tog) tog.textContent = open ? '▸' : '▾';
+  function toggleRow(id) {
+    const dr=document.getElementById('dr-'+id), arr=document.getElementById('arr-'+id);
+    if(!dr) return;
+    const open=dr.style.display!=='none';
+    dr.style.display=open?'none':'';
+    if(arr) arr.textContent=open?'▸':'▾';
   }
 
-  function filter() {
-    const q      = (document.getElementById('tsSearch').value || '').toLowerCase().trim();
-    const status = document.getElementById('fStatus').value;
-    const browser= document.getElementById('fBrowser').value;
-    const branch = document.getElementById('fBranch').value;
+  function applyFilters() {
+    const q    =(document.getElementById('q').value||'').toLowerCase().trim();
+    const brow =document.getElementById('fBrow').value.toLowerCase();
+    const bran =document.getElementById('fBran').value;
+    const st   =document.getElementById('fSt').value;
+    const sort =document.getElementById('fSort').value;
+    const tbody=document.getElementById('tbody');
+    if(!tbody) return;
 
-    let visible = 0;
-
-    document.querySelectorAll('.ts-card').forEach(card => {
-      const title  = (card.getAttribute('data-title') || '').toLowerCase();
-      const file   = (card.getAttribute('data-file')  || '').toLowerCase();
-      const lastSt = card.getAttribute('data-status') || '';
-      const matchQ  = !q || title.includes(q) || file.includes(q);
-      const matchSt = status === 'all' || lastSt === status;
-
-      let matchBr = browser === 'all';
-      if (!matchBr) card.querySelectorAll('.ts-hist-browser').forEach(el => { if (el.textContent.toLowerCase().includes(browser)) matchBr = true; });
-
-      let matchBranch = branch === 'all';
-      if (!matchBranch) card.querySelectorAll('.branch-tag').forEach(el => { if (el.textContent.trim() === branch) matchBranch = true; });
-
-      const show = matchQ && matchSt && matchBr && matchBranch;
-      card.style.display = show ? '' : 'none';
-      if (show) visible++;
+    const visible=[];
+    tbody.querySelectorAll('tr.test-row').forEach(row=>{
+      const dr=document.getElementById('dr-'+row.getAttribute('data-id'));
+      const matchQ =!q   ||(row.getAttribute('data-title')||'').includes(q)||(row.getAttribute('data-file')||'').includes(q)||(row.getAttribute('data-tags')||'').includes(q);
+      const matchSt=!st  || row.getAttribute('data-status')===st;
+      let matchBr=!brow; if(!matchBr&&dr) dr.querySelectorAll('.hbr').forEach(el=>{if(el.textContent.toLowerCase().includes(brow))matchBr=true;});
+      let matchBran=!bran;if(!matchBran&&dr) dr.querySelectorAll('.btag').forEach(el=>{if(el.textContent.trim()===bran)matchBran=true;});
+      const show=matchQ&&matchSt&&matchBr&&matchBran;
+      row.style.display=show?'':'none';
+      if(dr) { if(!show) dr.style.display='none'; }
+      if(show) visible.push(row);
     });
 
-    // Propagate: hide describe-groups and file-groups that have no visible tests
-    document.querySelectorAll('.describe-group').forEach(dg => {
-      const has = Array.from(dg.querySelectorAll('.ts-card')).some(c => c.style.display !== 'none');
-      dg.style.display = has ? '' : 'none';
+    const n=(r,a)=>Number(r.getAttribute(a)||0);
+    const s=(r,a)=>(r.getAttribute(a)||'');
+    visible.sort((a,b)=>{
+      switch(sort){
+        case 'failures':  return n(b,'data-failed')  -n(a,'data-failed');
+        case 'rate-asc':  return n(a,'data-passrate')-n(b,'data-passrate');
+        case 'rate-desc': return n(b,'data-passrate')-n(a,'data-passrate');
+        case 'name':      return s(a,'data-title').localeCompare(s(b,'data-title'));
+        case 'file':      return s(a,'data-file').localeCompare(s(b,'data-file'));
+        case 'duration':  return n(b,'data-dur')-n(a,'data-dur');
+        case 'flaky':     return n(b,'data-flaky')-n(a,'data-flaky');
+        default:          return n(b,'data-failed')-n(a,'data-failed');
+      }
     });
-    document.querySelectorAll('.file-group').forEach(fg => {
-      const has = Array.from(fg.querySelectorAll('.ts-card')).some(c => c.style.display !== 'none');
-      fg.style.display = has ? '' : 'none';
+    visible.forEach(r=>{
+      const dr=document.getElementById('dr-'+r.getAttribute('data-id'));
+      tbody.appendChild(r);
+      if(dr) tbody.appendChild(dr);
     });
+    document.getElementById('cnt').textContent=visible.length+' test'+(visible.length!==1?'s':'');
+  }
 
-    document.getElementById('tsCount').textContent = visible + ' test' + (visible !== 1 ? 's' : '');
+  function sortBy(s) {
+    const sel=document.getElementById('fSort');
+    // Toggle asc/desc for rate
+    if(s==='rate-asc'&&sel.value==='rate-asc') s='rate-desc';
+    else if(s==='rate-desc'&&sel.value==='rate-desc') s='rate-asc';
+    sel.value=s; applyFilters();
+  }
+
+  function filterByFile(file) {
+    setView('all');
+    document.getElementById('q').value=file;
+    applyFilters();
   }
 </script>
 </body>
@@ -658,7 +712,6 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
   fs.writeFileSync("tests.html", html);
   console.log(`Test analytics page generated with ${testStats.length} unique tests.`);
 }
-
 
 // ── Clean up old runs ─────────────────────────────────────────────────────────
 
@@ -704,15 +757,10 @@ function cleanOldRuns(branch, keepPassing, keepFailing, history) {
     const isFailing = failedRunIds.has(run);
     fs.rmSync(runPath, { recursive: true, force: true });
 
-    // If the run had failures, remove its failure-archive entry too so the
-    // archive stays in sync and doesn't accumulate ghost entries forever.
-    if (isFailing) {
-      const archiveFile = path.join(archiveDir, `${run}.json`);
-      if (fs.existsSync(archiveFile)) {
-        fs.rmSync(archiveFile);
-        console.log(`Removed failure-archive entry: ${run}.json`);
-      }
-    }
+    // failure-archive is kept PERMANENTLY as the long-term failure ledger.
+    // Even after the report folder and test-runs entry are pruned, the
+    // failure-archive entry still feeds long-term trend/metrics in tests.html.
+    // Do NOT delete failure-archive entries here.
 
     // Also prune test-runs archive entry
     const testRunFile = path.join(TEST_RUNS_DIR, `${run}.json`);
@@ -1736,7 +1784,8 @@ function main() {
   const history = updateHistory(entry);
 
   if (failed > 0) {
-    archiveFailureSummary(REPORT_PATH, RUN_ID, BRANCH);
+    archiveFailureSummary(REPORT_PATH, RUN_ID, BRANCH, BROWSER);
+
   }
 
   // Archive all test results (used for tests.html analytics)
@@ -1749,9 +1798,9 @@ function main() {
 
   // Build per-test analytics and generate tests.html
   const testRuns = loadTestRuns();
-  const testStats = buildPerTestAnalytics(testRuns);
-  const allBrowsers = [...new Set(testRuns.map(r => r.browser).filter(Boolean))];
-  const allBranches = [...new Set(testRuns.map(r => r.branch).filter(Boolean))];
+  const testStats = buildPerTestAnalytics(testRuns, failureArchive);
+  const allBrowsers = [...new Set([...testRuns.map(r => r.browser), ...failureArchive.map(a => (/** @type {any} */(a)).browser).filter(Boolean)].filter(Boolean))];
+  const allBranches = [...new Set([...testRuns.map(r => r.branch), ...failureArchive.map(a => a.branch)].filter(Boolean))];
   generateTestsPage(testStats, allBrowsers, allBranches);
 
   console.log(`Dashboard regenerated with ${history.length} runs, ${failureArchive.length} failure archive entries, ${testStats.length} unique tests.`);

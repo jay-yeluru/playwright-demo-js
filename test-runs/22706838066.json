@@ -1,0 +1,146 @@
+{
+  "runId": "22706838066",
+  "branch": "develop",
+  "browser": "chrome",
+  "date": "2026-03-05T07:20:05.382Z",
+  "reportUrl": "reports/develop/22706838066/index.html",
+  "tests": [
+    {
+      "title": "Scenario: Page has correct title, heading and a link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "status": "passed",
+      "duration": 684,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page has visible paragraph content",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "status": "passed",
+      "duration": 681,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Landing page has branding and \"Get started\" link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "status": "passed",
+      "duration": 453,
+      "errors": []
+    },
+    {
+      "title": "Scenario: \"Get started\" click navigates to intro docs",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "status": "passed",
+      "duration": 857,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page loads quickly and has a single h1",
+      "file": "bdd.spec.js",
+      "group": "Feature: Performance & Accessibility",
+      "status": "passed",
+      "duration": 241,
+      "errors": []
+    },
+    {
+      "title": "playwright.dev homepage has title and links to intro page @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 354,
+      "errors": []
+    },
+    {
+      "title": "example.com renders the correct heading @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 161,
+      "errors": []
+    },
+    {
+      "title": "example.com page loads and has content",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 165,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - page title check",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 156,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - element visibility check",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "failed",
+      "duration": 3145,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n\n  48 |   if (Math.random() < 0.4) {\n  49 |     // Simulated regression: element doesn't exist\n> 50 |     await expect(page.locator('#login-button')).toBeVisible({ timeout: 3000 });\n     |                                                 ^\n  51 |   } else {\n  52 |     await expect(page.locator('h1')).toBeVisible();\n  53 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:49",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n\n  48 |   if (Math.random() < 0.4) {\n  49 |     // Simulated regression: element doesn't exist\n> 50 |     await expect(page.locator('#login-button')).toBeVisible({ timeout: 3000 });\n     |                                                 ^\n  51 |   } else {\n  52 |     await expect(page.locator('h1')).toBeVisible();\n  53 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:49"
+      ]
+    },
+    {
+      "title": "INTERMITTENT - heading text assertion",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "flaky",
+      "duration": 3145,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "failed",
+      "duration": 125,
+      "errors": [
+        "Error: Simulated transient failure — this test is intentionally flaky\n\n  73 |\n  74 |   if (Math.random() < 0.5) {\n> 75 |     throw new Error('Simulated transient failure — this test is intentionally flaky');\n     |           ^\n  76 |   }\n  77 | });\n  78 |\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:75:11",
+        "Error: Simulated transient failure — this test is intentionally flaky\n\n  73 |\n  74 |   if (Math.random() < 0.5) {\n> 75 |     throw new Error('Simulated transient failure — this test is intentionally flaky');\n     |           ^\n  76 |   }\n  77 | });\n  78 |\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:75:11"
+      ]
+    },
+    {
+      "title": "FLAKY - random assertion failure",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "failed",
+      "duration": 3192,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#nonexistent-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#nonexistent-button')\u001b[22m\n\n\n  82 |   if (Math.random() < 0.5) {\n  83 |     // Wrong: element that doesn't exist\n> 84 |     await expect(page.locator('#nonexistent-button')).toBeVisible({ timeout: 3000 });\n     |                                                       ^\n  85 |   } else {\n  86 |     await expect(page.locator('h1')).toBeVisible();\n  87 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:84:55",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#nonexistent-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#nonexistent-button')\u001b[22m\n\n\n  82 |   if (Math.random() < 0.5) {\n  83 |     // Wrong: element that doesn't exist\n> 84 |     await expect(page.locator('#nonexistent-button')).toBeVisible({ timeout: 3000 });\n     |                                                       ^\n  85 |   } else {\n  86 |     await expect(page.locator('h1')).toBeVisible();\n  87 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:84:55"
+      ]
+    },
+    {
+      "title": "page title is \"Example Domain\" @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 312,
+      "errors": []
+    },
+    {
+      "title": "h1 is visible and correct @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 141,
+      "errors": []
+    },
+    {
+      "title": "page has at least one paragraph and link",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 146,
+      "errors": []
+    }
+  ]
+}

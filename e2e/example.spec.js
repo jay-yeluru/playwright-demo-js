@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 
 // ─────────────────────────────────────────────────────────────
-// ✅ PASSING TESTS
+// ✅ ALWAYS PASSING TESTS
 // ─────────────────────────────────────────────────────────────
 
 test('playwright.dev homepage has title and links to intro page @smoke', async ({ page }) => {
@@ -21,40 +21,51 @@ test('example.com renders the correct heading @smoke', async ({ page }) => {
   await expect(page.locator('h1')).toHaveText('Example Domain');
 });
 
-test('example.com has a "More information" link', async ({ page }) => {
+test('example.com page loads and has content', async ({ page }) => {
   await page.goto('https://example.com');
-  const link = page.getByRole('link', { name: /more information/i });
-  await expect(link).toBeVisible();
-  await expect(link).toHaveAttribute('href', /iana\.org/);
+  await expect(page.locator('p').first()).toContainText('illustrative examples');
 });
 
 // ─────────────────────────────────────────────────────────────
-// ❌ FAILING TESTS  (intentional — for dashboard demo)
+// ❌ RANDOM FAILING TESTS  (fail ~40% of runs — no retry)
+// These simulate real intermittent regressions.
 // ─────────────────────────────────────────────────────────────
 
-test('FAIL - wrong page title assertion', async ({ page }) => {
+test('INTERMITTENT - page title check', async ({ page }) => {
   await page.goto('https://example.com');
-  // Deliberately wrong — title is "Example Domain", not "My App"
-  await expect(page).toHaveTitle(/My App/, { timeout: 3000 });
+  if (Math.random() < 0.4) {
+    // Simulated regression: wrong title expectation
+    await expect(page).toHaveTitle(/My App/, { timeout: 3000 });
+  } else {
+    await expect(page).toHaveTitle(/Example Domain/);
+  }
 });
 
-test('FAIL - non-existent element on example.com', async ({ page }) => {
+test('INTERMITTENT - element visibility check', async ({ page }) => {
   await page.goto('https://example.com');
-  // This element does not exist on the page
-  await expect(page.locator('#login-button')).toBeVisible({ timeout: 3000 });
+  if (Math.random() < 0.4) {
+    // Simulated regression: element doesn't exist
+    await expect(page.locator('#login-button')).toBeVisible({ timeout: 3000 });
+  } else {
+    await expect(page.locator('h1')).toBeVisible();
+  }
 });
 
-test('FAIL - wrong heading text on example.com', async ({ page }) => {
+test('INTERMITTENT - heading text assertion', async ({ page }) => {
   await page.goto('https://example.com');
-  // Actual heading is "Example Domain"
-  await expect(page.locator('h1')).toHaveText('Wrong Domain', { timeout: 3000 });
+  if (Math.random() < 0.4) {
+    // Simulated regression: wrong heading
+    await expect(page.locator('h1')).toHaveText('Wrong Domain', { timeout: 3000 });
+  } else {
+    await expect(page.locator('h1')).toHaveText('Example Domain');
+  }
 });
 
 // ─────────────────────────────────────────────────────────────
-// ⚠️  FLAKY TESTS  (Math.random — no added network delay)
+// ⚠️  FLAKY TESTS  (fail first attempt ~50%, pass on retry)
 // ─────────────────────────────────────────────────────────────
 
-test('FLAKY - random failure 50% of the time', async ({ page }) => {
+test('FLAKY - random transient failure @smoke', async ({ page }) => {
   await page.goto('https://example.com');
   await expect(page).toHaveTitle(/Example Domain/);
 
@@ -63,11 +74,11 @@ test('FLAKY - random failure 50% of the time', async ({ page }) => {
   }
 });
 
-test('FLAKY - random wrong assertion 50% of the time', async ({ page }) => {
+test('FLAKY - random assertion failure', async ({ page }) => {
   await page.goto('https://example.com');
 
   if (Math.random() < 0.5) {
-    // Wrong: page has only one <p> with a different text
+    // Wrong: page has text that is different
     await expect(page.locator('p').first()).toHaveText('This domain does not exist.', { timeout: 3000 });
   } else {
     await expect(page.locator('p').first()).toContainText('illustrative examples');

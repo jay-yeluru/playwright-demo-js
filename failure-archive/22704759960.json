@@ -1,0 +1,15 @@
+{
+  "runId": "22704759960",
+  "branch": "develop",
+  "date": "2026-03-05T06:06:03.707Z",
+  "failures": [
+    {
+      "title": "INTERMITTENT - page title check",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n\n  38 |   if (Math.random() < 0.4) {\n  39 |     // Simulated regression: wrong title expectation\n> 40 |     await expect(page).toHaveTitle(/My App/, { timeout: 3000 });\n     |                        ^\n  41 |   } else {\n  42 |     await expect(page).toHaveTitle(/Example Domain/);\n  43 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:40:24",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n\n  38 |   if (Math.random() < 0.4) {\n  39 |     // Simulated regression: wrong title expectation\n> 40 |     await expect(page).toHaveTitle(/My App/, { timeout: 3000 });\n     |                        ^\n  41 |   } else {\n  42 |     await expect(page).toHaveTitle(/Example Domain/);\n  43 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:40:24",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n\n  38 |   if (Math.random() < 0.4) {\n  39 |     // Simulated regression: wrong title expectation\n> 40 |     await expect(page).toHaveTitle(/My App/, { timeout: 3000 });\n     |                        ^\n  41 |   } else {\n  42 |     await expect(page).toHaveTitle(/Example Domain/);\n  43 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:40:24"
+      ]
+    }
+  ]
+}

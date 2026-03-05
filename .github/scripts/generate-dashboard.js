@@ -969,26 +969,121 @@ function generateDashboard(history, failureArchive) {
   const branches = [...new Set(history.map((r) => r.branch))];
   const browsers = [...new Set(history.map((r) => r.browser).filter(Boolean))];
 
-  const sparkData = history
-    .slice(0, 20)
-    .reverse()
+  // ── Trend chart data (last 20 runs, oldest→newest) ─────────────────────────
+  const trendData = history.slice(0, 20).reverse();
+  const chartW = 800, chartH = 120;
+  const passPoints = trendData
+    .map((r, i) => {
+      const x = trendData.length > 1 ? (i / (trendData.length - 1)) * chartW : chartW / 2;
+      const y = chartH - ((r.total > 0 ? r.passed / r.total : 0) * chartH);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+  const durMax = Math.max(...trendData.map(r => r.duration ?? 0), 1);
+  const durPoints = trendData
+    .map((r, i) => {
+      const x = trendData.length > 1 ? (i / (trendData.length - 1)) * chartW : chartW / 2;
+      const y = chartH - (((r.duration ?? 0) / durMax) * chartH);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+  // Fill polygon for pass-rate area
+  const firstX = trendData.length > 1 ? 0 : chartW / 2;
+  const lastX = trendData.length > 1 ? chartW : chartW / 2;
+  const passArea = `${firstX},${chartH} ${passPoints} ${lastX},${chartH}`;
+
+  // X-axis labels: every ~4th run
+  const xLabels = trendData
+    .map((r, i) => {
+      if (i % Math.max(1, Math.floor(trendData.length / 5)) !== 0 && i !== trendData.length - 1) return '';
+      const x = trendData.length > 1 ? (i / (trendData.length - 1)) * chartW : chartW / 2;
+      return `<text x="${x.toFixed(1)}" y="${chartH + 16}" text-anchor="middle" font-size="9" fill="#64748b" font-family="monospace">${r.date?.substring(5, 16) ?? ''}</text>`;
+    }).join('');
+
+  // ── Insight cards ──────────────────────────────────────────────────────────
+  // Failure streak
+  let streak = 0, maxStreak = 0, streakBranch = latestRun?.branch ?? '';
+  for (const r of history) {
+    if (r.failed > 0) { streak++; if (streak > maxStreak) { maxStreak = streak; streakBranch = r.branch; } }
+    else streak = 0;
+  }
+  // Current streak (from newest)
+  let currentStreak = 0;
+  for (const r of history) {
+    if (r.failed > 0) currentStreak++;
+    else break;
+  }
+
+  // Avg test-level pass rate
+  const avgTestPassRate = history.length > 0
+    ? Math.round(history.reduce((s, r) => s + (r.total > 0 ? (r.passed / r.total) * 100 : 0), 0) / history.length)
+    : 0;
+
+  // Fastest + slowest run
+  const runsWithDur = history.filter(r => r.duration && r.duration > 0);
+  const fastest = runsWithDur.length > 0 ? runsWithDur.reduce((a, b) => (a.duration ?? 0) < (b.duration ?? 0) ? a : b) : null;
+  const slowest = runsWithDur.length > 0 ? runsWithDur.reduce((a, b) => (a.duration ?? 0) > (b.duration ?? 0) ? a : b) : null;
+
+  // Most active branch
+  const branchCounts = /** @type {Record<string,number>} */ ({});
+  history.forEach(r => { branchCounts[r.branch] = (branchCounts[r.branch] ?? 0) + 1; });
+  const mostActiveBranch = Object.entries(branchCounts).sort((a, b) => b[1] - a[1])[0];
+
+  // ── Browser breakdown ──────────────────────────────────────────────────────
+  const browserIcon = (/** @type {string} */ b) =>
+    ({ chrome: "🌐", firefox: "🦊", safari: "🧭", edge: "🔷" })[b?.toLowerCase()] ?? "🌐";
+
+  /** @type {Record<string,{runs:number,passed:number,failed:number}>} */
+  const browserStats = {};
+  history.forEach(r => {
+    if (!r.browser) return;
+    if (!browserStats[r.browser]) browserStats[r.browser] = { runs: 0, passed: 0, failed: 0 };
+    browserStats[r.browser].runs++;
+    if (r.failed === 0) browserStats[r.browser].passed++;
+    else browserStats[r.browser].failed++;
+  });
+
+  /** @type {Record<string,{runs:number,passed:number,failed:number}>} */
+  const branchStats = {};
+  history.forEach(r => {
+    if (!branchStats[r.branch]) branchStats[r.branch] = { runs: 0, passed: 0, failed: 0 };
+    branchStats[r.branch].runs++;
+    if (r.failed === 0) branchStats[r.branch].passed++;
+    else branchStats[r.branch].failed++;
+  });
+
+  const renderBreakdownBar = (/** @type {string} */ name, /** @type {{runs:number,passed:number,failed:number}} */ s, /** @type {string} */ icon) => {
+    const rate = s.runs > 0 ? Math.round((s.passed / s.runs) * 100) : 0;
+    const color = rate >= 80 ? 'var(--pass)' : rate >= 50 ? 'var(--flaky)' : 'var(--fail)';
+    return `
+      <div class="bd-row">
+        <span class="bd-name">${icon} ${name}</span>
+        <span class="bd-runs">${s.runs} runs</span>
+        <div class="bd-bar-wrap"><div class="bd-bar-fill" style="width:${rate}%;background:${color}"></div></div>
+        <span class="bd-rate" style="color:${color}">${rate}%</span>
+        <span class="bd-counts"><span class="bd-pass">${s.passed}✓</span> <span class="bd-fail">${s.failed}✗</span></span>
+      </div>`;
+  };
+
+  const browserBreakdownHTML = Object.entries(browserStats)
+    .sort((a, b) => b[1].runs - a[1].runs)
+    .map(([b, s]) => renderBreakdownBar(b, s, browserIcon(b))).join('');
+
+  const branchBreakdownHTML = Object.entries(branchStats)
+    .sort((a, b) => b[1].runs - a[1].runs)
+    .map(([b, s]) => renderBreakdownBar(b, s, '🌿')).join('');
+
+  // Sparkline (small — still used in stat cards)
+  const sparkData = history.slice(0, 20).reverse()
     .map((r) => (r.total > 0 ? Math.round((r.passed / r.total) * 100) : 0));
-  const sparkW = 120,
-    sparkH = 32;
+  const sparkW = 120, sparkH = 32;
   const sparkPoints = sparkData
     .map((v, i) => {
       const x = (i / Math.max(sparkData.length - 1, 1)) * sparkW;
       const y = sparkH - (v / 100) * sparkH;
       return `${x},${y}`;
-    })
-    .join(" ");
+    }).join(" ");
 
-  const branchOptions = branches
-    .map((b) => `<option value="${b}">${b}</option>`)
-    .join("");
-  const browserOptions = browsers
-    .map((b) => `<option value="${b}">${b}</option>`)
-    .join("");
+  const branchOptions = branches.map((b) => `<option value="${b}">${b}</option>`).join("");
+  const browserOptions = browsers.map((b) => `<option value="${b}">${b}</option>`).join("");
 
   const failureHistoryHTML = renderFailureHistory(failureArchive, history);
 
@@ -1100,6 +1195,53 @@ function generateDashboard(history, failureArchive) {
     .view-btn { display: inline-flex; align-items: center; gap: 4px; color: var(--accent); text-decoration: none; font-size: 0.78rem; font-family: var(--font-mono); padding: 4px 10px; border: 1px solid rgba(0,229,255,0.2); border-radius: 6px; transition: all 0.2s ease; background: rgba(0,229,255,0.05); }
     .view-btn:hover { background: rgba(0,229,255,0.12); border-color: var(--accent); box-shadow: 0 0 12px rgba(0,229,255,0.2); transform: translateX(2px); }
     .view-btn-sm { font-size: 0.68rem; padding: 2px 8px; }
+
+    /* ── Navigation tabs ── */
+    .nav-tabs { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+    .nav-tab { font-family: var(--font-mono); font-size: 0.76rem; padding: 6px 16px; border-radius: 6px; border: 1px solid var(--border); color: var(--muted); text-decoration: none; transition: all 0.15s ease; background: var(--surface2); }
+    .nav-tab:hover { border-color: var(--accent); color: var(--accent); }
+    .nav-tab.active { background: rgba(0,229,255,0.1); border-color: var(--accent); color: var(--accent); }
+
+    /* ── Trend chart ── */
+    .chart-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; animation: slideUp 0.5s 0.28s ease both; }
+    .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+    .chart-title { font-size: 0.8rem; font-family: var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .chart-legend { display: flex; align-items: center; gap: 1rem; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-family: var(--font-mono); color: var(--muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+    .chart-svg-wrap { width: 100%; overflow-x: auto; }
+    .chart-svg { display: block; width: 100%; }
+
+    /* ── Insights row ── */
+    .insights-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; position: relative; overflow: hidden; animation: slideUp 0.5s 0.32s ease both; }
+    .insight-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .insight-streak::before { background: var(--fail); }
+    .insight-rate::before   { background: linear-gradient(90deg, var(--pass), var(--accent)); }
+    .insight-speed::before  { background: var(--accent); }
+    .insight-branch::before { background: var(--accent2); }
+    .insight-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .insight-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
+    .insight-value { font-size: 1.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+    .insight-streak .insight-value { color: var(--fail); }
+    .insight-rate   .insight-value { color: var(--text); }
+    .insight-speed  .insight-value { color: var(--accent); }
+    .insight-branch .insight-value { color: var(--accent2); }
+    .insight-sub { font-size: 0.7rem; font-family: var(--font-mono); color: var(--muted); }
+
+    /* ── Breakdown panels ── */
+    .breakdown-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .bd-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; animation: slideUp 0.5s 0.35s ease both; }
+    .bd-panel-title { font-size: 0.72rem; font-family: var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.85rem; }
+    .bd-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.55rem; flex-wrap: nowrap; }
+    .bd-name { font-family: var(--font-mono); font-size: 0.78rem; min-width: 90px; }
+    .bd-runs { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); min-width: 54px; }
+    .bd-bar-wrap { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); min-width: 40px; }
+    .bd-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .bd-rate { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; min-width: 34px; text-align: right; }
+    .bd-counts { font-family: var(--font-mono); font-size: 0.65rem; min-width: 60px; text-align: right; }
+    .bd-pass { color: var(--pass); }
+    .bd-fail { color: var(--fail); }
 
     footer { text-align: center; padding: 2rem 0 1rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
 
@@ -1259,11 +1401,18 @@ function generateDashboard(history, failureArchive) {
       .fh-controls { flex-direction: column; align-items: stretch; }
       .th-title { max-width: 200px; }
       .th-stat-date { display: none; }
+      .breakdown-row { grid-template-columns: 1fr; }
+      .insights-row { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <nav class="nav-tabs">
+      <a href="index.html" class="nav-tab active">📊 Overview</a>
+      <a href="tests.html" class="nav-tab">🧪 Test Analytics</a>
+    </nav>
+
     <header>
       <div class="logo">
         <div class="logo-icon">🎭</div>
@@ -1299,9 +1448,9 @@ function generateDashboard(history, failureArchive) {
         <div class="stat-sub">had failures</div>
       </div>
       <div class="stat-card card-rate">
-        <div class="stat-label">Pass Rate</div>
-        <div class="stat-value">${overallRate}%</div>
-        <div class="stat-sub">across all runs</div>
+        <div class="stat-label">Avg Test Pass Rate</div>
+        <div class="stat-value">${avgTestPassRate}%</div>
+        <div class="stat-sub">test-level across all runs</div>
       </div>
       <div class="stat-card card-flaky">
         <div class="stat-label">Flaky Tests</div>
@@ -1310,8 +1459,7 @@ function generateDashboard(history, failureArchive) {
       </div>
     </div>
 
-    ${latestRun
-      ? `
+    ${latestRun ? `
     <div class="latest-banner">
       <div class="latest-label">Latest</div>
       <div class="latest-info">
@@ -1324,9 +1472,86 @@ function generateDashboard(history, failureArchive) {
         <span class="latest-stat">${latestRun.date}</span>
       </div>
       <a class="view-btn" href="${latestRun.reportUrl}" target="_blank">Latest Report <span>→</span></a>
-    </div>`
-      : ""
-    }
+    </div>` : ""}
+
+    <!-- ── Trend Chart ── -->
+    <div class="chart-panel">
+      <div class="chart-header">
+        <span class="chart-title">📈 Pass Rate &amp; Duration Trend — last ${trendData.length} runs</span>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--pass)"></div>Pass rate</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Duration</div>
+        </div>
+      </div>
+      <div class="chart-svg-wrap">
+        <svg class="chart-svg" viewBox="-30 -10 ${chartW + 40} ${chartH + 30}" preserveAspectRatio="xMidYMid meet">
+          <!-- Grid lines -->
+          ${[0, 25, 50, 75, 100].map(v => {
+    const y = chartH - (v / 100) * chartH;
+    return `<line x1="0" y1="${y.toFixed(1)}" x2="${chartW}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                    <text x="-4" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="#64748b" font-family="monospace">${v}%</text>`;
+  }).join('')}
+          <!-- X axis labels -->
+          ${xLabels}
+          <!-- Duration line -->
+          <polyline points="${durPoints}" fill="none" stroke="rgba(0,229,255,0.4)" stroke-width="1.5" stroke-dasharray="4 3" stroke-linecap="round"/>
+          <!-- Pass rate fill -->
+          <polygon points="${passArea}" fill="rgba(16,185,129,0.08)"/>
+          <!-- Pass rate line -->
+          <polyline points="${passPoints}" fill="none" stroke="var(--pass)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Data point dots -->
+          ${trendData.map((r, i) => {
+    const x = trendData.length > 1 ? (i / (trendData.length - 1)) * chartW : chartW / 2;
+    const y = chartH - ((r.total > 0 ? r.passed / r.total : 0) * chartH);
+    const color = r.failed > 0 ? 'var(--fail)' : 'var(--pass)';
+    const rate = r.total > 0 ? Math.round((r.passed / r.total) * 100) : 0;
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${color}" stroke="var(--bg)" stroke-width="1.5">
+                      <title>${r.date} · ${r.browser} · ${rate}% · ${r.passed}P ${r.failed}F</title>
+                    </circle>`;
+  }).join('')}
+        </svg>
+      </div>
+    </div>
+
+    <!-- ── Insight Cards ── -->
+    <div class="insights-row">
+      <div class="insight-card insight-streak">
+        <div class="insight-icon">🔥</div>
+        <div class="insight-label">Current Fail Streak</div>
+        <div class="insight-value">${currentStreak}</div>
+        <div class="insight-sub">${currentStreak > 0 ? `consecutive failing runs on <strong>${latestRun?.branch}</strong>` : 'No active failing streak'}</div>
+      </div>
+      <div class="insight-card insight-rate">
+        <div class="insight-icon">🎯</div>
+        <div class="insight-label">Avg Test Pass Rate</div>
+        <div class="insight-value">${avgTestPassRate}%</div>
+        <div class="insight-sub">test-level average across ${totalRuns} runs</div>
+      </div>
+      <div class="insight-card insight-speed">
+        <div class="insight-icon">⚡</div>
+        <div class="insight-label">Fastest Run</div>
+        <div class="insight-value">${fastest ? (fastest.duration / 1000).toFixed(1) + 's' : '—'}</div>
+        <div class="insight-sub">${fastest ? fastest.browser + ' / ' + fastest.branch : 'No data yet'}</div>
+      </div>
+      <div class="insight-card insight-branch">
+        <div class="insight-icon">🌿</div>
+        <div class="insight-label">Most Active Branch</div>
+        <div class="insight-value">${mostActiveBranch ? mostActiveBranch[1] : 0}</div>
+        <div class="insight-sub">${mostActiveBranch ? `runs on <strong>${mostActiveBranch[0]}</strong>` : 'No data'}</div>
+      </div>
+    </div>
+
+    <!-- ── Browser & Branch Breakdown ── -->
+    <div class="breakdown-row">
+      <div class="bd-panel">
+        <div class="bd-panel-title">🌐 Browser Breakdown</div>
+        ${browserBreakdownHTML || '<div style="font-size:0.75rem;color:var(--muted);font-family:monospace">No data yet</div>'}
+      </div>
+      <div class="bd-panel">
+        <div class="bd-panel-title">🌿 Branch Breakdown</div>
+        ${branchBreakdownHTML || '<div style="font-size:0.75rem;color:var(--muted);font-family:monospace">No data yet</div>'}
+      </div>
+    </div>
 
     <div class="table-wrap">
       <div class="table-header">

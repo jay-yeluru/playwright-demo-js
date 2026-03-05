@@ -1,0 +1,102 @@
+{
+  "runId": "22705335274",
+  "branch": "develop",
+  "browser": "edge",
+  "date": "2026-03-05T06:28:06.448Z",
+  "reportUrl": "reports/develop/22705335274/index.html",
+  "tests": [
+    {
+      "title": "playwright.dev homepage has title and links to intro page @smoke",
+      "status": "passed",
+      "duration": 5357,
+      "errors": []
+    },
+    {
+      "title": "example.com renders the correct heading @smoke",
+      "status": "passed",
+      "duration": 742,
+      "errors": []
+    },
+    {
+      "title": "example.com page loads and has content",
+      "status": "passed",
+      "duration": 293,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - page title check",
+      "status": "passed",
+      "duration": 290,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - element visibility check",
+      "status": "flaky",
+      "duration": 3226,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - heading text assertion",
+      "status": "passed",
+      "duration": 1479,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "status": "passed",
+      "duration": 233,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random assertion failure",
+      "status": "failed",
+      "duration": 3371,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#nonexistent-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#nonexistent-button')\u001b[22m\n\n\n  82 |   if (Math.random() < 0.5) {\n  83 |     // Wrong: element that doesn't exist\n> 84 |     await expect(page.locator('#nonexistent-button')).toBeVisible({ timeout: 3000 });\n     |                                                       ^\n  85 |   } else {\n  86 |     await expect(page.locator('h1')).toBeVisible();\n  87 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:84:55",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#nonexistent-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#nonexistent-button')\u001b[22m\n\n\n  82 |   if (Math.random() < 0.5) {\n  83 |     // Wrong: element that doesn't exist\n> 84 |     await expect(page.locator('#nonexistent-button')).toBeVisible({ timeout: 3000 });\n     |                                                       ^\n  85 |   } else {\n  86 |     await expect(page.locator('h1')).toBeVisible();\n  87 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:84:55"
+      ]
+    },
+    {
+      "title": "page title is \"Example Domain\" @smoke",
+      "status": "passed",
+      "duration": 452,
+      "errors": []
+    },
+    {
+      "title": "h1 is visible and correct @smoke",
+      "status": "passed",
+      "duration": 1757,
+      "errors": []
+    },
+    {
+      "title": "page has at least one paragraph",
+      "status": "passed",
+      "duration": 342,
+      "errors": []
+    },
+    {
+      "title": "page has a link",
+      "status": "passed",
+      "duration": 366,
+      "errors": []
+    },
+    {
+      "title": "homepage title contains \"Playwright\" @smoke",
+      "status": "passed",
+      "duration": 491,
+      "errors": []
+    },
+    {
+      "title": "\"Get started\" link points to /docs/intro @smoke",
+      "status": "passed",
+      "duration": 1178,
+      "errors": []
+    },
+    {
+      "title": "docs page loads successfully",
+      "status": "passed",
+      "duration": 584,
+      "errors": []
+    }
+  ]
+}

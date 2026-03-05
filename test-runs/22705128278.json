@@ -1,0 +1,99 @@
+{
+  "runId": "22705128278",
+  "branch": "master",
+  "browser": "edge",
+  "date": "2026-03-05T06:20:36.635Z",
+  "reportUrl": "reports/master/22705128278/index.html",
+  "tests": [
+    {
+      "title": "playwright.dev homepage has title and links to intro page @smoke",
+      "status": "passed",
+      "duration": 5125,
+      "errors": []
+    },
+    {
+      "title": "example.com renders the correct heading @smoke",
+      "status": "passed",
+      "duration": 280,
+      "errors": []
+    },
+    {
+      "title": "example.com page loads and has content",
+      "status": "passed",
+      "duration": 372,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - page title check",
+      "status": "flaky",
+      "duration": 3296,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - element visibility check",
+      "status": "passed",
+      "duration": 1717,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - heading text assertion",
+      "status": "passed",
+      "duration": 322,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "status": "passed",
+      "duration": 387,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random assertion failure",
+      "status": "flaky",
+      "duration": 3540,
+      "errors": []
+    },
+    {
+      "title": "page title is \"Example Domain\" @smoke",
+      "status": "passed",
+      "duration": 1232,
+      "errors": []
+    },
+    {
+      "title": "h1 is visible and correct @smoke",
+      "status": "passed",
+      "duration": 392,
+      "errors": []
+    },
+    {
+      "title": "page has at least one paragraph",
+      "status": "passed",
+      "duration": 340,
+      "errors": []
+    },
+    {
+      "title": "page has a link",
+      "status": "passed",
+      "duration": 357,
+      "errors": []
+    },
+    {
+      "title": "homepage title contains \"Playwright\" @smoke",
+      "status": "passed",
+      "duration": 609,
+      "errors": []
+    },
+    {
+      "title": "\"Get started\" link points to /docs/intro @smoke",
+      "status": "passed",
+      "duration": 1640,
+      "errors": []
+    },
+    {
+      "title": "docs page loads successfully",
+      "status": "passed",
+      "duration": 487,
+      "errors": []
+    }
+  ]
+}

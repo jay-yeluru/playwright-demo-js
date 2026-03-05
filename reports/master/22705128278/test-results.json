@@ -1,0 +1,892 @@
+{
+  "config": {
+    "configFile": "/Users/runner/work/playwright-demo-js/playwright-demo-js/playwright.config.js",
+    "rootDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+    "forbidOnly": true,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/f983bce197aa164e50491d344ceb5130ad166fb2",
+        "commitHash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+        "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705128278"
+      },
+      "gitCommit": {
+        "shortHash": "f983bce",
+        "hash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+        "subject": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs",
+        "body": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs\n",
+        "author": {
+          "name": "jay-yeluru",
+          "email": "24775245+jay-yeluru@users.noreply.github.com",
+          "time": 1772690678000
+        },
+        "committer": {
+          "name": "jay-yeluru",
+          "email": "24775245+jay-yeluru@users.noreply.github.com",
+          "time": 1772690678000
+        },
+        "branch": "master"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/f983bce197aa164e50491d344ceb5130ad166fb2",
+            "commitHash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705128278"
+          },
+          "gitCommit": {
+            "shortHash": "f983bce",
+            "hash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "subject": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs",
+            "body": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/f983bce197aa164e50491d344ceb5130ad166fb2",
+            "commitHash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705128278"
+          },
+          "gitCommit": {
+            "shortHash": "f983bce",
+            "hash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "subject": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs",
+            "body": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/f983bce197aa164e50491d344ceb5130ad166fb2",
+            "commitHash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705128278"
+          },
+          "gitCommit": {
+            "shortHash": "f983bce",
+            "hash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "subject": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs",
+            "body": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/f983bce197aa164e50491d344ceb5130ad166fb2",
+            "commitHash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705128278"
+          },
+          "gitCommit": {
+            "shortHash": "f983bce",
+            "hash": "f983bce197aa164e50491d344ceb5130ad166fb2",
+            "subject": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs",
+            "body": "test: fix broken paragraph assertion + add stable.spec.js for guaranteed-pass runs\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772690678000
+            },
+            "branch": "master"
+          },
+          "actualWorkers": 1
+        },
+        "id": "edge",
+        "name": "edge",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "reports",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reports/test-results.json"
+        }
+      ],
+      [
+        "github",
+        {}
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "example.spec.js",
+      "file": "example.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "playwright.dev homepage has title and links to intro page @smoke",
+          "ok": true,
+          "tags": [
+            "smoke"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5125,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:18:39.081Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-549c2ce2d03e057b3864",
+          "file": "example.spec.js",
+          "line": 8,
+          "column": 1
+        },
+        {
+          "title": "example.com renders the correct heading @smoke",
+          "ok": true,
+          "tags": [
+            "smoke"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 280,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:18:48.133Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-605b44fbeae142417d54",
+          "file": "example.spec.js",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "example.com page loads and has content",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 372,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:18:48.425Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-02f6ee27ccc3f6e86a42",
+          "file": "example.spec.js",
+          "line": 24,
+          "column": 1
+        },
+        {
+          "title": "INTERMITTENT - page title check",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3296,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:40:24",
+                    "location": {
+                      "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                      "column": 24,
+                      "line": 40
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 38 |\u001b[39m   \u001b[36mif\u001b[39m (\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mrandom() \u001b[33m<\u001b[39m \u001b[35m0.4\u001b[39m) {\n \u001b[90m 39 |\u001b[39m     \u001b[90m// Simulated regression: wrong title expectation\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 40 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/My App/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m3000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 41 |\u001b[39m   } \u001b[36melse\u001b[39m {\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Example Domain/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 43 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                        "column": 24,
+                        "line": 40
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/My App/\u001b[39m\nReceived string:  \u001b[31m\"Example Domain\"\u001b[39m\nTimeout: 3000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 3000ms\u001b[22m\n\u001b[2m    7 × unexpected value \"Example Domain\"\u001b[22m\n\n\n  38 |   if (Math.random() < 0.4) {\n  39 |     // Simulated regression: wrong title expectation\n> 40 |     await expect(page).toHaveTitle(/My App/, { timeout: 3000 });\n     |                        ^\n  41 |   } else {\n  42 |     await expect(page).toHaveTitle(/Example Domain/);\n  43 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:40:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:18:48.810Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts/example-INTERMITTENT---page-title-check-edge/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                    "column": 24,
+                    "line": 40
+                  }
+                },
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 531,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2026-03-05T06:19:23.127Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts/example-INTERMITTENT---page-title-check-edge-retry1/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "flaky"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-d4b3de7aaa3336219dc3",
+          "file": "example.spec.js",
+          "line": 36,
+          "column": 1
+        },
+        {
+          "title": "INTERMITTENT - element visibility check",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1717,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:19:24.832Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-85626bf1bfded4df5d83",
+          "file": "example.spec.js",
+          "line": 46,
+          "column": 1
+        },
+        {
+          "title": "INTERMITTENT - heading text assertion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 322,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:19:26.563Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-45c359c0fa8d86052399",
+          "file": "example.spec.js",
+          "line": 56,
+          "column": 1
+        },
+        {
+          "title": "FLAKY - random transient failure @smoke",
+          "ok": true,
+          "tags": [
+            "smoke"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 387,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:19:26.896Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-ba6224f02b3158631b32",
+          "file": "example.spec.js",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "FLAKY - random assertion failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge",
+              "projectName": "edge",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3540,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#nonexistent-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#nonexistent-button')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#nonexistent-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#nonexistent-button')\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:84:55",
+                    "location": {
+                      "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                      "column": 55,
+                      "line": 84
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 82 |\u001b[39m   \u001b[36mif\u001b[39m (\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mrandom() \u001b[33m<\u001b[39m \u001b[35m0.5\u001b[39m) {\n \u001b[90m 83 |\u001b[39m     \u001b[90m// Wrong: element that doesn't exist\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 84 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#nonexistent-button'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m3000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 85 |\u001b[39m   } \u001b[36melse\u001b[39m {\n \u001b[90m 86 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 87 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                        "column": 55,
+                        "line": 84
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#nonexistent-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#nonexistent-button')\u001b[22m\n\n\n  82 |   if (Math.random() < 0.5) {\n  83 |     // Wrong: element that doesn't exist\n> 84 |     await expect(page.locator('#nonexistent-button')).toBeVisible({ timeout: 3000 });\n     |                                                       ^\n  85 |   } else {\n  86 |     await expect(page.locator('h1')).toBeVisible();\n  87 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:84:55"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:19:27.298Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts/example-FLAKY---random-assertion-failure-edge/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                    "column": 55,
+                    "line": 84
+                  }
+                },
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 952,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2026-03-05T06:19:40.022Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts/example-FLAKY---random-assertion-failure-edge-retry1/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "flaky"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-6c12061783823ccdef2b",
+          "file": "example.spec.js",
+          "line": 79,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "stable.spec.js",
+      "file": "stable.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Stable — Example.com",
+          "file": "stable.spec.js",
+          "line": 12,
+          "column": 6,
+          "specs": [
+            {
+              "title": "page title is \"Example Domain\" @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "edge",
+                  "projectName": "edge",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1232,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:19:41.704Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-239e4056d9f6c33c0702",
+              "file": "stable.spec.js",
+              "line": 13,
+              "column": 5
+            },
+            {
+              "title": "h1 is visible and correct @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "edge",
+                  "projectName": "edge",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 392,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:19:42.951Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-9b74ec3ec734f918cb89",
+              "file": "stable.spec.js",
+              "line": 18,
+              "column": 5
+            },
+            {
+              "title": "page has at least one paragraph",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "edge",
+                  "projectName": "edge",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 340,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:19:43.364Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-b63093df46ba8790f490",
+              "file": "stable.spec.js",
+              "line": 24,
+              "column": 5
+            },
+            {
+              "title": "page has a link",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "edge",
+                  "projectName": "edge",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 357,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:19:43.715Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-7841ab0a4328be07a82c",
+              "file": "stable.spec.js",
+              "line": 29,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Stable — Playwright.dev",
+          "file": "stable.spec.js",
+          "line": 35,
+          "column": 6,
+          "specs": [
+            {
+              "title": "homepage title contains \"Playwright\" @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "edge",
+                  "projectName": "edge",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 609,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:19:44.080Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-570eadbd4a4d333a7a1e",
+              "file": "stable.spec.js",
+              "line": 36,
+              "column": 5
+            },
+            {
+              "title": "\"Get started\" link points to /docs/intro @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "edge",
+                  "projectName": "edge",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1640,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:19:44.697Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-da1abb3fcc045adbaa97",
+              "file": "stable.spec.js",
+              "line": 41,
+              "column": 5
+            },
+            {
+              "title": "docs page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "edge",
+                  "projectName": "edge",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 487,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:19:46.346Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-09b49d899a41266c06bf",
+              "file": "stable.spec.js",
+              "line": 48,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-05T06:18:38.254Z",
+    "duration": 98636.49799999999,
+    "expected": 13,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 2
+  }
+}

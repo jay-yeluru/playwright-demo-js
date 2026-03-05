@@ -1,0 +1,15 @@
+{
+  "runId": "22706840502",
+  "branch": "develop",
+  "date": "2026-03-05T07:19:51.713Z",
+  "failures": [
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "errors": [
+        "Error: Simulated transient failure — this test is intentionally flaky\n\n  73 |\n  74 |   if (Math.random() < 0.5) {\n> 75 |     throw new Error('Simulated transient failure — this test is intentionally flaky');\n     |           ^\n  76 |   }\n  77 | });\n  78 |\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:75:11",
+        "Error: Simulated transient failure — this test is intentionally flaky\n\n  73 |\n  74 |   if (Math.random() < 0.5) {\n> 75 |     throw new Error('Simulated transient failure — this test is intentionally flaky');\n     |           ^\n  76 |   }\n  77 | });\n  78 |\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:75:11",
+        "Error: Simulated transient failure — this test is intentionally flaky\n\n  73 |\n  74 |   if (Math.random() < 0.5) {\n> 75 |     throw new Error('Simulated transient failure — this test is intentionally flaky');\n     |           ^\n  76 |   }\n  77 | });\n  78 |\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:75:11"
+      ]
+    }
+  ]
+}

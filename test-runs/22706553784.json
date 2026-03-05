@@ -1,0 +1,140 @@
+{
+  "runId": "22706553784",
+  "branch": "develop",
+  "browser": "chrome",
+  "date": "2026-03-05T07:09:24.595Z",
+  "reportUrl": "reports/develop/22706553784/index.html",
+  "tests": [
+    {
+      "title": "Scenario: Page has correct title, heading and a link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "status": "passed",
+      "duration": 969,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page has visible paragraph content",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "status": "passed",
+      "duration": 951,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Landing page has branding and \"Get started\" link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "status": "passed",
+      "duration": 640,
+      "errors": []
+    },
+    {
+      "title": "Scenario: \"Get started\" click navigates to intro docs",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "status": "passed",
+      "duration": 1034,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page loads quickly and has a single h1",
+      "file": "bdd.spec.js",
+      "group": "Feature: Performance & Accessibility",
+      "status": "passed",
+      "duration": 350,
+      "errors": []
+    },
+    {
+      "title": "playwright.dev homepage has title and links to intro page @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 700,
+      "errors": []
+    },
+    {
+      "title": "example.com renders the correct heading @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 275,
+      "errors": []
+    },
+    {
+      "title": "example.com page loads and has content",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 310,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - page title check",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 254,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - element visibility check",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 281,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - heading text assertion",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 250,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "failed",
+      "duration": 263,
+      "errors": [
+        "Error: Simulated transient failure — this test is intentionally flaky\n\n  73 |\n  74 |   if (Math.random() < 0.5) {\n> 75 |     throw new Error('Simulated transient failure — this test is intentionally flaky');\n     |           ^\n  76 |   }\n  77 | });\n  78 |\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:75:11",
+        "Error: Simulated transient failure — this test is intentionally flaky\n\n  73 |\n  74 |   if (Math.random() < 0.5) {\n> 75 |     throw new Error('Simulated transient failure — this test is intentionally flaky');\n     |           ^\n  76 |   }\n  77 | });\n  78 |\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:75:11"
+      ]
+    },
+    {
+      "title": "FLAKY - random assertion failure",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 248,
+      "errors": []
+    },
+    {
+      "title": "page title is \"Example Domain\" @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 254,
+      "errors": []
+    },
+    {
+      "title": "h1 is visible and correct @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 271,
+      "errors": []
+    },
+    {
+      "title": "page has at least one paragraph and link",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 282,
+      "errors": []
+    }
+  ]
+}

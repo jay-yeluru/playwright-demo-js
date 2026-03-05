@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Analytics — Playwright Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0a0e1a; --surface:#111827; --surface2:#1a2235; --border:#1e2d45;
+      --accent:#00e5ff; --accent2:#7c3aed; --pass:#10b981; --fail:#f43f5e;
+      --flaky:#f59e0b; --cancelled:#64748b; --text:#e2e8f0; --muted:#64748b;
+      --font-display:'Syne',sans-serif; --font-mono:'JetBrains Mono',monospace;
+    }
+    body { font-family:var(--font-display); background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+    body::before {
+      content:''; position:fixed; inset:0;
+      background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);
+      background-size:40px 40px; animation:gridPan 20s linear infinite; pointer-events:none; z-index:0;
+    }
+    @keyframes gridPan { 0%{background-position:0 0} 100%{background-position:40px 40px} }
+    .container { position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:2.5rem 2rem; }
+
+    /* ── Nav ── */
+    .nav { display:flex; align-items:center; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+    .nav-logo { display:flex; align-items:center; gap:0.75rem; margin-right:auto; }
+    .nav-logo-icon { width:38px; height:38px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+    .nav-logo h1 { font-size:1.1rem; font-weight:800; background:linear-gradient(90deg,#fff,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .nav-tab { font-family:var(--font-mono); font-size:0.75rem; padding:6px 16px; border-radius:6px; border:1px solid var(--border); color:var(--muted); text-decoration:none; transition:all 0.15s ease; background:var(--surface2); }
+    .nav-tab:hover { border-color:var(--accent); color:var(--accent); }
+    .nav-tab.active { background:rgba(0,229,255,0.1); border-color:var(--accent); color:var(--accent); }
+
+    /* ── Summary chips ── */
+    .summary-bar { display:flex; gap:1rem; margin-bottom:2rem; flex-wrap:wrap; }
+    .sum-chip { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1rem 1.5rem; min-width:140px; position:relative; overflow:hidden; }
+    .sum-chip::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+    .sum-chip.chip-total::before { background:var(--accent); }
+    .sum-chip.chip-pass::before { background:var(--pass); }
+    .sum-chip.chip-fail::before { background:var(--fail); }
+    .sum-chip.chip-flaky::before { background:var(--flaky); }
+    .sum-chip.chip-rate::before { background:linear-gradient(90deg,var(--pass),var(--accent)); }
+    .sum-label { font-size:0.65rem; font-family:var(--font-mono); color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem; }
+    .sum-val { font-size:2rem; font-weight:800; line-height:1; }
+    .chip-total .sum-val { color:var(--accent); }
+    .chip-pass .sum-val { color:var(--pass); }
+    .chip-fail .sum-val { color:var(--fail); }
+    .chip-flaky .sum-val { color:var(--flaky); }
+    .chip-rate .sum-val { color:var(--text); }
+    .sum-sub { font-size:0.68rem; font-family:var(--font-mono); color:var(--muted); margin-top:0.3rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px; }
+
+    /* ── Controls ── */
+    .controls { display:flex; align-items:center; gap:0.75rem; padding:0.85rem 1.25rem; background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:1.25rem; flex-wrap:wrap; }
+    .search-wrap { position:relative; flex:1; min-width:200px; }
+    .search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); pointer-events:none; }
+    .search-input { width:100%; padding:6px 10px 6px 30px; background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:6px; font-family:var(--font-mono); font-size:0.78rem; outline:none; transition:border-color 0.15s; }
+    .search-input:focus { border-color:var(--accent); }
+    .search-input::placeholder { color:var(--muted); }
+    .filter-select { font-family:var(--font-mono); font-size:0.75rem; background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:5px 10px; cursor:pointer; outline:none; }
+    .filter-select:focus { border-color:var(--accent); }
+    .count-badge { font-size:0.72rem; font-family:var(--font-mono); color:var(--muted); background:var(--surface2); padding:2px 10px; border-radius:20px; border:1px solid var(--border); }
+
+    /* ── Test card ── */
+    .ts-list { display:flex; flex-direction:column; gap:0.5rem; }
+    .ts-card { border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:border-color 0.15s,box-shadow 0.15s; }
+    .ts-card:hover { border-color:rgba(0,229,255,0.25); box-shadow:0 2px 16px rgba(0,229,255,0.06); }
+    .ts-card-head { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 1rem; cursor:pointer; background:var(--surface2); gap:0.75rem; flex-wrap:wrap; transition:background 0.15s; }
+    .ts-card-head:hover { background:rgba(0,229,255,0.04); }
+    .ts-card-left { display:flex; align-items:center; gap:0.6rem; flex:1; min-width:0; }
+    .ts-card-right { display:flex; align-items:center; gap:0.85rem; flex-shrink:0; flex-wrap:wrap; }
+    .ts-title { font-size:0.84rem; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:520px; }
+    .ts-status-icon { font-size:0.9rem; flex-shrink:0; }
+
+    .ts-sev { font-size:0.6rem; font-family:var(--font-mono); font-weight:700; padding:2px 7px; border-radius:4px; letter-spacing:0.06em; text-transform:uppercase; flex-shrink:0; }
+    .sev-critical { background:rgba(244,63,94,0.2); color:#fb7185; border:1px solid rgba(244,63,94,0.4); }
+    .sev-high { background:rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.35); }
+    .sev-medium { background:rgba(124,58,237,0.15); color:#a78bfa; border:1px solid rgba(124,58,237,0.3); }
+    .sev-good { background:rgba(16,185,129,0.12); color:#34d399; border:1px solid rgba(16,185,129,0.3); }
+
+    .ts-trend { display:flex; align-items:center; gap:3px; }
+    .ts-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+    .ts-dot-passed { background:var(--pass); box-shadow:0 0 4px rgba(16,185,129,0.4); }
+    .ts-dot-failed { background:var(--fail); box-shadow:0 0 4px rgba(244,63,94,0.5); }
+    .ts-dot-flaky  { background:var(--flaky); box-shadow:0 0 4px rgba(245,158,11,0.4); }
+
+    .ts-metrics { display:flex; align-items:center; gap:0.5rem; font-family:var(--font-mono); }
+    .ts-met { font-size:0.78rem; font-weight:700; }
+    .ts-met-sep { font-size:0.7rem; color:var(--muted); }
+    .ts-pass-txt { color:var(--pass); }
+    .ts-fail-txt { color:var(--fail); }
+    .ts-flaky-txt { color:var(--flaky); }
+    .ts-rate { font-size:0.72rem; color:var(--muted); background:var(--surface); border:1px solid var(--border); padding:1px 7px; border-radius:10px; }
+    .ts-dur { font-size:0.68rem; color:var(--muted); }
+    .ts-toggle { font-size:0.85rem; color:var(--muted); transition:transform 0.2s; flex-shrink:0; }
+
+    /* ── Card expanded body ── */
+    .ts-card-body { border-top:1px solid var(--border); }
+    .ts-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; border-bottom:1px solid var(--border); }
+    .ts-detail-col { padding:0.85rem 1rem; }
+    .ts-detail-col:first-child { border-right:1px solid var(--border); }
+    .ts-detail-title { font-size:0.65rem; font-family:var(--font-mono); color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem; }
+    .ts-no-data { font-size:0.72rem; font-family:var(--font-mono); color:var(--muted); }
+
+    .ts-brow { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.35rem; flex-wrap:wrap; }
+    .ts-brow-name { font-family:var(--font-mono); font-size:0.75rem; min-width:100px; }
+    .ts-brow-stat { font-family:var(--font-mono); font-size:0.68rem; font-weight:700; min-width:28px; }
+    .ts-mini-bar { flex:1; height:6px; background:var(--surface); border-radius:3px; overflow:hidden; min-width:50px; border:1px solid var(--border); }
+    .ts-mini-fill { height:100%; background:linear-gradient(90deg,var(--pass),#34d399); border-radius:3px; }
+    .ts-brow-rate { font-family:var(--font-mono); font-size:0.68rem; color:var(--muted); min-width:32px; text-align:right; }
+
+    /* ── History rows ── */
+    .ts-history { }
+    .ts-hist-row { padding:0.65rem 1rem; border-top:1px solid var(--border); transition:background 0.1s; }
+    .ts-hist-row:first-child { border-top:none; }
+    .ts-hist-row:hover { background:rgba(0,229,255,0.03); }
+    .ts-hist-meta { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem; flex-wrap:wrap; }
+    .ts-status-badge { font-size:0.6rem; font-family:var(--font-mono); font-weight:700; padding:1px 6px; border-radius:3px; letter-spacing:0.05em; }
+    .ts-passed { background:rgba(16,185,129,0.15); color:var(--pass); border:1px solid rgba(16,185,129,0.3); }
+    .ts-failed { background:rgba(244,63,94,0.15); color:var(--fail); border:1px solid rgba(244,63,94,0.3); }
+    .ts-flaky { background:rgba(245,158,11,0.15); color:var(--flaky); border:1px solid rgba(245,158,11,0.3); }
+    .ts-run-num { font-family:var(--font-mono); font-size:0.72rem; color:var(--muted); min-width:40px; }
+    .ts-hist-browser { font-family:var(--font-mono); font-size:0.72rem; color:var(--text); }
+    .ts-hist-dur { font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); }
+    .ts-hist-date { font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); margin-left:auto; }
+    .ts-error { font-family:var(--font-mono); font-size:0.7rem; color:#fca5a5; background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.15); border-radius:6px; padding:0.5rem 0.75rem; white-space:pre-wrap; word-break:break-all; max-height:120px; overflow-y:auto; line-height:1.5; }
+
+    /* ── Shared ── */
+    .branch-tag { font-family:var(--font-mono); font-size:0.72rem; background:var(--surface2); border:1px solid var(--border); padding:2px 7px; border-radius:4px; color:var(--accent); }
+    .view-btn { display:inline-flex; align-items:center; gap:4px; color:var(--accent); text-decoration:none; font-size:0.75rem; font-family:var(--font-mono); padding:3px 9px; border:1px solid rgba(0,229,255,0.2); border-radius:5px; transition:all 0.2s; background:rgba(0,229,255,0.05); }
+    .view-btn:hover { background:rgba(0,229,255,0.12); border-color:var(--accent); }
+    .view-btn-sm { font-size:0.66rem; padding:1px 7px; }
+    .empty-state { text-align:center; padding:3rem; font-family:var(--font-mono); font-size:0.8rem; color:var(--muted); }
+
+    footer { text-align:center; padding:2rem 0 1rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); }
+
+    @media(max-width:768px) {
+      .ts-detail-grid { grid-template-columns:1fr; }
+      .ts-title { max-width:200px; }
+      .ts-hist-date { display:none; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">🎭</div>
+      <h1>Playwright Dashboard</h1>
+    </div>
+    <a href="index.html" class="nav-tab">📊 Overview</a>
+    <a href="tests.html" class="nav-tab active">🧪 Test Analytics</a>
+  </nav>
+
+  <div class="summary-bar">
+    <div class="sum-chip chip-total">
+      <div class="sum-label">Unique Tests</div>
+      <div class="sum-val">15</div>
+      <div class="sum-sub">tracked across all runs</div>
+    </div>
+    <div class="sum-chip chip-rate">
+      <div class="sum-label">Avg Pass Rate</div>
+      <div class="sum-val">100%</div>
+      <div class="sum-sub">across all tests &amp; runs</div>
+    </div>
+    <div class="sum-chip chip-fail">
+      <div class="sum-label">Most Failing</div>
+      <div class="sum-val">0</div>
+      <div class="sum-sub">"Get started" link points to /…</div>
+    </div>
+    <div class="sum-chip chip-flaky">
+      <div class="sum-label">Most Flaky</div>
+      <div class="sum-val">0</div>
+      <div class="sum-sub">"Get started" link points to /…</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="tsSearch" type="text" placeholder="Search test name…" oninput="filter()" />
+    </div>
+    <select class="filter-select" id="fBrowser" onchange="filter()"><option value="all">All browsers</option><option value="chrome">🌐 chrome</option></select>
+    <select class="filter-select" id="fBranch" onchange="filter()"><option value="all">All branches</option><option value="develop">develop</option></select>
+    <select class="filter-select" id="fStatus" onchange="filter()">
+      <option value="all">All statuses</option>
+      <option value="passed">✅ Passed last</option>
+      <option value="failed">❌ Failed last</option>
+      <option value="flaky">⚠️ Flaky last</option>
+    </select>
+    <select class="filter-select" id="fSort" onchange="filter()">
+      <option value="failures">Sort: Most failures</option>
+      <option value="passrate">Sort: Pass rate ↑</option>
+      <option value="alpha">Sort: A → Z</option>
+    </select>
+    <span class="count-badge" id="tsCount">15 tests</span>
+  </div>
+
+  <div class="ts-list" id="tsList">
+    
+    <div class="ts-card" id="tscard__Get_started__link_points_to__docs_intro" data-title="&quot;Get started&quot; link points to /docs/intro @smoke" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('_Get_started__link_points_to__docs_intro')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">"Get started" link points to /docs/intro @smoke</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.2s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle__Get_started__link_points_to__docs_intro">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody__Get_started__link_points_to__docs_intro" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_docs_page_loads_successfully" data-title="docs page loads successfully" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('docs_page_loads_successfully')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">docs page loads successfully</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_docs_page_loads_successfully">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_docs_page_loads_successfully" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_example_com_page_loads_and_has_content" data-title="example.com page loads and has content" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('example_com_page_loads_and_has_content')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">example.com page loads and has content</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_example_com_page_loads_and_has_content">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_example_com_page_loads_and_has_content" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_example_com_renders_the_correct_heading_" data-title="example.com renders the correct heading @smoke" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('example_com_renders_the_correct_heading_')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">example.com renders the correct heading @smoke</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_example_com_renders_the_correct_heading_">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_example_com_renders_the_correct_heading_" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_FLAKY___random_assertion_failure" data-title="FLAKY - random assertion failure" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('FLAKY___random_assertion_failure')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">FLAKY - random assertion failure</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_FLAKY___random_assertion_failure">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_FLAKY___random_assertion_failure" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_FLAKY___random_transient_failure__smoke" data-title="FLAKY - random transient failure @smoke" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('FLAKY___random_transient_failure__smoke')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">FLAKY - random transient failure @smoke</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_FLAKY___random_transient_failure__smoke">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_FLAKY___random_transient_failure__smoke" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_h1_is_visible_and_correct__smoke" data-title="h1 is visible and correct @smoke" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('h1_is_visible_and_correct__smoke')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">h1 is visible and correct @smoke</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_h1_is_visible_and_correct__smoke">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_h1_is_visible_and_correct__smoke" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_homepage_title_contains__Playwright___sm" data-title="homepage title contains &quot;Playwright&quot; @smoke" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('homepage_title_contains__Playwright___sm')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">homepage title contains "Playwright" @smoke</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.2s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_homepage_title_contains__Playwright___sm">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_homepage_title_contains__Playwright___sm" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_INTERMITTENT___element_visibility_check" data-title="INTERMITTENT - element visibility check" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('INTERMITTENT___element_visibility_check')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">INTERMITTENT - element visibility check</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.2s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_INTERMITTENT___element_visibility_check">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_INTERMITTENT___element_visibility_check" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_INTERMITTENT___heading_text_assertion" data-title="INTERMITTENT - heading text assertion" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('INTERMITTENT___heading_text_assertion')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">INTERMITTENT - heading text assertion</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_INTERMITTENT___heading_text_assertion">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_INTERMITTENT___heading_text_assertion" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_INTERMITTENT___page_title_check" data-title="INTERMITTENT - page title check" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('INTERMITTENT___page_title_check')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">INTERMITTENT - page title check</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.2s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_INTERMITTENT___page_title_check">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_INTERMITTENT___page_title_check" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_page_has_a_link" data-title="page has a link" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('page_has_a_link')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">page has a link</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.2s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_page_has_a_link">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_page_has_a_link" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_page_has_at_least_one_paragraph" data-title="page has at least one paragraph" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('page_has_at_least_one_paragraph')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">page has at least one paragraph</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.2s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_page_has_at_least_one_paragraph">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_page_has_at_least_one_paragraph" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_page_title_is__Example_Domain___smoke" data-title="page title is &quot;Example Domain&quot; @smoke" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('page_title_is__Example_Domain___smoke')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">page title is "Example Domain" @smoke</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">0.2s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_page_title_is__Example_Domain___smoke">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_page_title_is__Example_Domain___smoke" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_playwright_dev_homepage_has_title_and_li" data-title="playwright.dev homepage has title and links to intro page @smoke" data-status="passed" data-passrate="100">
+      <div class="ts-card-head" onclick="toggleCard('playwright_dev_homepage_has_title_and_li')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-good">Stable</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">playwright.dev homepage has title and links to intro page @smoke</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">0</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">100%</span>
+            <span class="ts-dur">1.1s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_playwright_dev_homepage_has_title_and_li">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_playwright_dev_homepage_has_title_and_li" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">1.1s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Playwright Test Analytics · 2026-03-05 06:14:37 UTC</footer>
+</div>
+
+<script>
+  function toggleCard(id) {
+    const body = document.getElementById('tsbody_' + id);
+    const tog  = document.getElementById('tstoggle_' + id);
+    if (!body) return;
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : '';
+    if (tog) tog.textContent = open ? '▸' : '▾';
+  }
+
+  function filter() {
+    const q       = (document.getElementById('tsSearch').value || '').toLowerCase().trim();
+    const browser = document.getElementById('fBrowser').value;
+    const branch  = document.getElementById('fBranch').value;
+    const status  = document.getElementById('fStatus').value;
+    const sort    = document.getElementById('fSort').value;
+    const list    = document.getElementById('tsList');
+    const cards   = Array.from(list.querySelectorAll('.ts-card'));
+
+    let visible = 0;
+    cards.forEach(card => {
+      const title   = (card.getAttribute('data-title') || '').toLowerCase();
+      const lastSt  = card.getAttribute('data-status') || '';
+      const matchQ  = !q || title.includes(q);
+      const matchSt = status === 'all' || lastSt === status;
+
+      // browser: check if any history row contains this browser
+      let matchBr = browser === 'all';
+      if (!matchBr) { card.querySelectorAll('.ts-hist-browser').forEach(el => { if (el.textContent.toLowerCase().includes(browser)) matchBr = true; }); }
+
+      // branch: check if any branch-tag in the card matches
+      let matchBranch = branch === 'all';
+      if (!matchBranch) { card.querySelectorAll('.branch-tag').forEach(el => { if (el.textContent.trim() === branch) matchBranch = true; }); }
+
+      const show = matchQ && matchSt && matchBr && matchBranch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    // Sort visible cards
+    const sorted = cards.filter(c => c.style.display !== 'none').sort((a, b) => {
+      if (sort === 'failures') {
+        return parseInt(b.querySelectorAll('.ts-fail-txt')[0]?.textContent || '0') -
+               parseInt(a.querySelectorAll('.ts-fail-txt')[0]?.textContent || '0');
+      } else if (sort === 'passrate') {
+        return parseInt(a.getAttribute('data-passrate') || '0') -
+               parseInt(b.getAttribute('data-passrate') || '0');
+      } else {
+        return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
+      }
+    });
+    sorted.forEach(c => list.appendChild(c));
+
+    document.getElementById('tsCount').textContent = visible + ' test' + (visible !== 1 ? 's' : '');
+    list.querySelector('.empty-filt')?.remove();
+    if (visible === 0) {
+      const e = document.createElement('div'); e.className='empty-state empty-filt';
+      e.textContent = 'No tests match your filters.'; list.appendChild(e);
+    }
+  }
+</script>
+</body>
+</html>

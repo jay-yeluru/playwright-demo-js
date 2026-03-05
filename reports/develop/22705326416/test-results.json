@@ -1,0 +1,843 @@
+{
+  "config": {
+    "configFile": "/Users/runner/work/playwright-demo-js/playwright-demo-js/playwright.config.js",
+    "rootDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+    "forbidOnly": true,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/5679d77f454ac9266bf363a9b8f9c448840a24bb",
+        "commitHash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+        "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705326416"
+      },
+      "gitCommit": {
+        "shortHash": "5679d77",
+        "hash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+        "subject": "added failure archive",
+        "body": "added failure archive\n",
+        "author": {
+          "name": "jay-yeluru",
+          "email": "24775245+jay-yeluru@users.noreply.github.com",
+          "time": 1772691866000
+        },
+        "committer": {
+          "name": "jay-yeluru",
+          "email": "24775245+jay-yeluru@users.noreply.github.com",
+          "time": 1772691866000
+        },
+        "branch": "develop"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "commitHash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705326416"
+          },
+          "gitCommit": {
+            "shortHash": "5679d77",
+            "hash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "subject": "added failure archive",
+            "body": "added failure archive\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "branch": "develop"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "commitHash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705326416"
+          },
+          "gitCommit": {
+            "shortHash": "5679d77",
+            "hash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "subject": "added failure archive",
+            "body": "added failure archive\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "branch": "develop"
+          },
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "commitHash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705326416"
+          },
+          "gitCommit": {
+            "shortHash": "5679d77",
+            "hash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "subject": "added failure archive",
+            "body": "added failure archive\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "branch": "develop"
+          },
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/jay-yeluru/playwright-demo-js/commit/5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "commitHash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "buildHref": "https://github.com/jay-yeluru/playwright-demo-js/actions/runs/22705326416"
+          },
+          "gitCommit": {
+            "shortHash": "5679d77",
+            "hash": "5679d77f454ac9266bf363a9b8f9c448840a24bb",
+            "subject": "added failure archive",
+            "body": "added failure archive\n",
+            "author": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "committer": {
+              "name": "jay-yeluru",
+              "email": "24775245+jay-yeluru@users.noreply.github.com",
+              "time": 1772691866000
+            },
+            "branch": "develop"
+          },
+          "actualWorkers": 1
+        },
+        "id": "edge",
+        "name": "edge",
+        "testDir": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "reports",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reports/test-results.json"
+        }
+      ],
+      [
+        "github",
+        {}
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "example.spec.js",
+      "file": "example.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "playwright.dev homepage has title and links to intro page @smoke",
+          "ok": true,
+          "tags": [
+            "smoke"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1553,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:46.551Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-4e62c705cbbcf684ef7d",
+          "file": "example.spec.js",
+          "line": 8,
+          "column": 1
+        },
+        {
+          "title": "example.com renders the correct heading @smoke",
+          "ok": true,
+          "tags": [
+            "smoke"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 348,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:49.631Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-16747243f0ac159579f0",
+          "file": "example.spec.js",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "example.com page loads and has content",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 333,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:49.989Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-188648b686c512453369",
+          "file": "example.spec.js",
+          "line": 24,
+          "column": 1
+        },
+        {
+          "title": "INTERMITTENT - page title check",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 309,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:50.331Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-360aef97d6e286ee4dcd",
+          "file": "example.spec.js",
+          "line": 36,
+          "column": 1
+        },
+        {
+          "title": "INTERMITTENT - element visibility check",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3300,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:49",
+                    "location": {
+                      "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                      "column": 49,
+                      "line": 50
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 48 |\u001b[39m   \u001b[36mif\u001b[39m (\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mrandom() \u001b[33m<\u001b[39m \u001b[35m0.4\u001b[39m) {\n \u001b[90m 49 |\u001b[39m     \u001b[90m// Simulated regression: element doesn't exist\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 50 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#login-button'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m3000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 51 |\u001b[39m   } \u001b[36melse\u001b[39m {\n \u001b[90m 52 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 53 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                        "column": 49,
+                        "line": 50
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n\n  48 |   if (Math.random() < 0.4) {\n  49 |     // Simulated regression: element doesn't exist\n> 50 |     await expect(page.locator('#login-button')).toBeVisible({ timeout: 3000 });\n     |                                                 ^\n  51 |   } else {\n  52 |     await expect(page.locator('h1')).toBeVisible();\n  53 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:49"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:50.656Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts/example-INTERMITTENT---element-visibility-check-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js",
+                    "column": 49,
+                    "line": 50
+                  }
+                },
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 417,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2026-03-05T06:25:54.875Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/runner/work/playwright-demo-js/playwright-demo-js/test-artifacts/example-INTERMITTENT---element-visibility-check-chromium-retry1/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "flaky"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-ab9811bfdbe4493fa31d",
+          "file": "example.spec.js",
+          "line": 46,
+          "column": 1
+        },
+        {
+          "title": "INTERMITTENT - heading text assertion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 276,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:55.787Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-15fe44b2ee3691c33e02",
+          "file": "example.spec.js",
+          "line": 56,
+          "column": 1
+        },
+        {
+          "title": "FLAKY - random transient failure @smoke",
+          "ok": true,
+          "tags": [
+            "smoke"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 255,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:56.074Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-a53323af74ce0ceac76b",
+          "file": "example.spec.js",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "FLAKY - random assertion failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 319,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-05T06:25:56.343Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd9b2edffe9b7501040c-7e5d70b90984ae6186c1",
+          "file": "example.spec.js",
+          "line": 79,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "stable.spec.js",
+      "file": "stable.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Stable — Example.com",
+          "file": "stable.spec.js",
+          "line": 12,
+          "column": 6,
+          "specs": [
+            {
+              "title": "page title is \"Example Domain\" @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 285,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:25:56.679Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-464f82510505aba3dc54",
+              "file": "stable.spec.js",
+              "line": 13,
+              "column": 5
+            },
+            {
+              "title": "h1 is visible and correct @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 260,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:25:56.975Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-41b3aa1519102c4e2e2b",
+              "file": "stable.spec.js",
+              "line": 18,
+              "column": 5
+            },
+            {
+              "title": "page has at least one paragraph",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 276,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:25:57.241Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-3b38e498d3aeda04fcd7",
+              "file": "stable.spec.js",
+              "line": 24,
+              "column": 5
+            },
+            {
+              "title": "page has a link",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 319,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:25:57.526Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-3dfdfa24c8df4d5da425",
+              "file": "stable.spec.js",
+              "line": 29,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Stable — Playwright.dev",
+          "file": "stable.spec.js",
+          "line": 35,
+          "column": 6,
+          "specs": [
+            {
+              "title": "homepage title contains \"Playwright\" @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 243,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:25:57.855Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-ad5ed5034731558bd6e3",
+              "file": "stable.spec.js",
+              "line": 36,
+              "column": 5
+            },
+            {
+              "title": "\"Get started\" link points to /docs/intro @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 317,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:25:58.107Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-487555bb894b8e178cfa",
+              "file": "stable.spec.js",
+              "line": 41,
+              "column": 5
+            },
+            {
+              "title": "docs page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 412,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T06:25:58.430Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9d6923084abce48b154a-61298571296a75f0bfc8",
+              "file": "stable.spec.js",
+              "line": 48,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-05T06:25:45.310Z",
+    "duration": 13585.596,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 1
+  }
+}

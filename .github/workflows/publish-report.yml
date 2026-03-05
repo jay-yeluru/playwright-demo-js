@@ -59,8 +59,9 @@ jobs:
       - name: Commit and push
         timeout-minutes: 3
         run: |
-          git add index.html dashboard.json reports/
+          git add index.html tests.html dashboard.json reports/
           [ -d failure-archive ] && git add failure-archive/ || true
+          [ -d test-runs ] && git add test-runs/ || true
           git commit -m "ci: add report for run ${{ github.event.workflow_run.id }}"
 
           until git push; do

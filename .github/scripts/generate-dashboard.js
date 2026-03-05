@@ -8,7 +8,7 @@ const path = require("path");
 /** @typedef {{ date: string, branch: string, browser: string, passed: number, failed: number, flaky: number, total: number, duration: number, status: string, conclusion: string, reportUrl: string, runId: string }} RunEntry */
 /** @typedef {{ title: string, errors: string[] }} FailureSummary */
 /** @typedef {{ runId: string, branch: string, date: string, failures: FailureSummary[] }} FailureArchive */
-/** @typedef {{ title: string, status: 'passed'|'failed'|'flaky', duration: number, errors: string[] }} TestCaseResult */
+/** @typedef {{ title: string, file: string, group: string, status: 'passed'|'failed'|'flaky', duration: number, errors: string[] }} TestCaseResult */
 /** @typedef {{ runId: string, branch: string, browser: string, date: string, reportUrl: string, tests: TestCaseResult[] }} TestRunEntry */
 
 // ── Environment ───────────────────────────────────────────────────────────────
@@ -157,14 +157,16 @@ function archiveTestRun(runPath, runId, branch, browser, reportUrl) {
   if (!fs.existsSync(resultsFile)) return;
 
   const results = /** @type {TestResults} */ (readJSON(resultsFile));
-  const specs = flattenSpecs(results.suites);
 
   /** @type {TestCaseResult[]} */
-  const tests = specs.map((/** @type {any} */ s) => {
-    const allTests = s.tests ?? [];
-    const isFlaky = s.ok && allTests.some((/** @type {any} */ t) => (t.results?.length ?? 0) > 1);
-    const status = !s.ok ? "failed" : isFlaky ? "flaky" : "passed";
-    const errors = !s.ok
+  const tests = [];
+
+  /** @param {any} spec @param {string} file @param {string} group */
+  const processSpec = (spec, file, group) => {
+    const allTests = spec.tests ?? [];
+    const isFlaky = spec.ok && allTests.some((/** @type {any} */ t) => (t.results?.length ?? 0) > 1);
+    const status = !spec.ok ? "failed" : isFlaky ? "flaky" : "passed";
+    const errors = !spec.ok
       ? allTests.flatMap((/** @type {any} */ t) =>
         t.results?.flatMap((/** @type {any} */ r) =>
           r.errors?.map((/** @type {any} */ e) => e.message) ?? []
@@ -175,8 +177,20 @@ function archiveTestRun(runPath, runId, branch, browser, reportUrl) {
       (/** @type {number} */ sum, /** @type {any} */ t) => sum + (t.results?.[0]?.duration ?? 0),
       0
     );
-    return { title: s.title, status, duration, errors: errors.slice(0, 2) };
-  });
+    tests.push({ title: spec.title, file, group, status, duration, errors: errors.slice(0, 2) });
+  };
+
+  /** @param {any} suite @param {string} file @param {string} group */
+  const processSuite = (suite, file, group) => {
+    for (const spec of (suite.specs ?? [])) processSpec(spec, file, group);
+    for (const sub of (suite.suites ?? [])) processSuite(sub, file, sub.title || group);
+  };
+
+  for (const fileSuite of (results.suites ?? [])) {
+    const file = path.basename(fileSuite.title || fileSuite.file || "unknown.spec.js");
+    for (const spec of (fileSuite.specs ?? [])) processSpec(spec, file, "");
+    for (const describe of (fileSuite.suites ?? [])) processSuite(describe, file, describe.title || "");
+  }
 
   fs.mkdirSync(TEST_RUNS_DIR, { recursive: true });
   /** @type {TestRunEntry} */
@@ -200,7 +214,7 @@ function loadTestRuns() {
 
 /**
  * @typedef {{
- *   title: string,
+ *   title: string, file: string, group: string,
  *   totalRuns: number, passed: number, failed: number, flaky: number, passRate: number,
  *   avgDuration: number, lastStatus: string, lastDate: string,
  *   browsers: Object.<string,{runs:number,passed:number,failed:number,flaky:number}>,
@@ -214,18 +228,21 @@ function buildPerTestAnalytics(runs) {
   /** @type {Map<string, PerTestStat>} */
   const map = new Map();
 
-  // Iterate runs newest-first
   for (const run of runs) {
     for (const t of run.tests) {
-      if (!map.has(t.title)) {
-        map.set(t.title, {
+      // Key by file + title to avoid collisions across spec files
+      const key = `${t.file ?? ''}::${t.title}`;
+      if (!map.has(key)) {
+        map.set(key, {
           title: t.title,
+          file: t.file ?? 'unknown',
+          group: t.group ?? '',
           totalRuns: 0, passed: 0, failed: 0, flaky: 0, passRate: 0,
           avgDuration: 0, lastStatus: t.status, lastDate: run.date,
           browsers: {}, branches: {}, history: [],
         });
       }
-      const stat = /** @type {PerTestStat} */ (map.get(t.title));
+      const stat = /** @type {PerTestStat} */ (map.get(key));
 
       stat.totalRuns++;
       if (t.status === "passed") stat.passed++;
@@ -236,17 +253,14 @@ function buildPerTestAnalytics(runs) {
         (stat.avgDuration * (stat.totalRuns - 1) + t.duration) / stat.totalRuns
       );
 
-      // Browser breakdown
       if (!stat.browsers[run.browser]) stat.browsers[run.browser] = { runs: 0, passed: 0, failed: 0, flaky: 0 };
       stat.browsers[run.browser].runs++;
       stat.browsers[run.browser][t.status]++;
 
-      // Branch breakdown
       if (!stat.branches[run.branch]) stat.branches[run.branch] = { runs: 0, passed: 0, failed: 0, flaky: 0 };
       stat.branches[run.branch].runs++;
       stat.branches[run.branch][t.status]++;
 
-      // Run history (newest first, cap at 20)
       if (stat.history.length < 20) {
         stat.history.push({
           runId: run.runId, branch: run.branch, browser: run.browser,
@@ -257,7 +271,6 @@ function buildPerTestAnalytics(runs) {
     }
   }
 
-  // Compute pass rates + sort by most failures first
   for (const stat of map.values()) {
     stat.passRate = stat.totalRuns > 0 ? Math.round((stat.passed / stat.totalRuns) * 100) : 0;
   }
@@ -275,6 +288,18 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
   const statusClass = (/** @type {string} */ s) =>
     ({ passed: "ts-pass", failed: "ts-fail", flaky: "ts-flaky" })[s] ?? "";
 
+  // Group by spec file → describe group
+  /** @type {Map<string, Map<string, PerTestStat[]>>} */
+  const byFile = new Map();
+  for (const stat of testStats) {
+    const f = stat.file || "unknown.spec.js";
+    const g = stat.group || "";
+    if (!byFile.has(f)) byFile.set(f, new Map());
+    const fileMap = /** @type {Map<string,PerTestStat[]>} */ (byFile.get(f));
+    if (!fileMap.has(g)) fileMap.set(g, []);
+    /** @type {PerTestStat[]} */ (fileMap.get(g)).push(stat);
+  }
+
   const branchOptions = allBranches.map((b) => `<option value="${b}">${b}</option>`).join("");
   const browserOptions = allBrowsers.map((b) => `<option value="${b}">${browserIcon(b)} ${b}</option>`).join("");
 
@@ -283,69 +308,41 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
     ? Math.round(testStats.reduce((s, t) => s + t.passRate, 0) / totalTests)
     : 0;
   const mostFlaky = testStats.slice().sort((a, b) => b.flaky - a.flaky)[0];
-  const mostFailing = testStats[0]; // already sorted by failures
+  const mostFailing = testStats[0];
 
   /** @param {PerTestStat} stat */
   const renderTestCard = (stat) => {
-    const safeId = stat.title.replace(/[^a-zA-Z0-9]/g, "_").substring(0, 40);
+    const safeId = (stat.file + stat.title).replace(/[^a-zA-Z0-9]/g, "_").substring(0, 50);
     const severityClass = stat.passRate < 50 ? "sev-critical" : stat.passRate < 80 ? "sev-high" : stat.failed > 0 ? "sev-medium" : "sev-good";
     const severityLabel = stat.passRate < 50 ? "Critical" : stat.passRate < 80 ? "High" : stat.failed > 0 ? "Medium" : "Stable";
 
-    // Trend dots — last 10 history entries (oldest → newest)
-    const trendDots = stat.history
-      .slice(0, 10)
-      .reverse()
+    const trendDots = stat.history.slice(0, 10).reverse()
       .map((h) => `<span class="ts-dot ts-dot-${h.status}" title="${h.browser} / ${h.date.substring(0, 10)}"></span>`)
       .join("");
 
-    // Browser breakdown rows
     const browserRows = Object.entries(stat.browsers).map(([br, b]) => {
       const rate = b.runs > 0 ? Math.round((b.passed / b.runs) * 100) : 0;
-      return `<div class="ts-brow">
-        <span class="ts-brow-name">${browserIcon(br)} ${br}</span>
-        <span class="ts-brow-stat ts-pass-txt">${b.passed}P</span>
-        <span class="ts-brow-stat ts-fail-txt">${b.failed}F</span>
-        <span class="ts-brow-stat ts-flaky-txt">${b.flaky}FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:${rate}%"></div></div>
-        <span class="ts-brow-rate">${rate}%</span>
-      </div>`;
+      return `<div class="ts-brow"><span class="ts-brow-name">${browserIcon(br)} ${br}</span><span class="ts-brow-stat ts-pass-txt">${b.passed}P</span><span class="ts-brow-stat ts-fail-txt">${b.failed}F</span><span class="ts-brow-stat ts-flaky-txt">${b.flaky}FL</span><div class="ts-mini-bar"><div class="ts-mini-fill" style="width:${rate}%"></div></div><span class="ts-brow-rate">${rate}%</span></div>`;
     }).join("");
 
-    // Branch breakdown rows
     const branchRows = Object.entries(stat.branches).map(([br, b]) => {
       const rate = b.runs > 0 ? Math.round((b.passed / b.runs) * 100) : 0;
-      return `<div class="ts-brow">
-        <span class="ts-brow-name"><span class="branch-tag">${br}</span></span>
-        <span class="ts-brow-stat ts-pass-txt">${b.passed}P</span>
-        <span class="ts-brow-stat ts-fail-txt">${b.failed}F</span>
-        <span class="ts-brow-stat ts-flaky-txt">${b.flaky}FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:${rate}%"></div></div>
-        <span class="ts-brow-rate">${rate}%</span>
-      </div>`;
+      return `<div class="ts-brow"><span class="ts-brow-name"><span class="branch-tag">${br}</span></span><span class="ts-brow-stat ts-pass-txt">${b.passed}P</span><span class="ts-brow-stat ts-fail-txt">${b.failed}F</span><span class="ts-brow-stat ts-flaky-txt">${b.flaky}FL</span><div class="ts-mini-bar"><div class="ts-mini-fill" style="width:${rate}%"></div></div><span class="ts-brow-rate">${rate}%</span></div>`;
     }).join("");
 
-    // History timeline
     const historyRows = stat.history.map((h, idx) => {
       const shortDate = h.date.replace("T", " ").substring(0, 16) + " UTC";
       const errHtml = h.errors.length > 0
-        ? `<pre class="ts-error">${h.errors[0].toString().substring(0, 350)}</pre>`
-        : "";
-      return `<div class="ts-hist-row ${statusClass(h.status)}">
-        <div class="ts-hist-meta">
-          <span class="ts-status-badge ts-${h.status}">${h.status.toUpperCase()}</span>
-          <span class="ts-run-num">${idx === 0 ? "Latest" : "#" + (idx + 1)}</span>
-          <span class="branch-tag">${h.branch}</span>
-          <span class="ts-hist-browser">${browserIcon(h.browser)} ${h.browser}</span>
-          <span class="ts-hist-dur">${(h.duration / 1000).toFixed(1)}s</span>
-          <span class="ts-hist-date">${shortDate}</span>
-          ${h.reportUrl ? `<a class="view-btn view-btn-sm" href="${h.reportUrl}" target="_blank">Report →</a>` : ""}
-        </div>
-        ${errHtml}
-      </div>`;
+        ? `<pre class="ts-error">${h.errors[0].toString().substring(0, 350)}</pre>` : "";
+      return `<div class="ts-hist-row ${statusClass(h.status)}"><div class="ts-hist-meta"><span class="ts-status-badge ts-${h.status}">${h.status.toUpperCase()}</span><span class="ts-run-num">${idx === 0 ? "Latest" : "#" + (idx + 1)}</span><span class="branch-tag">${h.branch}</span><span class="ts-hist-browser">${browserIcon(h.browser)} ${h.browser}</span><span class="ts-hist-dur">${(h.duration / 1000).toFixed(1)}s</span><span class="ts-hist-date">${shortDate}</span>${h.reportUrl ? `<a class="view-btn view-btn-sm" href="${h.reportUrl}" target="_blank">Report →</a>` : ""}</div>${errHtml}</div>`;
     }).join("");
 
     return `
-    <div class="ts-card" id="tscard_${safeId}" data-title="${stat.title.replace(/"/g, "&quot;")}" data-status="${stat.lastStatus}" data-passrate="${stat.passRate}">
+    <div class="ts-card" id="tscard_${safeId}"
+         data-title="${stat.title.replace(/"/g, "&quot;")}"
+         data-file="${stat.file}"
+         data-status="${stat.lastStatus}"
+         data-passrate="${stat.passRate}">
       <div class="ts-card-head" onclick="toggleCard('${safeId}')">
         <div class="ts-card-left">
           <span class="ts-sev ${severityClass}">${severityLabel}</span>
@@ -368,14 +365,8 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
       </div>
       <div class="ts-card-body" id="tsbody_${safeId}" style="display:none">
         <div class="ts-detail-grid">
-          <div class="ts-detail-col">
-            <div class="ts-detail-title">Browser Breakdown</div>
-            ${browserRows || "<div class=\"ts-no-data\">No data</div>"}
-          </div>
-          <div class="ts-detail-col">
-            <div class="ts-detail-title">Branch Breakdown</div>
-            ${branchRows || "<div class=\"ts-no-data\">No data</div>"}
-          </div>
+          <div class="ts-detail-col"><div class="ts-detail-title">Browser Breakdown</div>${browserRows || "<div class=\"ts-no-data\">No data</div>"}</div>
+          <div class="ts-detail-col"><div class="ts-detail-title">Branch Breakdown</div>${branchRows || "<div class=\"ts-no-data\">No data</div>"}</div>
         </div>
         <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
         <div class="ts-history">${historyRows}</div>
@@ -383,6 +374,48 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
     </div>`;
   };
 
+  /** @param {string} file @param {Map<string,PerTestStat[]>} groups */
+  const renderFileGroup = (file, groups) => {
+    const allStats = Array.from(groups.values()).flat();
+    const fileId = file.replace(/[^a-zA-Z0-9]/g, "_");
+    const fp = allStats.reduce((s, t) => s + t.passed, 0);
+    const ff = allStats.reduce((s, t) => s + t.failed, 0);
+    const ffl = allStats.reduce((s, t) => s + t.flaky, 0);
+    const fr = allStats.length > 0 ? Math.round(allStats.reduce((s, t) => s + t.passRate, 0) / allStats.length) : 0;
+    const fcolor = fr >= 80 ? "var(--pass)" : fr >= 50 ? "var(--flaky)" : "var(--fail)";
+
+    const groupsHtml = Array.from(groups.entries()).map(([group, stats]) => {
+      const groupHeader = group
+        ? `<div class="describe-hdr"><span class="describe-icon">🔸</span>${group}</div>`
+        : "";
+      return `<div class="describe-group">${groupHeader}${stats.map(renderTestCard).join("")}</div>`;
+    }).join("");
+
+    return `
+    <div class="file-group" id="fg_${fileId}" data-file="${file}">
+      <div class="file-hdr" onclick="toggleFileGroup('${fileId}')">
+        <span class="file-icon">📄</span>
+        <span class="file-name">${file}</span>
+        <div class="file-chips">
+          <span class="fc">${allStats.length} tests</span>
+          <span class="fc fc-p">${fp}✓</span>
+          <span class="fc fc-f">${ff}✗</span>
+          ${ffl > 0 ? `<span class="fc fc-fl">${ffl}⚠</span>` : ""}
+          <span class="fc fc-r" style="color:${fcolor}">${fr}%</span>
+        </div>
+        <span class="file-toggle" id="ftog_${fileId}">▾</span>
+      </div>
+      <div class="file-body" id="fb_${fileId}">${groupsHtml}</div>
+    </div>`;
+  };
+
+  const filesHtml = byFile.size > 0
+    ? Array.from(byFile.entries()).map(([f, g]) => renderFileGroup(f, g)).join("")
+    : `<div class="empty-state">No test run data yet. Runs are recorded after each CI execution.</div>`;
+
+
+
+  // ── HTML ─────────────────────────────────────────────────────────────────────
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -395,43 +428,37 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
     :root {
       --bg:#0a0e1a; --surface:#111827; --surface2:#1a2235; --border:#1e2d45;
       --accent:#00e5ff; --accent2:#7c3aed; --pass:#10b981; --fail:#f43f5e;
-      --flaky:#f59e0b; --cancelled:#64748b; --text:#e2e8f0; --muted:#64748b;
+      --flaky:#f59e0b; --text:#e2e8f0; --muted:#64748b;
       --font-display:'Syne',sans-serif; --font-mono:'JetBrains Mono',monospace;
     }
     body { font-family:var(--font-display); background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
-    body::before {
-      content:''; position:fixed; inset:0;
-      background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);
-      background-size:40px 40px; animation:gridPan 20s linear infinite; pointer-events:none; z-index:0;
-    }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px); background-size:40px 40px; animation:gridPan 20s linear infinite; pointer-events:none; z-index:0; }
     @keyframes gridPan { 0%{background-position:0 0} 100%{background-position:40px 40px} }
     .container { position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:2.5rem 2rem; }
 
     /* ── Nav ── */
-    .nav { display:flex; align-items:center; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+    .nav { display:flex; align-items:center; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; border-bottom:1px solid var(--border); padding-bottom:1rem; }
     .nav-logo { display:flex; align-items:center; gap:0.75rem; margin-right:auto; }
     .nav-logo-icon { width:38px; height:38px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
     .nav-logo h1 { font-size:1.1rem; font-weight:800; background:linear-gradient(90deg,#fff,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .nav-tab { font-family:var(--font-mono); font-size:0.75rem; padding:6px 16px; border-radius:6px; border:1px solid var(--border); color:var(--muted); text-decoration:none; transition:all 0.15s ease; background:var(--surface2); }
+    .nav-tab { font-family:var(--font-mono); font-size:0.75rem; padding:6px 16px; border-radius:6px; border:1px solid var(--border); color:var(--muted); text-decoration:none; transition:all 0.15s; background:var(--surface2); }
     .nav-tab:hover { border-color:var(--accent); color:var(--accent); }
     .nav-tab.active { background:rgba(0,229,255,0.1); border-color:var(--accent); color:var(--accent); }
 
-    /* ── Summary chips ── */
+    /* ── Summary ── */
     .summary-bar { display:flex; gap:1rem; margin-bottom:2rem; flex-wrap:wrap; }
     .sum-chip { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1rem 1.5rem; min-width:140px; position:relative; overflow:hidden; }
     .sum-chip::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
     .sum-chip.chip-total::before { background:var(--accent); }
-    .sum-chip.chip-pass::before { background:var(--pass); }
-    .sum-chip.chip-fail::before { background:var(--fail); }
+    .sum-chip.chip-pass::before  { background:var(--pass); }
+    .sum-chip.chip-fail::before  { background:var(--fail); }
     .sum-chip.chip-flaky::before { background:var(--flaky); }
-    .sum-chip.chip-rate::before { background:linear-gradient(90deg,var(--pass),var(--accent)); }
+    .sum-chip.chip-rate::before  { background:linear-gradient(90deg,var(--pass),var(--accent)); }
     .sum-label { font-size:0.65rem; font-family:var(--font-mono); color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem; }
     .sum-val { font-size:2rem; font-weight:800; line-height:1; }
-    .chip-total .sum-val { color:var(--accent); }
-    .chip-pass .sum-val { color:var(--pass); }
-    .chip-fail .sum-val { color:var(--fail); }
-    .chip-flaky .sum-val { color:var(--flaky); }
-    .chip-rate .sum-val { color:var(--text); }
+    .chip-total .sum-val { color:var(--accent); } .chip-pass .sum-val { color:var(--pass); }
+    .chip-fail  .sum-val { color:var(--fail);  } .chip-flaky .sum-val { color:var(--flaky); }
+    .chip-rate  .sum-val { color:var(--text);  }
     .sum-sub { font-size:0.68rem; font-family:var(--font-mono); color:var(--muted); margin-top:0.3rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px; }
 
     /* ── Controls ── */
@@ -445,47 +472,57 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
     .filter-select:focus { border-color:var(--accent); }
     .count-badge { font-size:0.72rem; font-family:var(--font-mono); color:var(--muted); background:var(--surface2); padding:2px 10px; border-radius:20px; border:1px solid var(--border); }
 
-    /* ── Test card ── */
-    .ts-list { display:flex; flex-direction:column; gap:0.5rem; }
-    .ts-card { border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:border-color 0.15s,box-shadow 0.15s; }
-    .ts-card:hover { border-color:rgba(0,229,255,0.25); box-shadow:0 2px 16px rgba(0,229,255,0.06); }
-    .ts-card-head { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 1rem; cursor:pointer; background:var(--surface2); gap:0.75rem; flex-wrap:wrap; transition:background 0.15s; }
-    .ts-card-head:hover { background:rgba(0,229,255,0.04); }
-    .ts-card-left { display:flex; align-items:center; gap:0.6rem; flex:1; min-width:0; }
-    .ts-card-right { display:flex; align-items:center; gap:0.85rem; flex-shrink:0; flex-wrap:wrap; }
-    .ts-title { font-size:0.84rem; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:520px; }
-    .ts-status-icon { font-size:0.9rem; flex-shrink:0; }
+    /* ── File group ── */
+    .file-group { margin-bottom:1rem; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    .file-hdr { display:flex; align-items:center; gap:0.75rem; padding:0.85rem 1.25rem; cursor:pointer; background:var(--surface2); transition:background 0.15s; flex-wrap:wrap; gap:0.5rem; }
+    .file-hdr:hover { background:rgba(0,229,255,0.05); }
+    .file-icon { font-size:1rem; flex-shrink:0; }
+    .file-name { font-family:var(--font-mono); font-size:0.9rem; font-weight:700; color:var(--accent); flex:1; }
+    .file-chips { display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; }
+    .fc { font-family:var(--font-mono); font-size:0.68rem; padding:2px 8px; border-radius:4px; background:var(--surface); border:1px solid var(--border); color:var(--muted); }
+    .fc-p { color:var(--pass); border-color:rgba(16,185,129,0.3); }
+    .fc-f { color:var(--fail); border-color:rgba(244,63,94,0.3); }
+    .fc-fl { color:var(--flaky); border-color:rgba(245,158,11,0.3); }
+    .fc-r { font-weight:700; }
+    .file-toggle { font-size:0.85rem; color:var(--muted); flex-shrink:0; transition:transform 0.2s; }
+    .file-body { padding:0.5rem; display:flex; flex-direction:column; gap:0.35rem; }
 
+    /* ── Describe group ── */
+    .describe-group { margin-bottom:0.25rem; }
+    .describe-hdr { font-family:var(--font-mono); font-size:0.72rem; color:var(--muted); padding:0.4rem 0.5rem 0.25rem; text-transform:uppercase; letter-spacing:0.06em; display:flex; align-items:center; gap:0.4rem; }
+    .describe-icon { font-size:0.8rem; }
+
+    /* ── Test card ── */
+    .ts-card { border:1px solid var(--border); border-radius:8px; overflow:hidden; transition:border-color 0.15s,box-shadow 0.15s; background:var(--surface); }
+    .ts-card:hover { border-color:rgba(0,229,255,0.25); box-shadow:0 2px 12px rgba(0,229,255,0.06); }
+    .ts-card-head { display:flex; align-items:center; justify-content:space-between; padding:0.65rem 1rem; cursor:pointer; background:var(--surface2); gap:0.75rem; flex-wrap:wrap; transition:background 0.15s; }
+    .ts-card-head:hover { background:rgba(0,229,255,0.04); }
+    .ts-card-left { display:flex; align-items:center; gap:0.55rem; flex:1; min-width:0; }
+    .ts-card-right { display:flex; align-items:center; gap:0.75rem; flex-shrink:0; flex-wrap:wrap; }
+    .ts-title { font-size:0.83rem; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:520px; }
+    .ts-status-icon { font-size:0.9rem; flex-shrink:0; }
     .ts-sev { font-size:0.6rem; font-family:var(--font-mono); font-weight:700; padding:2px 7px; border-radius:4px; letter-spacing:0.06em; text-transform:uppercase; flex-shrink:0; }
     .sev-critical { background:rgba(244,63,94,0.2); color:#fb7185; border:1px solid rgba(244,63,94,0.4); }
     .sev-high { background:rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.35); }
     .sev-medium { background:rgba(124,58,237,0.15); color:#a78bfa; border:1px solid rgba(124,58,237,0.3); }
     .sev-good { background:rgba(16,185,129,0.12); color:#34d399; border:1px solid rgba(16,185,129,0.3); }
-
     .ts-trend { display:flex; align-items:center; gap:3px; }
-    .ts-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
-    .ts-dot-passed { background:var(--pass); box-shadow:0 0 4px rgba(16,185,129,0.4); }
-    .ts-dot-failed { background:var(--fail); box-shadow:0 0 4px rgba(244,63,94,0.5); }
-    .ts-dot-flaky  { background:var(--flaky); box-shadow:0 0 4px rgba(245,158,11,0.4); }
-
-    .ts-metrics { display:flex; align-items:center; gap:0.5rem; font-family:var(--font-mono); }
-    .ts-met { font-size:0.78rem; font-weight:700; }
-    .ts-met-sep { font-size:0.7rem; color:var(--muted); }
-    .ts-pass-txt { color:var(--pass); }
-    .ts-fail-txt { color:var(--fail); }
-    .ts-flaky-txt { color:var(--flaky); }
-    .ts-rate { font-size:0.72rem; color:var(--muted); background:var(--surface); border:1px solid var(--border); padding:1px 7px; border-radius:10px; }
+    .ts-dot { width:9px; height:9px; border-radius:2px; flex-shrink:0; }
+    .ts-dot-passed { background:var(--pass); } .ts-dot-failed { background:var(--fail); } .ts-dot-flaky { background:var(--flaky); }
+    .ts-metrics { display:flex; align-items:center; gap:0.45rem; font-family:var(--font-mono); }
+    .ts-met { font-size:0.78rem; font-weight:700; } .ts-met-sep { font-size:0.7rem; color:var(--muted); }
+    .ts-pass-txt { color:var(--pass); } .ts-fail-txt { color:var(--fail); } .ts-flaky-txt { color:var(--flaky); }
+    .ts-rate { font-size:0.7rem; color:var(--muted); background:var(--surface); border:1px solid var(--border); padding:1px 7px; border-radius:10px; }
     .ts-dur { font-size:0.68rem; color:var(--muted); }
     .ts-toggle { font-size:0.85rem; color:var(--muted); transition:transform 0.2s; flex-shrink:0; }
 
-    /* ── Card expanded body ── */
+    /* ── Card body ── */
     .ts-card-body { border-top:1px solid var(--border); }
     .ts-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; border-bottom:1px solid var(--border); }
     .ts-detail-col { padding:0.85rem 1rem; }
     .ts-detail-col:first-child { border-right:1px solid var(--border); }
     .ts-detail-title { font-size:0.65rem; font-family:var(--font-mono); color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem; }
     .ts-no-data { font-size:0.72rem; font-family:var(--font-mono); color:var(--muted); }
-
     .ts-brow { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.35rem; flex-wrap:wrap; }
     .ts-brow-name { font-family:var(--font-mono); font-size:0.75rem; min-width:100px; }
     .ts-brow-stat { font-family:var(--font-mono); font-size:0.68rem; font-weight:700; min-width:28px; }
@@ -493,21 +530,20 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
     .ts-mini-fill { height:100%; background:linear-gradient(90deg,var(--pass),#34d399); border-radius:3px; }
     .ts-brow-rate { font-family:var(--font-mono); font-size:0.68rem; color:var(--muted); min-width:32px; text-align:right; }
 
-    /* ── History rows ── */
-    .ts-history { }
-    .ts-hist-row { padding:0.65rem 1rem; border-top:1px solid var(--border); transition:background 0.1s; }
+    /* ── History ── */
+    .ts-hist-row { padding:0.6rem 1rem; border-top:1px solid var(--border); transition:background 0.1s; }
     .ts-hist-row:first-child { border-top:none; }
     .ts-hist-row:hover { background:rgba(0,229,255,0.03); }
     .ts-hist-meta { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem; flex-wrap:wrap; }
     .ts-status-badge { font-size:0.6rem; font-family:var(--font-mono); font-weight:700; padding:1px 6px; border-radius:3px; letter-spacing:0.05em; }
     .ts-passed { background:rgba(16,185,129,0.15); color:var(--pass); border:1px solid rgba(16,185,129,0.3); }
     .ts-failed { background:rgba(244,63,94,0.15); color:var(--fail); border:1px solid rgba(244,63,94,0.3); }
-    .ts-flaky { background:rgba(245,158,11,0.15); color:var(--flaky); border:1px solid rgba(245,158,11,0.3); }
+    .ts-flaky  { background:rgba(245,158,11,0.15); color:var(--flaky); border:1px solid rgba(245,158,11,0.3); }
     .ts-run-num { font-family:var(--font-mono); font-size:0.72rem; color:var(--muted); min-width:40px; }
     .ts-hist-browser { font-family:var(--font-mono); font-size:0.72rem; color:var(--text); }
     .ts-hist-dur { font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); }
     .ts-hist-date { font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); margin-left:auto; }
-    .ts-error { font-family:var(--font-mono); font-size:0.7rem; color:#fca5a5; background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.15); border-radius:6px; padding:0.5rem 0.75rem; white-space:pre-wrap; word-break:break-all; max-height:120px; overflow-y:auto; line-height:1.5; }
+    .ts-error { font-family:var(--font-mono); font-size:0.7rem; color:#fca5a5; background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.15); border-radius:6px; padding:0.5rem 0.75rem; white-space:pre-wrap; word-break:break-all; max-height:110px; overflow-y:auto; line-height:1.5; }
 
     /* ── Shared ── */
     .branch-tag { font-family:var(--font-mono); font-size:0.72rem; background:var(--surface2); border:1px solid var(--border); padding:2px 7px; border-radius:4px; color:var(--accent); }
@@ -515,55 +551,33 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
     .view-btn:hover { background:rgba(0,229,255,0.12); border-color:var(--accent); }
     .view-btn-sm { font-size:0.66rem; padding:1px 7px; }
     .empty-state { text-align:center; padding:3rem; font-family:var(--font-mono); font-size:0.8rem; color:var(--muted); }
-
     footer { text-align:center; padding:2rem 0 1rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); }
 
     @media(max-width:768px) {
       .ts-detail-grid { grid-template-columns:1fr; }
       .ts-title { max-width:200px; }
       .ts-hist-date { display:none; }
+      .breakdown-row { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
 <div class="container">
   <nav class="nav">
-    <div class="nav-logo">
-      <div class="nav-logo-icon">🎭</div>
-      <h1>Playwright Dashboard</h1>
-    </div>
+    <div class="nav-logo"><div class="nav-logo-icon">🎭</div><h1>Playwright Dashboard</h1></div>
     <a href="index.html" class="nav-tab">📊 Overview</a>
     <a href="tests.html" class="nav-tab active">🧪 Test Analytics</a>
   </nav>
 
   <div class="summary-bar">
-    <div class="sum-chip chip-total">
-      <div class="sum-label">Unique Tests</div>
-      <div class="sum-val">${totalTests}</div>
-      <div class="sum-sub">tracked across all runs</div>
-    </div>
-    <div class="sum-chip chip-rate">
-      <div class="sum-label">Avg Pass Rate</div>
-      <div class="sum-val">${avgPassRate}%</div>
-      <div class="sum-sub">across all tests &amp; runs</div>
-    </div>
-    <div class="sum-chip chip-fail">
-      <div class="sum-label">Most Failing</div>
-      <div class="sum-val">${mostFailing ? mostFailing.failed : 0}</div>
-      <div class="sum-sub">${mostFailing ? mostFailing.title.substring(0, 30) + "…" : "—"}</div>
-    </div>
-    <div class="sum-chip chip-flaky">
-      <div class="sum-label">Most Flaky</div>
-      <div class="sum-val">${mostFlaky ? mostFlaky.flaky : 0}</div>
-      <div class="sum-sub">${mostFlaky ? mostFlaky.title.substring(0, 30) + "…" : "—"}</div>
-    </div>
+    <div class="sum-chip chip-total"><div class="sum-label">Unique Tests</div><div class="sum-val">${totalTests}</div><div class="sum-sub">tracked across all runs</div></div>
+    <div class="sum-chip chip-rate"><div class="sum-label">Avg Pass Rate</div><div class="sum-val">${avgPassRate}%</div><div class="sum-sub">across all tests &amp; runs</div></div>
+    <div class="sum-chip chip-fail"><div class="sum-label">Most Failing</div><div class="sum-val">${mostFailing ? mostFailing.failed : 0}</div><div class="sum-sub">${mostFailing ? mostFailing.title.substring(0, 30) + '…' : '—'}</div></div>
+    <div class="sum-chip chip-flaky"><div class="sum-label">Most Flaky</div><div class="sum-val">${mostFlaky ? mostFlaky.flaky : 0}</div><div class="sum-sub">${mostFlaky ? mostFlaky.title.substring(0, 30) + '…' : '—'}</div></div>
   </div>
 
   <div class="controls">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input class="search-input" id="tsSearch" type="text" placeholder="Search test name…" oninput="filter()" />
-    </div>
+    <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="tsSearch" type="text" placeholder="Search test or spec file…" oninput="filter()" /></div>
     <select class="filter-select" id="fBrowser" onchange="filter()"><option value="all">All browsers</option>${browserOptions}</select>
     <select class="filter-select" id="fBranch" onchange="filter()"><option value="all">All branches</option>${branchOptions}</select>
     <select class="filter-select" id="fStatus" onchange="filter()">
@@ -572,17 +586,10 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
       <option value="failed">❌ Failed last</option>
       <option value="flaky">⚠️ Flaky last</option>
     </select>
-    <select class="filter-select" id="fSort" onchange="filter()">
-      <option value="failures">Sort: Most failures</option>
-      <option value="passrate">Sort: Pass rate ↑</option>
-      <option value="alpha">Sort: A → Z</option>
-    </select>
     <span class="count-badge" id="tsCount">${totalTests} tests</span>
   </div>
 
-  <div class="ts-list" id="tsList">
-    ${testStats.length > 0 ? testStats.map(renderTestCard).join("") : "<div class=\"empty-state\">No test run data yet. Runs are recorded after each CI execution.</div>"}
-  </div>
+  <div id="fileList">${filesHtml}</div>
 
   <footer>Playwright Test Analytics · ${new Date().toISOString().replace("T", " ").substring(0, 19)} UTC</footer>
 </div>
@@ -597,55 +604,52 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
     if (tog) tog.textContent = open ? '▸' : '▾';
   }
 
+  function toggleFileGroup(id) {
+    const body = document.getElementById('fb_' + id);
+    const tog  = document.getElementById('ftog_' + id);
+    if (!body) return;
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : '';
+    if (tog) tog.textContent = open ? '▸' : '▾';
+  }
+
   function filter() {
-    const q       = (document.getElementById('tsSearch').value || '').toLowerCase().trim();
-    const browser = document.getElementById('fBrowser').value;
-    const branch  = document.getElementById('fBranch').value;
-    const status  = document.getElementById('fStatus').value;
-    const sort    = document.getElementById('fSort').value;
-    const list    = document.getElementById('tsList');
-    const cards   = Array.from(list.querySelectorAll('.ts-card'));
+    const q      = (document.getElementById('tsSearch').value || '').toLowerCase().trim();
+    const status = document.getElementById('fStatus').value;
+    const browser= document.getElementById('fBrowser').value;
+    const branch = document.getElementById('fBranch').value;
 
     let visible = 0;
-    cards.forEach(card => {
-      const title   = (card.getAttribute('data-title') || '').toLowerCase();
-      const lastSt  = card.getAttribute('data-status') || '';
-      const matchQ  = !q || title.includes(q);
+
+    document.querySelectorAll('.ts-card').forEach(card => {
+      const title  = (card.getAttribute('data-title') || '').toLowerCase();
+      const file   = (card.getAttribute('data-file')  || '').toLowerCase();
+      const lastSt = card.getAttribute('data-status') || '';
+      const matchQ  = !q || title.includes(q) || file.includes(q);
       const matchSt = status === 'all' || lastSt === status;
 
-      // browser: check if any history row contains this browser
       let matchBr = browser === 'all';
-      if (!matchBr) { card.querySelectorAll('.ts-hist-browser').forEach(el => { if (el.textContent.toLowerCase().includes(browser)) matchBr = true; }); }
+      if (!matchBr) card.querySelectorAll('.ts-hist-browser').forEach(el => { if (el.textContent.toLowerCase().includes(browser)) matchBr = true; });
 
-      // branch: check if any branch-tag in the card matches
       let matchBranch = branch === 'all';
-      if (!matchBranch) { card.querySelectorAll('.branch-tag').forEach(el => { if (el.textContent.trim() === branch) matchBranch = true; }); }
+      if (!matchBranch) card.querySelectorAll('.branch-tag').forEach(el => { if (el.textContent.trim() === branch) matchBranch = true; });
 
       const show = matchQ && matchSt && matchBr && matchBranch;
       card.style.display = show ? '' : 'none';
       if (show) visible++;
     });
 
-    // Sort visible cards
-    const sorted = cards.filter(c => c.style.display !== 'none').sort((a, b) => {
-      if (sort === 'failures') {
-        return parseInt(b.querySelectorAll('.ts-fail-txt')[0]?.textContent || '0') -
-               parseInt(a.querySelectorAll('.ts-fail-txt')[0]?.textContent || '0');
-      } else if (sort === 'passrate') {
-        return parseInt(a.getAttribute('data-passrate') || '0') -
-               parseInt(b.getAttribute('data-passrate') || '0');
-      } else {
-        return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
-      }
+    // Propagate: hide describe-groups and file-groups that have no visible tests
+    document.querySelectorAll('.describe-group').forEach(dg => {
+      const has = Array.from(dg.querySelectorAll('.ts-card')).some(c => c.style.display !== 'none');
+      dg.style.display = has ? '' : 'none';
     });
-    sorted.forEach(c => list.appendChild(c));
+    document.querySelectorAll('.file-group').forEach(fg => {
+      const has = Array.from(fg.querySelectorAll('.ts-card')).some(c => c.style.display !== 'none');
+      fg.style.display = has ? '' : 'none';
+    });
 
     document.getElementById('tsCount').textContent = visible + ' test' + (visible !== 1 ? 's' : '');
-    list.querySelector('.empty-filt')?.remove();
-    if (visible === 0) {
-      const e = document.createElement('div'); e.className='empty-state empty-filt';
-      e.textContent = 'No tests match your filters.'; list.appendChild(e);
-    }
   }
 </script>
 </body>
@@ -654,6 +658,7 @@ function generateTestsPage(testStats, allBrowsers, allBranches) {
   fs.writeFileSync("tests.html", html);
   console.log(`Test analytics page generated with ${testStats.length} unique tests.`);
 }
+
 
 // ── Clean up old runs ─────────────────────────────────────────────────────────
 
@@ -1085,7 +1090,8 @@ function generateDashboard(history, failureArchive) {
   const branchOptions = branches.map((b) => `<option value="${b}">${b}</option>`).join("");
   const browserOptions = browsers.map((b) => `<option value="${b}">${b}</option>`).join("");
 
-  const failureHistoryHTML = renderFailureHistory(failureArchive, history);
+  // (Failure history section removed — test analytics now live on tests.html)
+
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -1586,8 +1592,6 @@ function generateDashboard(history, failureArchive) {
         <tbody id="runTable">${history.map(renderRow).join("")}</tbody>
       </table>
     </div>
-
-    ${failureHistoryHTML}
 
     <footer>Generated by playwright-demo-js · ${new Date().toISOString().replace("T", " ").substring(0, 19)} UTC</footer>
   </div>

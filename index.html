@@ -56,7 +56,7 @@
     .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; font-family: var(--font-mono); display: flex; align-items: center; gap: 8px; }
     .sparkline polyline { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    .latest-banner { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--fail); border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; animation: slideUp 0.4s 0.25s ease both; }
+    .latest-banner { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--pass); border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; animation: slideUp 0.4s 0.25s ease both; }
     .latest-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
     .latest-info { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
     .latest-stat { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text); }
@@ -280,7 +280,7 @@
       </div>
       <div class="header-meta">
         <div><span class="live-dot"></span>Auto-updated on every run</div>
-        <div style="margin-top:4px">Last run: 2026-03-05 06:06:03 UTC</div>
+        <div style="margin-top:4px">Last run: 2026-03-05 06:06:21 UTC</div>
       </div>
     </header>
 
@@ -290,28 +290,28 @@
         <div class="stat-value">40</div>
         <div class="stat-sub">all time
           <svg class="sparkline" width="120" height="32" viewBox="0 0 120 32">
-            <polyline points="0,19.84 6.315789473684211,19.84 12.631578947368421,19.84 18.94736842105263,19.84 25.263157894736842,19.84 31.57894736842105,19.84 37.89473684210526,19.84 44.21052631578947,19.84 50.526315789473685,19.84 56.84210526315789,19.84 63.1578947368421,24 69.47368421052632,19.84 75.78947368421052,8 82.10526315789474,8 88.42105263157895,8 94.73684210526316,8 101.05263157894737,11.84 107.36842105263158,8 113.68421052631578,8 120,2.2399999999999984" />
+            <polyline points="0,19.84 6.315789473684211,19.84 12.631578947368421,19.84 18.94736842105263,19.84 25.263157894736842,19.84 31.57894736842105,19.84 37.89473684210526,19.84 44.21052631578947,19.84 50.526315789473685,19.84 56.84210526315789,24 63.1578947368421,19.84 69.47368421052632,8 75.78947368421052,8 82.10526315789474,8 88.42105263157895,8 94.73684210526316,11.84 101.05263157894737,8 107.36842105263158,8 113.68421052631578,2.2399999999999984 120,0" />
           </svg>
         </div>
       </div>
       <div class="stat-card card-pass">
         <div class="stat-label">Passed Runs</div>
-        <div class="stat-value">0</div>
+        <div class="stat-value">1</div>
         <div class="stat-sub">all tests green</div>
       </div>
       <div class="stat-card card-fail">
         <div class="stat-label">Failed Runs</div>
-        <div class="stat-value">40</div>
+        <div class="stat-value">39</div>
         <div class="stat-sub">had failures</div>
       </div>
       <div class="stat-card card-rate">
         <div class="stat-label">Pass Rate</div>
-        <div class="stat-value">0%</div>
+        <div class="stat-value">3%</div>
         <div class="stat-sub">across all runs</div>
       </div>
       <div class="stat-card card-flaky">
         <div class="stat-label">Flaky Tests</div>
-        <div class="stat-value">23</div>
+        <div class="stat-value">25</div>
         <div class="stat-sub">total retried passes</div>
       </div>
     </div>
@@ -321,14 +321,14 @@
       <div class="latest-label">Latest</div>
       <div class="latest-info">
         <span class="latest-stat"><strong>develop</strong></span>
-        <span class="latest-stat">🌐 chrome</span>
-        <span class="latest-stat" style="color:var(--pass)">✓ 14 passed</span>
-        <span class="latest-stat" style="color:var(--fail)">✗ 1 failed</span>
+        <span class="latest-stat">🦊 firefox</span>
+        <span class="latest-stat" style="color:var(--pass)">✓ 15 passed</span>
+        
         <span class="latest-stat" style="color:var(--flaky)">⚠️ 2 flaky</span>
-        <span class="latest-stat">⏱ 9.0s</span>
-        <span class="latest-stat">2026-03-05 06:06:03 UTC</span>
+        <span class="latest-stat">⏱ 12.7s</span>
+        <span class="latest-stat">2026-03-05 06:06:21 UTC</span>
       </div>
-      <a class="view-btn" href="reports/develop/22704759960/index.html" target="_blank">Latest Report <span>→</span></a>
+      <a class="view-btn" href="reports/develop/22704762968/index.html" target="_blank">Latest Report <span>→</span></a>
     </div>
 
     <div class="table-wrap">
@@ -341,7 +341,7 @@
           </select>
           <select class="filter-select" id="browserFilter" onchange="applyFilters()">
             <option value="all">All browsers</option>
-            <option value="chrome">chrome</option><option value="edge">edge</option><option value="safari">safari</option><option value="firefox">firefox</option>
+            <option value="firefox">firefox</option><option value="chrome">chrome</option><option value="edge">edge</option><option value="safari">safari</option>
           </select>
           <span class="run-count" id="runCount">40 runs</span>
         </div>
@@ -362,7 +362,24 @@
           </tr>
         </thead>
         <tbody id="runTable">
-    <tr class="fail" style="animation-delay:0s">
+    <tr class="pass" style="animation-delay:0s">
+      <td><span class="badge badge-pass">PASS</span></td>
+      <td class="date-cell">2026-03-05 06:06:21 UTC</td>
+      <td><span class="branch-tag">develop</span></td>
+      <td class="browser-cell">🦊 firefox</td>
+      <td class="pass-count">15</td>
+      <td class="fail-count zero">0</td>
+      <td class="flaky-count has-flaky">⚠️ 2</td>
+      <td class="duration-cell">12.7s</td>
+      <td>
+        <div class="progress-wrap">
+          <div class="progress-bar progress-pass" style="width:100%"></div>
+          <span class="progress-label">100%</span>
+        </div>
+      </td>
+      <td><a class="view-btn" href="reports/develop/22704762968/index.html" target="_blank">View <span>→</span></a></td>
+    </tr>
+    <tr class="fail" style="animation-delay:0.04s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 06:06:03 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -379,7 +396,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22704759960/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.04s">
+    <tr class="fail" style="animation-delay:0.08s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 06:01:56 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -396,7 +413,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22704587536/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.08s">
+    <tr class="fail" style="animation-delay:0.12s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 06:00:33 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -413,7 +430,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22704583645/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.12s">
+    <tr class="fail" style="animation-delay:0.16s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 06:00:15 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -430,7 +447,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22704591379/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.16s">
+    <tr class="fail" style="animation-delay:0.2s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 05:24:08 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -447,7 +464,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22703639050/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.2s">
+    <tr class="fail" style="animation-delay:0.24s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 05:24:01 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -464,7 +481,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22703586307/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.24s">
+    <tr class="fail" style="animation-delay:0.28s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 05:21:36 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -481,7 +498,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22703581171/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.28s">
+    <tr class="fail" style="animation-delay:0.32s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 05:17:25 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -498,7 +515,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22703475018/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.32s">
+    <tr class="fail" style="animation-delay:0.36s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:51:03 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -515,7 +532,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22666047969/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.36s">
+    <tr class="fail" style="animation-delay:0.4s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:44:59 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -532,7 +549,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22665839135/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.4s">
+    <tr class="fail" style="animation-delay:0.44s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:43:47 UTC</td>
       <td><span class="branch-tag">master</span></td>
@@ -549,7 +566,7 @@
       </td>
       <td><a class="view-btn" href="reports/master/22665827574/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.44s">
+    <tr class="fail" style="animation-delay:0.48s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:33:38 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -566,7 +583,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22665464526/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.48s">
+    <tr class="fail" style="animation-delay:0.52s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 08:26:24 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -583,7 +600,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22661111471/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.52s">
+    <tr class="fail" style="animation-delay:0.56s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:56:54 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -600,7 +617,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22660196601/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.56s">
+    <tr class="fail" style="animation-delay:0.6s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:55:48 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -617,7 +634,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659706581/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.6s">
+    <tr class="fail" style="animation-delay:0.64s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:55:33 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -634,7 +651,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659705674/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.64s">
+    <tr class="fail" style="animation-delay:0.68s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:54:54 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -651,7 +668,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659704878/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.68s">
+    <tr class="fail" style="animation-delay:0.72s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:54:26 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -668,7 +685,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659704151/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.72s">
+    <tr class="fail" style="animation-delay:0.76s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:54:16 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -685,7 +702,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659703383/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.76s">
+    <tr class="fail" style="animation-delay:0.8s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:53:37 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -702,7 +719,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659702167/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.8s">
+    <tr class="fail" style="animation-delay:0.84s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:53:28 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -719,7 +736,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659702924/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.84s">
+    <tr class="fail" style="animation-delay:0.88s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:53:12 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -736,7 +753,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659701286/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.88s">
+    <tr class="fail" style="animation-delay:0.92s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:52:44 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -753,7 +770,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659700432/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.92s">
+    <tr class="fail" style="animation-delay:0.96s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:52:27 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -770,7 +787,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659699920/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.96s">
+    <tr class="fail" style="animation-delay:1s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:51:43 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -787,7 +804,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659699186/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1s">
+    <tr class="fail" style="animation-delay:1.04s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:51:11 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -804,7 +821,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659697972/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.04s">
+    <tr class="fail" style="animation-delay:1.08s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:50:52 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -821,7 +838,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659697273/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.08s">
+    <tr class="fail" style="animation-delay:1.12s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:50:27 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -838,7 +855,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659696608/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.12s">
+    <tr class="fail" style="animation-delay:1.16s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:50:01 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -855,7 +872,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659695905/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.16s">
+    <tr class="fail" style="animation-delay:1.2s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:49:55 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -872,7 +889,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659695076/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.2s">
+    <tr class="fail" style="animation-delay:1.24s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:49:16 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -889,7 +906,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659694412/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.24s">
+    <tr class="fail" style="animation-delay:1.28s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:49:05 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -906,7 +923,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659692738/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.28s">
+    <tr class="fail" style="animation-delay:1.32s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:48:35 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -923,7 +940,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659693586/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.32s">
+    <tr class="fail" style="animation-delay:1.36s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:48:07 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -940,7 +957,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659691901/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.36s">
+    <tr class="fail" style="animation-delay:1.4000000000000001s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:47:31 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -957,7 +974,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659691118/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.4000000000000001s">
+    <tr class="fail" style="animation-delay:1.44s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:46:51 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -974,7 +991,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659689993/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.44s">
+    <tr class="fail" style="animation-delay:1.48s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:46:18 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -991,7 +1008,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659688488/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.48s">
+    <tr class="fail" style="animation-delay:1.52s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:45:47 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -1008,7 +1025,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659688063/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.52s">
+    <tr class="fail" style="animation-delay:1.56s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:45:42 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -1024,23 +1041,6 @@
         </div>
       </td>
       <td><a class="view-btn" href="reports/develop/22659687362/index.html" target="_blank">View <span>→</span></a></td>
-    </tr>
-    <tr class="fail" style="animation-delay:1.56s">
-      <td><span class="badge badge-fail">FAIL</span></td>
-      <td class="date-cell">2026-03-04 07:45:11 UTC</td>
-      <td><span class="branch-tag">develop</span></td>
-      <td class="browser-cell">🌐 chrome</td>
-      <td class="pass-count">3</td>
-      <td class="fail-count ">5</td>
-      <td class="flaky-count zero">0</td>
-      <td class="duration-cell">19.9s</td>
-      <td>
-        <div class="progress-wrap">
-          <div class="progress-bar progress-fail" style="width:38%"></div>
-          <span class="progress-label">38%</span>
-        </div>
-      </td>
-      <td><a class="view-btn" href="reports/develop/22659686463/index.html" target="_blank">View <span>→</span></a></td>
     </tr></tbody>
       </table>
     </div>
@@ -5938,7 +5938,7 @@ Call log:
     </div>
   </div>
 
-    <footer>Generated by playwright-demo-js · 2026-03-05 06:06:03 UTC</footer>
+    <footer>Generated by playwright-demo-js · 2026-03-05 06:06:22 UTC</footer>
   </div>
 
   <script>

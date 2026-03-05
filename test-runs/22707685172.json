@@ -1,0 +1,163 @@
+{
+  "runId": "22707685172",
+  "branch": "develop",
+  "browser": "edge",
+  "date": "2026-03-05T07:49:17.955Z",
+  "reportUrl": "reports/develop/22707685172/index.html",
+  "tests": [
+    {
+      "title": "Scenario: Page has correct title, heading and a link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "tags": [],
+      "status": "passed",
+      "duration": 5293,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page has visible paragraph content",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "tags": [],
+      "status": "passed",
+      "duration": 5528,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Landing page has branding and \"Get started\" link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "tags": [],
+      "status": "passed",
+      "duration": 6073,
+      "errors": []
+    },
+    {
+      "title": "Scenario: \"Get started\" click navigates to intro docs",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "tags": [],
+      "status": "passed",
+      "duration": 7512,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page loads quickly and has a single h1",
+      "file": "bdd.spec.js",
+      "group": "Feature: Performance & Accessibility",
+      "tags": [],
+      "status": "passed",
+      "duration": 1023,
+      "errors": []
+    },
+    {
+      "title": "playwright.dev homepage has title and links to intro page @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [
+        "@smoke"
+      ],
+      "status": "passed",
+      "duration": 10548,
+      "errors": []
+    },
+    {
+      "title": "example.com renders the correct heading @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [
+        "@smoke"
+      ],
+      "status": "passed",
+      "duration": 1316,
+      "errors": []
+    },
+    {
+      "title": "example.com page loads and has content",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [],
+      "status": "passed",
+      "duration": 3197,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - page title check",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [],
+      "status": "flaky",
+      "duration": 4755,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - element visibility check",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [],
+      "status": "flaky",
+      "duration": 4462,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - heading text assertion",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [],
+      "status": "passed",
+      "duration": 732,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [
+        "@smoke"
+      ],
+      "status": "flaky",
+      "duration": 568,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random assertion failure",
+      "file": "example.spec.js",
+      "group": "",
+      "tags": [],
+      "status": "passed",
+      "duration": 517,
+      "errors": []
+    },
+    {
+      "title": "page title is \"Example Domain\" @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "tags": [
+        "@smoke"
+      ],
+      "status": "passed",
+      "duration": 437,
+      "errors": []
+    },
+    {
+      "title": "h1 is visible and correct @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "tags": [
+        "@smoke"
+      ],
+      "status": "passed",
+      "duration": 892,
+      "errors": []
+    },
+    {
+      "title": "page has at least one paragraph and link",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "tags": [],
+      "status": "passed",
+      "duration": 485,
+      "errors": []
+    }
+  ]
+}

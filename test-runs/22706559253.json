@@ -1,0 +1,137 @@
+{
+  "runId": "22706559253",
+  "branch": "develop",
+  "browser": "safari",
+  "date": "2026-03-05T07:10:10.308Z",
+  "reportUrl": "reports/develop/22706559253/index.html",
+  "tests": [
+    {
+      "title": "Scenario: Page has correct title, heading and a link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "status": "passed",
+      "duration": 3338,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page has visible paragraph content",
+      "file": "bdd.spec.js",
+      "group": "Feature: Example.com Homepage",
+      "status": "passed",
+      "duration": 3337,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Landing page has branding and \"Get started\" link",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "status": "passed",
+      "duration": 1989,
+      "errors": []
+    },
+    {
+      "title": "Scenario: \"Get started\" click navigates to intro docs",
+      "file": "bdd.spec.js",
+      "group": "Feature: Playwright.dev Navigation",
+      "status": "passed",
+      "duration": 2539,
+      "errors": []
+    },
+    {
+      "title": "Scenario: Page loads quickly and has a single h1",
+      "file": "bdd.spec.js",
+      "group": "Feature: Performance & Accessibility",
+      "status": "passed",
+      "duration": 1062,
+      "errors": []
+    },
+    {
+      "title": "playwright.dev homepage has title and links to intro page @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 1903,
+      "errors": []
+    },
+    {
+      "title": "example.com renders the correct heading @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 615,
+      "errors": []
+    },
+    {
+      "title": "example.com page loads and has content",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 569,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - page title check",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 524,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - element visibility check",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "flaky",
+      "duration": 3367,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - heading text assertion",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 400,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 392,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random assertion failure",
+      "file": "example.spec.js",
+      "group": "",
+      "status": "passed",
+      "duration": 373,
+      "errors": []
+    },
+    {
+      "title": "page title is \"Example Domain\" @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 356,
+      "errors": []
+    },
+    {
+      "title": "h1 is visible and correct @smoke",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 336,
+      "errors": []
+    },
+    {
+      "title": "page has at least one paragraph and link",
+      "file": "stable.spec.js",
+      "group": "Stable — Example.com",
+      "status": "passed",
+      "duration": 342,
+      "errors": []
+    }
+  ]
+}

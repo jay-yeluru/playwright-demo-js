@@ -1,0 +1,102 @@
+{
+  "runId": "22705123823",
+  "branch": "master",
+  "browser": "chrome",
+  "date": "2026-03-05T06:19:24.931Z",
+  "reportUrl": "reports/master/22705123823/index.html",
+  "tests": [
+    {
+      "title": "playwright.dev homepage has title and links to intro page @smoke",
+      "status": "passed",
+      "duration": 1107,
+      "errors": []
+    },
+    {
+      "title": "example.com renders the correct heading @smoke",
+      "status": "passed",
+      "duration": 358,
+      "errors": []
+    },
+    {
+      "title": "example.com page loads and has content",
+      "status": "passed",
+      "duration": 275,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - page title check",
+      "status": "passed",
+      "duration": 260,
+      "errors": []
+    },
+    {
+      "title": "INTERMITTENT - element visibility check",
+      "status": "failed",
+      "duration": 3264,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n\n  48 |   if (Math.random() < 0.4) {\n  49 |     // Simulated regression: element doesn't exist\n> 50 |     await expect(page.locator('#login-button')).toBeVisible({ timeout: 3000 });\n     |                                                 ^\n  51 |   } else {\n  52 |     await expect(page.locator('h1')).toBeVisible();\n  53 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:49",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#login-button')\nExpected: visible\nTimeout: 3000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 3000ms\u001b[22m\n\u001b[2m  - waiting for locator('#login-button')\u001b[22m\n\n\n  48 |   if (Math.random() < 0.4) {\n  49 |     // Simulated regression: element doesn't exist\n> 50 |     await expect(page.locator('#login-button')).toBeVisible({ timeout: 3000 });\n     |                                                 ^\n  51 |   } else {\n  52 |     await expect(page.locator('h1')).toBeVisible();\n  53 |   }\n    at /Users/runner/work/playwright-demo-js/playwright-demo-js/e2e/example.spec.js:50:49"
+      ]
+    },
+    {
+      "title": "INTERMITTENT - heading text assertion",
+      "status": "passed",
+      "duration": 337,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random transient failure @smoke",
+      "status": "passed",
+      "duration": 289,
+      "errors": []
+    },
+    {
+      "title": "FLAKY - random assertion failure",
+      "status": "flaky",
+      "duration": 3296,
+      "errors": []
+    },
+    {
+      "title": "page title is \"Example Domain\" @smoke",
+      "status": "passed",
+      "duration": 331,
+      "errors": []
+    },
+    {
+      "title": "h1 is visible and correct @smoke",
+      "status": "passed",
+      "duration": 583,
+      "errors": []
+    },
+    {
+      "title": "page has at least one paragraph",
+      "status": "passed",
+      "duration": 303,
+      "errors": []
+    },
+    {
+      "title": "page has a link",
+      "status": "passed",
+      "duration": 340,
+      "errors": []
+    },
+    {
+      "title": "homepage title contains \"Playwright\" @smoke",
+      "status": "passed",
+      "duration": 283,
+      "errors": []
+    },
+    {
+      "title": "\"Get started\" link points to /docs/intro @smoke",
+      "status": "passed",
+      "duration": 333,
+      "errors": []
+    },
+    {
+      "title": "docs page loads successfully",
+      "status": "passed",
+      "duration": 318,
+      "errors": []
+    }
+  ]
+}

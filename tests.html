@@ -159,18 +159,18 @@
     </div>
     <div class="sum-chip chip-rate">
       <div class="sum-label">Avg Pass Rate</div>
-      <div class="sum-val">97%</div>
+      <div class="sum-val">93%</div>
       <div class="sum-sub">across all tests &amp; runs</div>
     </div>
     <div class="sum-chip chip-fail">
       <div class="sum-label">Most Failing</div>
       <div class="sum-val">1</div>
-      <div class="sum-sub">INTERMITTENT - heading text as…</div>
+      <div class="sum-sub">INTERMITTENT - element visibil…</div>
     </div>
     <div class="sum-chip chip-flaky">
       <div class="sum-label">Most Flaky</div>
-      <div class="sum-val">0</div>
-      <div class="sum-sub">INTERMITTENT - heading text as…</div>
+      <div class="sum-val">1</div>
+      <div class="sum-sub">FLAKY - random assertion failu…</div>
     </div>
   </div>
 
@@ -179,7 +179,7 @@
       <span class="search-icon">🔍</span>
       <input class="search-input" id="tsSearch" type="text" placeholder="Search test name…" oninput="filter()" />
     </div>
-    <select class="filter-select" id="fBrowser" onchange="filter()"><option value="all">All browsers</option><option value="firefox">🦊 firefox</option><option value="chrome">🌐 chrome</option></select>
+    <select class="filter-select" id="fBrowser" onchange="filter()"><option value="all">All browsers</option><option value="chrome">🌐 chrome</option><option value="firefox">🦊 firefox</option></select>
     <select class="filter-select" id="fBranch" onchange="filter()"><option value="all">All branches</option><option value="master">master</option><option value="develop">develop</option></select>
     <select class="filter-select" id="fStatus" onchange="filter()">
       <option value="all">All statuses</option>
@@ -197,40 +197,40 @@
 
   <div class="ts-list" id="tsList">
     
-    <div class="ts-card" id="tscard_INTERMITTENT___heading_text_assertion" data-title="INTERMITTENT - heading text assertion" data-status="failed" data-passrate="50">
-      <div class="ts-card-head" onclick="toggleCard('INTERMITTENT___heading_text_assertion')">
+    <div class="ts-card" id="tscard_INTERMITTENT___element_visibility_check" data-title="INTERMITTENT - element visibility check" data-status="failed" data-passrate="67">
+      <div class="ts-card-head" onclick="toggleCard('INTERMITTENT___element_visibility_check')">
         <div class="ts-card-left">
           <span class="ts-sev sev-high">High</span>
           <span class="ts-status-icon">❌</span>
-          <span class="ts-title">INTERMITTENT - heading text assertion</span>
+          <span class="ts-title">INTERMITTENT - element visibility check</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-failed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-failed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">1</span>
+            <span class="ts-met ts-pass-txt" title="Passed">2</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">1</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
-            <span class="ts-rate" title="Pass rate">50%</span>
-            <span class="ts-dur">1.8s</span>
+            <span class="ts-rate" title="Pass rate">67%</span>
+            <span class="ts-dur">1.3s</span>
           </div>
-          <span class="ts-toggle" id="tstoggle_INTERMITTENT___heading_text_assertion">▸</span>
+          <span class="ts-toggle" id="tstoggle_INTERMITTENT___element_visibility_check">▸</span>
         </div>
       </div>
-      <div class="ts-card-body" id="tsbody_INTERMITTENT___heading_text_assertion" style="display:none">
+      <div class="ts-card-body" id="tsbody_INTERMITTENT___element_visibility_check" style="display:none">
         <div class="ts-detail-grid">
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">0P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">1F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:0%"></div></div>
-        <span class="ts-brow-rate">0%</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:50%"></div></div>
+        <span class="ts-brow-rate">50%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -242,11 +242,11 @@
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">0P</span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">1F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:0%"></div></div>
-        <span class="ts-brow-rate">0%</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:50%"></div></div>
+        <span class="ts-brow-rate">50%</span>
       </div><div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
@@ -262,6 +262,127 @@
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-failed">FAILED</span>
           <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">3.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        <pre class="ts-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: locator('#login-button')
+Expected: visible
+Timeout: 3000ms
+Error: element(s) not found
+
+Call log:
+[2m  - Expect "toBeVisible" with timeout 3000ms[22m
+[2m  - waiting for locator('#login-button')[22m
+
+
+  48 |   if (Math.random() < 0.4) {
+  49 |    </pre>
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🦊 firefox</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705112022/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#3</span>
+          <span class="branch-tag">develop</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.2s</span>
+          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div></div>
+      </div>
+    </div>
+    <div class="ts-card" id="tscard_INTERMITTENT___heading_text_assertion" data-title="INTERMITTENT - heading text assertion" data-status="passed" data-passrate="67">
+      <div class="ts-card-head" onclick="toggleCard('INTERMITTENT___heading_text_assertion')">
+        <div class="ts-card-left">
+          <span class="ts-sev sev-high">High</span>
+          <span class="ts-status-icon">✅</span>
+          <span class="ts-title">INTERMITTENT - heading text assertion</span>
+        </div>
+        <div class="ts-card-right">
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-failed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
+          <div class="ts-metrics">
+            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-fail-txt" title="Failed">1</span>
+            <span class="ts-met-sep">/</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
+            <span class="ts-rate" title="Pass rate">67%</span>
+            <span class="ts-dur">1.3s</span>
+          </div>
+          <span class="ts-toggle" id="tstoggle_INTERMITTENT___heading_text_assertion">▸</span>
+        </div>
+      </div>
+      <div class="ts-card-body" id="tsbody_INTERMITTENT___heading_text_assertion" style="display:none">
+        <div class="ts-detail-grid">
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Browser Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div><div class="ts-brow">
+        <span class="ts-brow-name">🦊 firefox</span>
+        <span class="ts-brow-stat ts-pass-txt">0P</span>
+        <span class="ts-brow-stat ts-fail-txt">1F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:0%"></div></div>
+        <span class="ts-brow-rate">0%</span>
+      </div>
+          </div>
+          <div class="ts-detail-col">
+            <div class="ts-detail-title">Branch Breakdown</div>
+            <div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">master</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">1F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:50%"></div></div>
+        <span class="ts-brow-rate">50%</span>
+      </div><div class="ts-brow">
+        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
+        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-fail-txt">0F</span>
+        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
+        <span class="ts-brow-rate">100%</span>
+      </div>
+          </div>
+        </div>
+        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
+        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-fail">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-failed">FAILED</span>
+          <span class="ts-run-num">#2</span>
           <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">3.3s</span>
@@ -282,7 +403,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.3s</span>
@@ -301,9 +422,9 @@ Call log:
           <span class="ts-title">"Get started" link points to /docs/intro @smoke</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -319,14 +440,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -338,7 +459,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -359,6 +480,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.5s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -368,7 +500,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.2s</span>
@@ -387,15 +519,15 @@ Call log:
           <span class="ts-title">docs page loads successfully</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
             <span class="ts-rate" title="Pass rate">100%</span>
-            <span class="ts-dur">0.5s</span>
+            <span class="ts-dur">0.4s</span>
           </div>
           <span class="ts-toggle" id="tstoggle_docs_page_loads_successfully">▸</span>
         </div>
@@ -405,14 +537,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -424,7 +556,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -445,6 +577,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.6s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -454,7 +597,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.3s</span>
@@ -473,9 +616,9 @@ Call log:
           <span class="ts-title">example.com page loads and has content</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -491,14 +634,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -510,7 +653,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -531,6 +674,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.3s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -540,7 +694,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.3s</span>
@@ -559,9 +713,9 @@ Call log:
           <span class="ts-title">example.com renders the correct heading @smoke</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -577,14 +731,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -596,7 +750,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -616,6 +770,17 @@ Call log:
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.4s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
           <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.4s</span>
@@ -626,7 +791,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.3s</span>
@@ -637,23 +802,23 @@ Call log:
       </div></div>
       </div>
     </div>
-    <div class="ts-card" id="tscard_FLAKY___random_assertion_failure" data-title="FLAKY - random assertion failure" data-status="passed" data-passrate="100">
+    <div class="ts-card" id="tscard_FLAKY___random_assertion_failure" data-title="FLAKY - random assertion failure" data-status="flaky" data-passrate="67">
       <div class="ts-card-head" onclick="toggleCard('FLAKY___random_assertion_failure')">
         <div class="ts-card-left">
-          <span class="ts-sev sev-good">Stable</span>
-          <span class="ts-status-icon">✅</span>
+          <span class="ts-sev sev-high">High</span>
+          <span class="ts-status-icon">⚠️</span>
           <span class="ts-title">FLAKY - random assertion failure</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-flaky" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
             <span class="ts-met ts-pass-txt" title="Passed">2</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
-            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
-            <span class="ts-rate" title="Pass rate">100%</span>
-            <span class="ts-dur">0.4s</span>
+            <span class="ts-met ts-flaky-txt" title="Flaky">1</span>
+            <span class="ts-rate" title="Pass rate">67%</span>
+            <span class="ts-dur">1.4s</span>
           </div>
           <span class="ts-toggle" id="tstoggle_FLAKY___random_assertion_failure">▸</span>
         </div>
@@ -663,14 +828,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
+        <span class="ts-brow-name">🌐 chrome</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
-        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
-        <span class="ts-brow-rate">100%</span>
+        <span class="ts-brow-stat ts-flaky-txt">1FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:50%"></div></div>
+        <span class="ts-brow-rate">50%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -684,9 +849,9 @@ Call log:
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
-        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
-        <span class="ts-brow-rate">100%</span>
+        <span class="ts-brow-stat ts-flaky-txt">1FL</span>
+        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:50%"></div></div>
+        <span class="ts-brow-rate">50%</span>
       </div><div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
@@ -698,10 +863,21 @@ Call log:
           </div>
         </div>
         <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
-        <div class="ts-history"><div class="ts-hist-row ts-pass">
+        <div class="ts-history"><div class="ts-hist-row ts-flaky">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-flaky">FLAKY</span>
+          <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">3.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">Latest</span>
+          <span class="ts-run-num">#2</span>
           <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.6s</span>
@@ -712,7 +888,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.3s</span>
@@ -731,15 +907,15 @@ Call log:
           <span class="ts-title">FLAKY - random transient failure @smoke</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
             <span class="ts-rate" title="Pass rate">100%</span>
-            <span class="ts-dur">0.8s</span>
+            <span class="ts-dur">0.6s</span>
           </div>
           <span class="ts-toggle" id="tstoggle_FLAKY___random_transient_failure__smoke">▸</span>
         </div>
@@ -749,14 +925,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -768,7 +944,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -789,6 +965,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">1.3s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -798,7 +985,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.3s</span>
@@ -817,9 +1004,9 @@ Call log:
           <span class="ts-title">h1 is visible and correct @smoke</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -835,14 +1022,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -854,7 +1041,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -875,6 +1062,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.6s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.5s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -884,7 +1082,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.3s</span>
@@ -903,15 +1101,15 @@ Call log:
           <span class="ts-title">homepage title contains "Playwright" @smoke</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
             <span class="ts-rate" title="Pass rate">100%</span>
-            <span class="ts-dur">0.6s</span>
+            <span class="ts-dur">0.5s</span>
           </div>
           <span class="ts-toggle" id="tstoggle_homepage_title_contains__Playwright___sm">▸</span>
         </div>
@@ -921,14 +1119,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -940,7 +1138,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -960,6 +1158,17 @@ Call log:
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
+          <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
           <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">1.1s</span>
@@ -970,93 +1179,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
-          <span class="branch-tag">develop</span>
-          <span class="ts-hist-browser">🌐 chrome</span>
-          <span class="ts-hist-dur">0.2s</span>
-          <span class="ts-hist-date">2026-03-05 06:14 UTC</span>
-          <a class="view-btn view-btn-sm" href="reports/develop/22705001291/index.html" target="_blank">Report →</a>
-        </div>
-        
-      </div></div>
-      </div>
-    </div>
-    <div class="ts-card" id="tscard_INTERMITTENT___element_visibility_check" data-title="INTERMITTENT - element visibility check" data-status="passed" data-passrate="100">
-      <div class="ts-card-head" onclick="toggleCard('INTERMITTENT___element_visibility_check')">
-        <div class="ts-card-left">
-          <span class="ts-sev sev-good">Stable</span>
-          <span class="ts-status-icon">✅</span>
-          <span class="ts-title">INTERMITTENT - element visibility check</span>
-        </div>
-        <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
-          <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
-            <span class="ts-met-sep">/</span>
-            <span class="ts-met ts-fail-txt" title="Failed">0</span>
-            <span class="ts-met-sep">/</span>
-            <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
-            <span class="ts-rate" title="Pass rate">100%</span>
-            <span class="ts-dur">0.3s</span>
-          </div>
-          <span class="ts-toggle" id="tstoggle_INTERMITTENT___element_visibility_check">▸</span>
-        </div>
-      </div>
-      <div class="ts-card-body" id="tsbody_INTERMITTENT___element_visibility_check" style="display:none">
-        <div class="ts-detail-grid">
-          <div class="ts-detail-col">
-            <div class="ts-detail-title">Browser Breakdown</div>
-            <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
-        <span class="ts-brow-stat ts-fail-txt">0F</span>
-        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
-        <span class="ts-brow-rate">100%</span>
-      </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
-        <span class="ts-brow-stat ts-fail-txt">0F</span>
-        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
-        <span class="ts-brow-rate">100%</span>
-      </div>
-          </div>
-          <div class="ts-detail-col">
-            <div class="ts-detail-title">Branch Breakdown</div>
-            <div class="ts-brow">
-        <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
-        <span class="ts-brow-stat ts-fail-txt">0F</span>
-        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
-        <span class="ts-brow-rate">100%</span>
-      </div><div class="ts-brow">
-        <span class="ts-brow-name"><span class="branch-tag">develop</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
-        <span class="ts-brow-stat ts-fail-txt">0F</span>
-        <span class="ts-brow-stat ts-flaky-txt">0FL</span>
-        <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
-        <span class="ts-brow-rate">100%</span>
-      </div>
-          </div>
-        </div>
-        <div class="ts-detail-title" style="margin:1rem 1rem 0.4rem">Run History (newest first)</div>
-        <div class="ts-history"><div class="ts-hist-row ts-pass">
-        <div class="ts-hist-meta">
-          <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">Latest</span>
-          <span class="branch-tag">master</span>
-          <span class="ts-hist-browser">🦊 firefox</span>
-          <span class="ts-hist-dur">0.3s</span>
-          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
-          <a class="view-btn view-btn-sm" href="reports/master/22705112022/index.html" target="_blank">Report →</a>
-        </div>
-        
-      </div><div class="ts-hist-row ts-pass">
-        <div class="ts-hist-meta">
-          <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.2s</span>
@@ -1075,9 +1198,9 @@ Call log:
           <span class="ts-title">INTERMITTENT - page title check</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -1093,14 +1216,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -1112,7 +1235,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -1133,6 +1256,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.3s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -1142,7 +1276,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.2s</span>
@@ -1161,9 +1295,9 @@ Call log:
           <span class="ts-title">page has a link</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -1179,14 +1313,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -1198,7 +1332,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -1219,6 +1353,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.6s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -1228,7 +1373,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.2s</span>
@@ -1247,9 +1392,9 @@ Call log:
           <span class="ts-title">page has at least one paragraph</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -1265,14 +1410,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -1284,7 +1429,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -1305,6 +1450,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.4s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -1314,7 +1470,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.2s</span>
@@ -1333,9 +1489,9 @@ Call log:
           <span class="ts-title">page title is "Example Domain" @smoke</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
@@ -1351,14 +1507,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -1370,7 +1526,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -1391,6 +1547,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">0.3s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">0.6s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -1400,7 +1567,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">0.2s</span>
@@ -1419,15 +1586,15 @@ Call log:
           <span class="ts-title">playwright.dev homepage has title and links to intro page @smoke</span>
         </div>
         <div class="ts-card-right">
-          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span></div>
+          <div class="ts-trend"><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="firefox / 2026-03-05"></span><span class="ts-dot ts-dot-passed" title="chrome / 2026-03-05"></span></div>
           <div class="ts-metrics">
-            <span class="ts-met ts-pass-txt" title="Passed">2</span>
+            <span class="ts-met ts-pass-txt" title="Passed">3</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-fail-txt" title="Failed">0</span>
             <span class="ts-met-sep">/</span>
             <span class="ts-met ts-flaky-txt" title="Flaky">0</span>
             <span class="ts-rate" title="Pass rate">100%</span>
-            <span class="ts-dur">1.8s</span>
+            <span class="ts-dur">1.6s</span>
           </div>
           <span class="ts-toggle" id="tstoggle_playwright_dev_homepage_has_title_and_li">▸</span>
         </div>
@@ -1437,14 +1604,14 @@ Call log:
           <div class="ts-detail-col">
             <div class="ts-detail-title">Browser Breakdown</div>
             <div class="ts-brow">
-        <span class="ts-brow-name">🦊 firefox</span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
         <span class="ts-brow-rate">100%</span>
       </div><div class="ts-brow">
-        <span class="ts-brow-name">🌐 chrome</span>
+        <span class="ts-brow-name">🦊 firefox</span>
         <span class="ts-brow-stat ts-pass-txt">1P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
@@ -1456,7 +1623,7 @@ Call log:
             <div class="ts-detail-title">Branch Breakdown</div>
             <div class="ts-brow">
         <span class="ts-brow-name"><span class="branch-tag">master</span></span>
-        <span class="ts-brow-stat ts-pass-txt">1P</span>
+        <span class="ts-brow-stat ts-pass-txt">2P</span>
         <span class="ts-brow-stat ts-fail-txt">0F</span>
         <span class="ts-brow-stat ts-flaky-txt">0FL</span>
         <div class="ts-mini-bar"><div class="ts-mini-fill" style="width:100%"></div></div>
@@ -1477,6 +1644,17 @@ Call log:
           <span class="ts-status-badge ts-passed">PASSED</span>
           <span class="ts-run-num">Latest</span>
           <span class="branch-tag">master</span>
+          <span class="ts-hist-browser">🌐 chrome</span>
+          <span class="ts-hist-dur">1.1s</span>
+          <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
+          <a class="view-btn view-btn-sm" href="reports/master/22705123823/index.html" target="_blank">Report →</a>
+        </div>
+        
+      </div><div class="ts-hist-row ts-pass">
+        <div class="ts-hist-meta">
+          <span class="ts-status-badge ts-passed">PASSED</span>
+          <span class="ts-run-num">#2</span>
+          <span class="branch-tag">master</span>
           <span class="ts-hist-browser">🦊 firefox</span>
           <span class="ts-hist-dur">2.5s</span>
           <span class="ts-hist-date">2026-03-05 06:19 UTC</span>
@@ -1486,7 +1664,7 @@ Call log:
       </div><div class="ts-hist-row ts-pass">
         <div class="ts-hist-meta">
           <span class="ts-status-badge ts-passed">PASSED</span>
-          <span class="ts-run-num">#2</span>
+          <span class="ts-run-num">#3</span>
           <span class="branch-tag">develop</span>
           <span class="ts-hist-browser">🌐 chrome</span>
           <span class="ts-hist-dur">1.1s</span>
@@ -1499,7 +1677,7 @@ Call log:
     </div>
   </div>
 
-  <footer>Playwright Test Analytics · 2026-03-05 06:19:02 UTC</footer>
+  <footer>Playwright Test Analytics · 2026-03-05 06:19:25 UTC</footer>
 </div>
 
 <script>

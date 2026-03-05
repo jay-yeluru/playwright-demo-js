@@ -11,7 +11,7 @@ const config = {
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
-  workers: isCI ? 1 : undefined,
+  workers: isCI ? 2 : undefined,
 
   expect: {
     timeout: 5000,
@@ -19,7 +19,8 @@ const config = {
 
   use: {
     actionTimeout: 0,
-    trace: "on-first-retry",
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
   },
 
   reporter:

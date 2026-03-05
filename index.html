@@ -280,7 +280,7 @@
       </div>
       <div class="header-meta">
         <div><span class="live-dot"></span>Auto-updated on every run</div>
-        <div style="margin-top:4px">Last run: 2026-03-05 05:21:36 UTC</div>
+        <div style="margin-top:4px">Last run: 2026-03-05 05:24:01 UTC</div>
       </div>
     </header>
 
@@ -290,7 +290,7 @@
         <div class="stat-value">40</div>
         <div class="stat-sub">all time
           <svg class="sparkline" width="120" height="32" viewBox="0 0 120 32">
-            <polyline points="0,19.84 6.315789473684211,19.84 12.631578947368421,19.84 18.94736842105263,19.84 25.263157894736842,19.84 31.57894736842105,19.84 37.89473684210526,19.84 44.21052631578947,19.84 50.526315789473685,19.84 56.84210526315789,19.84 63.1578947368421,19.84 69.47368421052632,19.84 75.78947368421052,19.84 82.10526315789474,19.84 88.42105263157895,19.84 94.73684210526316,19.84 101.05263157894737,24 107.36842105263158,19.84 113.68421052631578,8 120,8" />
+            <polyline points="0,19.84 6.315789473684211,19.84 12.631578947368421,19.84 18.94736842105263,19.84 25.263157894736842,19.84 31.57894736842105,19.84 37.89473684210526,19.84 44.21052631578947,19.84 50.526315789473685,19.84 56.84210526315789,19.84 63.1578947368421,19.84 69.47368421052632,19.84 75.78947368421052,19.84 82.10526315789474,19.84 88.42105263157895,19.84 94.73684210526316,24 101.05263157894737,19.84 107.36842105263158,8 113.68421052631578,8 120,8" />
           </svg>
         </div>
       </div>
@@ -311,7 +311,7 @@
       </div>
       <div class="stat-card card-flaky">
         <div class="stat-label">Flaky Tests</div>
-        <div class="stat-value">16</div>
+        <div class="stat-value">19</div>
         <div class="stat-sub">total retried passes</div>
       </div>
     </div>
@@ -321,14 +321,14 @@
       <div class="latest-label">Latest</div>
       <div class="latest-info">
         <span class="latest-stat"><strong>develop</strong></span>
-        <span class="latest-stat">🧭 safari</span>
+        <span class="latest-stat">🔷 edge</span>
         <span class="latest-stat" style="color:var(--pass)">✓ 6 passed</span>
         <span class="latest-stat" style="color:var(--fail)">✗ 2 failed</span>
-        <span class="latest-stat" style="color:var(--flaky)">⚠️ 1 flaky</span>
-        <span class="latest-stat">⏱ 16.7s</span>
-        <span class="latest-stat">2026-03-05 05:21:36 UTC</span>
+        <span class="latest-stat" style="color:var(--flaky)">⚠️ 3 flaky</span>
+        <span class="latest-stat">⏱ 37.6s</span>
+        <span class="latest-stat">2026-03-05 05:24:01 UTC</span>
       </div>
-      <a class="view-btn" href="reports/develop/22703581171/index.html" target="_blank">Latest Report <span>→</span></a>
+      <a class="view-btn" href="reports/develop/22703586307/index.html" target="_blank">Latest Report <span>→</span></a>
     </div>
 
     <div class="table-wrap">
@@ -341,7 +341,7 @@
           </select>
           <select class="filter-select" id="browserFilter" onchange="applyFilters()">
             <option value="all">All browsers</option>
-            <option value="safari">safari</option><option value="chrome">chrome</option><option value="firefox">firefox</option>
+            <option value="edge">edge</option><option value="safari">safari</option><option value="chrome">chrome</option><option value="firefox">firefox</option>
           </select>
           <span class="run-count" id="runCount">40 runs</span>
         </div>
@@ -364,6 +364,23 @@
         <tbody id="runTable">
     <tr class="fail" style="animation-delay:0s">
       <td><span class="badge badge-fail">FAIL</span></td>
+      <td class="date-cell">2026-03-05 05:24:01 UTC</td>
+      <td><span class="branch-tag">develop</span></td>
+      <td class="browser-cell">🔷 edge</td>
+      <td class="pass-count">6</td>
+      <td class="fail-count ">2</td>
+      <td class="flaky-count has-flaky">⚠️ 3</td>
+      <td class="duration-cell">37.6s</td>
+      <td>
+        <div class="progress-wrap">
+          <div class="progress-bar progress-fail" style="width:75%"></div>
+          <span class="progress-label">75%</span>
+        </div>
+      </td>
+      <td><a class="view-btn" href="reports/develop/22703586307/index.html" target="_blank">View <span>→</span></a></td>
+    </tr>
+    <tr class="fail" style="animation-delay:0.04s">
+      <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 05:21:36 UTC</td>
       <td><span class="branch-tag">develop</span></td>
       <td class="browser-cell">🧭 safari</td>
@@ -379,7 +396,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22703581171/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.04s">
+    <tr class="fail" style="animation-delay:0.08s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-05 05:17:25 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -396,7 +413,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22703475018/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.08s">
+    <tr class="fail" style="animation-delay:0.12s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:51:03 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -413,7 +430,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22666047969/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.12s">
+    <tr class="fail" style="animation-delay:0.16s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:44:59 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -430,7 +447,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22665839135/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.16s">
+    <tr class="fail" style="animation-delay:0.2s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:43:47 UTC</td>
       <td><span class="branch-tag">master</span></td>
@@ -447,7 +464,7 @@
       </td>
       <td><a class="view-btn" href="reports/master/22665827574/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.2s">
+    <tr class="fail" style="animation-delay:0.24s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 10:33:38 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -464,7 +481,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22665464526/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.24s">
+    <tr class="fail" style="animation-delay:0.28s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 08:26:24 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -481,7 +498,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22661111471/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.28s">
+    <tr class="fail" style="animation-delay:0.32s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:56:54 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -498,7 +515,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22660196601/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.32s">
+    <tr class="fail" style="animation-delay:0.36s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:55:48 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -515,7 +532,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659706581/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.36s">
+    <tr class="fail" style="animation-delay:0.4s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:55:33 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -532,7 +549,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659705674/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.4s">
+    <tr class="fail" style="animation-delay:0.44s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:54:54 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -549,7 +566,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659704878/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.44s">
+    <tr class="fail" style="animation-delay:0.48s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:54:26 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -566,7 +583,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659704151/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.48s">
+    <tr class="fail" style="animation-delay:0.52s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:54:16 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -583,7 +600,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659703383/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.52s">
+    <tr class="fail" style="animation-delay:0.56s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:53:37 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -600,7 +617,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659702167/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.56s">
+    <tr class="fail" style="animation-delay:0.6s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:53:28 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -617,7 +634,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659702924/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.6s">
+    <tr class="fail" style="animation-delay:0.64s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:53:12 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -634,7 +651,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659701286/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.64s">
+    <tr class="fail" style="animation-delay:0.68s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:52:44 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -651,7 +668,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659700432/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.68s">
+    <tr class="fail" style="animation-delay:0.72s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:52:27 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -668,7 +685,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659699920/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.72s">
+    <tr class="fail" style="animation-delay:0.76s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:51:43 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -685,7 +702,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659699186/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.76s">
+    <tr class="fail" style="animation-delay:0.8s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:51:11 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -702,7 +719,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659697972/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.8s">
+    <tr class="fail" style="animation-delay:0.84s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:50:52 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -719,7 +736,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659697273/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.84s">
+    <tr class="fail" style="animation-delay:0.88s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:50:27 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -736,7 +753,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659696608/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.88s">
+    <tr class="fail" style="animation-delay:0.92s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:50:01 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -753,7 +770,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659695905/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.92s">
+    <tr class="fail" style="animation-delay:0.96s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:49:55 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -770,7 +787,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659695076/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:0.96s">
+    <tr class="fail" style="animation-delay:1s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:49:16 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -787,7 +804,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659694412/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1s">
+    <tr class="fail" style="animation-delay:1.04s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:49:05 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -804,7 +821,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659692738/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.04s">
+    <tr class="fail" style="animation-delay:1.08s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:48:35 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -821,7 +838,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659693586/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.08s">
+    <tr class="fail" style="animation-delay:1.12s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:48:07 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -838,7 +855,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659691901/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.12s">
+    <tr class="fail" style="animation-delay:1.16s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:47:31 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -855,7 +872,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659691118/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.16s">
+    <tr class="fail" style="animation-delay:1.2s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:46:51 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -872,7 +889,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659689993/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.2s">
+    <tr class="fail" style="animation-delay:1.24s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:46:18 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -889,7 +906,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659688488/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.24s">
+    <tr class="fail" style="animation-delay:1.28s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:45:47 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -906,7 +923,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659688063/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.28s">
+    <tr class="fail" style="animation-delay:1.32s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:45:42 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -923,7 +940,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659687362/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.32s">
+    <tr class="fail" style="animation-delay:1.36s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:45:11 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -940,7 +957,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659686463/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.36s">
+    <tr class="fail" style="animation-delay:1.4000000000000001s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:44:59 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -957,7 +974,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659685749/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.4000000000000001s">
+    <tr class="fail" style="animation-delay:1.44s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:44:48 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -974,7 +991,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659684977/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.44s">
+    <tr class="fail" style="animation-delay:1.48s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:43:58 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -991,7 +1008,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659684181/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.48s">
+    <tr class="fail" style="animation-delay:1.52s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:43:43 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -1008,7 +1025,7 @@
       </td>
       <td><a class="view-btn" href="reports/develop/22659683449/index.html" target="_blank">View <span>→</span></a></td>
     </tr>
-    <tr class="fail" style="animation-delay:1.52s">
+    <tr class="fail" style="animation-delay:1.56s">
       <td><span class="badge badge-fail">FAIL</span></td>
       <td class="date-cell">2026-03-04 07:43:20 UTC</td>
       <td><span class="branch-tag">develop</span></td>
@@ -1024,23 +1041,6 @@
         </div>
       </td>
       <td><a class="view-btn" href="reports/develop/22659682588/index.html" target="_blank">View <span>→</span></a></td>
-    </tr>
-    <tr class="fail" style="animation-delay:1.56s">
-      <td><span class="badge badge-fail">FAIL</span></td>
-      <td class="date-cell">2026-03-04 07:43:08 UTC</td>
-      <td><span class="branch-tag">develop</span></td>
-      <td class="browser-cell">🌐 chrome</td>
-      <td class="pass-count">2</td>
-      <td class="fail-count ">6</td>
-      <td class="flaky-count zero">0</td>
-      <td class="duration-cell">21.8s</td>
-      <td>
-        <div class="progress-wrap">
-          <div class="progress-bar progress-fail" style="width:25%"></div>
-          <span class="progress-label">25%</span>
-        </div>
-      </td>
-      <td><a class="view-btn" href="reports/develop/22659682162/index.html" target="_blank">View <span>→</span></a></td>
     </tr></tbody>
       </table>
     </div>
@@ -1059,7 +1059,7 @@
         <div class="fh-summary-chips">
           <span class="fh-chip fh-chip-tests"><span class="fh-chip-val">8</span><span class="fh-chip-lbl">Unique Failures</span></span>
           <span class="fh-chip fh-chip-runs"><span class="fh-chip-val">49</span><span class="fh-chip-lbl">Failed Runs</span></span>
-          <span class="fh-chip fh-chip-total"><span class="fh-chip-val">242</span><span class="fh-chip-lbl">Total Failures</span></span>
+          <span class="fh-chip fh-chip-total"><span class="fh-chip-val">239</span><span class="fh-chip-lbl">Total Failures</span></span>
         </div>
       </div>
     </div>
@@ -1090,10 +1090,10 @@
           <div class="th-title">example.com has a "More information" link</div>
         </div>
         <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span><span class="trend-dot trend-fail" title="Run 22659705"></span></div>
+          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703586"></span><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span></div>
           <div class="th-stats">
-            <span class="th-stat-fail" title="Total failures">✗ 47</span>
-            <span class="th-stat-rate" title="Failure rate across archived runs">96%</span>
+            <span class="th-stat-fail" title="Total failures">✗ 46</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">94%</span>
             <span class="th-stat-date" title="Last failed">2026-03-04 10:51 UTC</span>
           </div>
           <span class="th-toggle-icon" id="thicon_example_com_has_a__More_information__lin">▸</span>
@@ -1724,8 +1724,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#29</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:46 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659688488/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:43 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -1747,7 +1747,7 @@ Call log:
               <span class="th-run-num">#30</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -1769,7 +1769,7 @@ Call log:
               <span class="th-run-num">#31</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -1790,8 +1790,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#32</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682162/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -1834,7 +1834,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#34</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              <span class="th-run-date">2026-03-04 07:41 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -1878,7 +1878,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#36</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:41 UTC</span>
+              <span class="th-run-date">2026-03-04 07:40 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -1922,7 +1922,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#38</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:40 UTC</span>
+              <span class="th-run-date">2026-03-04 07:39 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -1966,7 +1966,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#40</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:39 UTC</span>
+              <span class="th-run-date">2026-03-04 07:38 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -2032,7 +2032,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#43</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:38 UTC</span>
+              <span class="th-run-date">2026-03-04 07:37 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -2054,7 +2054,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#44</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:37 UTC</span>
+              <span class="th-run-date">2026-03-04 07:26 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -2098,28 +2098,6 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#46</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:26 UTC</span>
-              
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
-
-Locator: getByRole('link', { name: /more information/i })
-Expected: visible
-Timeout: 5000ms
-Error: element(s) not found
-
-Call log:
-[2m  - Expect "toBeVisible" with timeout 5000ms[22m
-[2m  - waiting for getByRole('link', { name: /more information/i })[22m
-
-
-  25 |   await page.goto('https://example.com');</pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#47</span>
-              <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:25 UTC</span>
               
             </div>
@@ -2147,10 +2125,10 @@ Call log:
           <div class="th-title">FAIL - wrong page title assertion</div>
         </div>
         <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span><span class="trend-dot trend-fail" title="Run 22659705"></span></div>
+          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703586"></span><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span></div>
           <div class="th-stats">
-            <span class="th-stat-fail" title="Total failures">✗ 47</span>
-            <span class="th-stat-rate" title="Failure rate across archived runs">96%</span>
+            <span class="th-stat-fail" title="Total failures">✗ 46</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">94%</span>
             <span class="th-stat-date" title="Last failed">2026-03-04 10:51 UTC</span>
           </div>
           <span class="th-toggle-icon" id="thicon_FAIL___wrong_page_title_assertion">▸</span>
@@ -2781,8 +2759,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#29</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:46 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659688488/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:43 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -2804,7 +2782,7 @@ Call log:
               <span class="th-run-num">#30</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -2826,7 +2804,7 @@ Call log:
               <span class="th-run-num">#31</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -2847,8 +2825,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#32</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682162/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -2891,7 +2869,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#34</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              <span class="th-run-date">2026-03-04 07:41 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
@@ -2935,7 +2913,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#36</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:41 UTC</span>
+              <span class="th-run-date">2026-03-04 07:40 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
@@ -2979,7 +2957,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#38</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:40 UTC</span>
+              <span class="th-run-date">2026-03-04 07:39 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
@@ -3023,7 +3001,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#40</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:39 UTC</span>
+              <span class="th-run-date">2026-03-04 07:38 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
@@ -3089,7 +3067,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#43</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:38 UTC</span>
+              <span class="th-run-date">2026-03-04 07:37 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
@@ -3111,7 +3089,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#44</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:37 UTC</span>
+              <span class="th-run-date">2026-03-04 07:26 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
@@ -3155,28 +3133,6 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#46</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:26 UTC</span>
-              
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveTitle[2m([22m[32mexpected[39m[2m)[22m failed
-
-Expected pattern: [32m/My App/[39m
-Received string:  [31m"Example Domain"[39m
-Timeout: 3000ms
-
-Call log:
-[2m  - Expect "toHaveTitle" with timeout 3000ms[22m
-[2m    7 × unexpected value "Example Domain"[22m
-
-
-  36 |   await page.goto('https://example.com');
-  37 |   // Deliberately wron</pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#47</span>
-              <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:25 UTC</span>
               
             </div>
@@ -3204,10 +3160,10 @@ Call log:
           <div class="th-title">FAIL - non-existent element on example.com</div>
         </div>
         <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span><span class="trend-dot trend-fail" title="Run 22659705"></span></div>
+          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703586"></span><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span></div>
           <div class="th-stats">
-            <span class="th-stat-fail" title="Total failures">✗ 47</span>
-            <span class="th-stat-rate" title="Failure rate across archived runs">96%</span>
+            <span class="th-stat-fail" title="Total failures">✗ 46</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">94%</span>
             <span class="th-stat-date" title="Last failed">2026-03-04 10:51 UTC</span>
           </div>
           <span class="th-toggle-icon" id="thicon_FAIL___non_existent_element_on_example_c">▸</span>
@@ -3866,8 +3822,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#29</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:46 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659688488/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:43 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -3890,7 +3846,7 @@ Call log:
               <span class="th-run-num">#30</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -3913,7 +3869,7 @@ Call log:
               <span class="th-run-num">#31</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -3935,8 +3891,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#32</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682162/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -3981,7 +3937,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#34</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              <span class="th-run-date">2026-03-04 07:41 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -4027,7 +3983,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#36</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:41 UTC</span>
+              <span class="th-run-date">2026-03-04 07:40 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -4073,7 +4029,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#38</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:40 UTC</span>
+              <span class="th-run-date">2026-03-04 07:39 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -4119,7 +4075,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#40</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:39 UTC</span>
+              <span class="th-run-date">2026-03-04 07:38 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -4188,7 +4144,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#43</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:38 UTC</span>
+              <span class="th-run-date">2026-03-04 07:37 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -4211,7 +4167,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#44</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:37 UTC</span>
+              <span class="th-run-date">2026-03-04 07:26 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
@@ -4257,29 +4213,6 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#46</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:26 UTC</span>
-              
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
-
-Locator: locator('#login-button')
-Expected: visible
-Timeout: 3000ms
-Error: element(s) not found
-
-Call log:
-[2m  - Expect "toBeVisible" with timeout 3000ms[22m
-[2m  - waiting for locator('#login-button')[22m
-
-
-  42 |   await page.goto('https://example.com');
-  43 |   // This element does not exist on the </pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#47</span>
-              <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:25 UTC</span>
               
             </div>
@@ -4308,10 +4241,10 @@ Call log:
           <div class="th-title">FAIL - wrong heading text on example.com</div>
         </div>
         <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span><span class="trend-dot trend-fail" title="Run 22659705"></span></div>
+          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703586"></span><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span></div>
           <div class="th-stats">
-            <span class="th-stat-fail" title="Total failures">✗ 47</span>
-            <span class="th-stat-rate" title="Failure rate across archived runs">96%</span>
+            <span class="th-stat-fail" title="Total failures">✗ 46</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">94%</span>
             <span class="th-stat-date" title="Last failed">2026-03-04 10:51 UTC</span>
           </div>
           <span class="th-toggle-icon" id="thicon_FAIL___wrong_heading_text_on_example_com">▸</span>
@@ -4886,8 +4819,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#29</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:46 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659688488/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:43 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -4907,7 +4840,7 @@ Call log:
               <span class="th-run-num">#30</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -4927,7 +4860,7 @@ Call log:
               <span class="th-run-num">#31</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -4946,8 +4879,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#32</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682162/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -4986,7 +4919,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#34</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              <span class="th-run-date">2026-03-04 07:41 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -5026,7 +4959,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#36</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:41 UTC</span>
+              <span class="th-run-date">2026-03-04 07:40 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -5066,7 +4999,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#38</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:40 UTC</span>
+              <span class="th-run-date">2026-03-04 07:39 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -5106,7 +5039,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#40</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:39 UTC</span>
+              <span class="th-run-date">2026-03-04 07:38 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -5166,7 +5099,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#43</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:38 UTC</span>
+              <span class="th-run-date">2026-03-04 07:37 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -5186,7 +5119,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#44</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:37 UTC</span>
+              <span class="th-run-date">2026-03-04 07:26 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -5226,26 +5159,6 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#46</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:26 UTC</span>
-              
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator:  locator('h1')
-Expected: [32m"[7mWrong[27m Domain"[39m
-Received: [31m"[7mExample[27m Domain"[39m
-Timeout:  3000ms
-
-Call log:
-[2m  - Expect "toHaveText" with timeout 3000ms[22m
-[2m  - waiting for locator('h1')[22m
-[2m    7 × locator resolved to <h1>Example Domain</h1>[2</pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#47</span>
-              <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:25 UTC</span>
               
             </div>
@@ -5271,10 +5184,10 @@ Call log:
           <div class="th-title">FLAKY - random wrong assertion 50% of the time</div>
         </div>
         <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span><span class="trend-dot trend-fail" title="Run 22659705"></span></div>
+          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703586"></span><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-fail" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-fail" title="Run 22665827"></span><span class="trend-dot trend-fail" title="Run 22665464"></span><span class="trend-dot trend-fail" title="Run 22661111"></span><span class="trend-dot trend-fail" title="Run 22660196"></span><span class="trend-dot trend-fail" title="Run 22659706"></span></div>
           <div class="th-stats">
-            <span class="th-stat-fail" title="Total failures">✗ 47</span>
-            <span class="th-stat-rate" title="Failure rate across archived runs">96%</span>
+            <span class="th-stat-fail" title="Total failures">✗ 46</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">94%</span>
             <span class="th-stat-date" title="Last failed">2026-03-04 10:51 UTC</span>
           </div>
           <span class="th-toggle-icon" id="thicon_FLAKY___random_wrong_assertion_50__of_th">▸</span>
@@ -5778,8 +5691,8 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#29</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:46 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659688488/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:43 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -5796,7 +5709,7 @@ Call log:</pre>
               <span class="th-run-num">#30</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659683449/index.html" target="_blank">Report →</a>
+              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -5813,7 +5726,7 @@ Call log:</pre>
               <span class="th-run-num">#31</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682588/index.html" target="_blank">Report →</a>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -5829,8 +5742,8 @@ Call log:</pre>
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#32</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682162/index.html" target="_blank">Report →</a>
+              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
 
@@ -5863,17 +5776,18 @@ Call log:</pre>
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#34</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:42 UTC</span>
+              <span class="th-run-date">2026-03-04 07:41 UTC</span>
               
             </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
 
-Locator: locator('p').first()
-Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
-Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
-Timeout: 5000ms
+Locator:  locator('p').first()
+Expected: [32m"This domain [7mdoes not exist[27m."[39m
+Received: [31m"This domain [7mis for use in documentation examples without needing permission. Avoid use in operations[27m."[39m
+Timeout:  3000ms
 
-Call log:</pre>
+Call log:
+[2m  - Expect "toHaveText" with timeout </pre>
           </div>
           <div class="th-run ">
             <div class="th-run-meta">
@@ -5898,7 +5812,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#36</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:41 UTC</span>
+              <span class="th-run-date">2026-03-04 07:40 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -5934,24 +5848,6 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#38</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:40 UTC</span>
-              
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator:  locator('p').first()
-Expected: [32m"This domain [7mdoes not exist[27m."[39m
-Received: [31m"This domain [7mis for use in documentation examples without needing permission. Avoid use in operations[27m."[39m
-Timeout:  3000ms
-
-Call log:
-[2m  - Expect "toHaveText" with timeout </pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#39</span>
-              <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:39 UTC</span>
               
             </div>
@@ -5967,7 +5863,7 @@ Call log:</pre>
           <div class="th-run ">
             <div class="th-run-meta">
               <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#40</span>
+              <span class="th-run-num">#39</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:39 UTC</span>
               
@@ -5981,6 +5877,23 @@ Timeout:  3000ms
 
 Call log:
 [2m  - Expect "toHaveText" with timeout </pre>
+          </div>
+          <div class="th-run ">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">#40</span>
+              <span class="branch-tag">develop</span>
+              <span class="th-run-date">2026-03-04 07:38 UTC</span>
+              
+            </div>
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+Locator: locator('p').first()
+Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
+Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
+Timeout: 5000ms
+
+Call log:</pre>
           </div>
           <div class="th-run ">
             <div class="th-run-meta">
@@ -6007,21 +5920,22 @@ Call log:</pre>
               <span class="th-run-date">2026-03-04 07:38 UTC</span>
               
             </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
 
-Locator: locator('p').first()
-Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
-Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
-Timeout: 5000ms
+Locator:  locator('p').first()
+Expected: [32m"This domain [7mdoes not exist[27m."[39m
+Received: [31m"This domain [7mis for use in documentation examples without needing permission. Avoid use in operations[27m."[39m
+Timeout:  3000ms
 
-Call log:</pre>
+Call log:
+[2m  - Expect "toHaveText" with timeout </pre>
           </div>
           <div class="th-run ">
             <div class="th-run-meta">
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#43</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:38 UTC</span>
+              <span class="th-run-date">2026-03-04 07:37 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -6039,7 +5953,7 @@ Call log:
               <span class="th-run-badge">FAIL</span>
               <span class="th-run-num">#44</span>
               <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:37 UTC</span>
+              <span class="th-run-date">2026-03-04 07:26 UTC</span>
               
             </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
@@ -6060,24 +5974,6 @@ Call log:
               <span class="th-run-date">2026-03-04 07:26 UTC</span>
               
             </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator:  locator('p').first()
-Expected: [32m"This domain [7mdoes not exist[27m."[39m
-Received: [31m"This domain [7mis for use in documentation examples without needing permission. Avoid use in operations[27m."[39m
-Timeout:  3000ms
-
-Call log:
-[2m  - Expect "toHaveText" with timeout </pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#46</span>
-              <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-04 07:26 UTC</span>
-              
-            </div>
             <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
 
 Locator: locator('p').first()
@@ -6090,7 +5986,7 @@ Call log:</pre>
           <div class="th-run ">
             <div class="th-run-meta">
               <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#47</span>
+              <span class="th-run-num">#46</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:25 UTC</span>
               
@@ -6107,6 +6003,156 @@ Call log:</pre>
         </div>
       </div>
     </div>
+    <div class="th-card" id="thcard_example_com_page_loads_and_has_content" data-branch="" data-title="example.com page loads and has content">
+      <div class="th-card-header" onclick="toggleTestHistory('example_com_page_loads_and_has_content')">
+        <div class="th-card-left">
+          <span class="th-severity severity-medium">Medium</span>
+          <div class="th-title">example.com page loads and has content</div>
+        </div>
+        <div class="th-card-right">
+          <div class="th-trend"><span class="trend-dot trend-fail" title="Run 22703586"></span><span class="trend-dot trend-fail" title="Run 22703581"></span><span class="trend-dot trend-fail" title="Run 22703475"></span><span class="trend-dot trend-pass" title="Run 22666047"></span><span class="trend-dot trend-pass" title="Run 22665839"></span><span class="trend-dot trend-pass" title="Run 22665827"></span><span class="trend-dot trend-pass" title="Run 22665464"></span><span class="trend-dot trend-pass" title="Run 22661111"></span><span class="trend-dot trend-pass" title="Run 22660196"></span><span class="trend-dot trend-pass" title="Run 22659706"></span></div>
+          <div class="th-stats">
+            <span class="th-stat-fail" title="Total failures">✗ 3</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">6%</span>
+            <span class="th-stat-date" title="Last failed">2026-03-05 05:24 UTC</span>
+          </div>
+          <span class="th-toggle-icon" id="thicon_example_com_page_loads_and_has_content">▸</span>
+        </div>
+      </div>
+      <div class="th-card-body" id="thbody_example_com_page_loads_and_has_content" style="display:none">
+        <div class="th-timeline-label">Run-by-run history (newest first)</div>
+        <div class="th-timeline">
+          
+          <div class="th-run th-run-latest">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">Latest</span>
+              <span class="branch-tag">develop</span>
+              <span class="th-run-date">2026-03-05 05:24 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22703586307/index.html" target="_blank">Report →</a>
+            </div>
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+Locator: locator('p').first()
+Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
+Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
+Timeout: 5000ms
+
+Call log:</pre>
+          </div>
+          <div class="th-run ">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">#2</span>
+              <span class="branch-tag">develop</span>
+              <span class="th-run-date">2026-03-05 05:21 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22703581171/index.html" target="_blank">Report →</a>
+            </div>
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+Locator: locator('p').first()
+Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
+Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
+Timeout: 5000ms
+
+Call log:</pre>
+          </div>
+          <div class="th-run ">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">#3</span>
+              <span class="branch-tag">develop</span>
+              <span class="th-run-date">2026-03-05 05:17 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22703475018/index.html" target="_blank">Report →</a>
+            </div>
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+Locator: locator('p').first()
+Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
+Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
+Timeout: 5000ms
+
+Call log:</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="th-card" id="thcard_FLAKY___random_assertion_failure" data-branch="" data-title="FLAKY - random assertion failure">
+      <div class="th-card-header" onclick="toggleTestHistory('FLAKY___random_assertion_failure')">
+        <div class="th-card-left">
+          <span class="th-severity severity-medium">Medium</span>
+          <div class="th-title">FLAKY - random assertion failure</div>
+        </div>
+        <div class="th-card-right">
+          <div class="th-trend"><span class="trend-dot trend-fail" title="Run 22703586"></span><span class="trend-dot trend-fail" title="Run 22703581"></span><span class="trend-dot trend-fail" title="Run 22703475"></span><span class="trend-dot trend-pass" title="Run 22666047"></span><span class="trend-dot trend-pass" title="Run 22665839"></span><span class="trend-dot trend-pass" title="Run 22665827"></span><span class="trend-dot trend-pass" title="Run 22665464"></span><span class="trend-dot trend-pass" title="Run 22661111"></span><span class="trend-dot trend-pass" title="Run 22660196"></span><span class="trend-dot trend-pass" title="Run 22659706"></span></div>
+          <div class="th-stats">
+            <span class="th-stat-fail" title="Total failures">✗ 3</span>
+            <span class="th-stat-rate" title="Failure rate across archived runs">6%</span>
+            <span class="th-stat-date" title="Last failed">2026-03-05 05:24 UTC</span>
+          </div>
+          <span class="th-toggle-icon" id="thicon_FLAKY___random_assertion_failure">▸</span>
+        </div>
+      </div>
+      <div class="th-card-body" id="thbody_FLAKY___random_assertion_failure" style="display:none">
+        <div class="th-timeline-label">Run-by-run history (newest first)</div>
+        <div class="th-timeline">
+          
+          <div class="th-run th-run-latest">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">Latest</span>
+              <span class="branch-tag">develop</span>
+              <span class="th-run-date">2026-03-05 05:24 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22703586307/index.html" target="_blank">Report →</a>
+            </div>
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
+
+Locator:  locator('p').first()
+Expected: [32m"This domain [7mdoes not exist[27m."[39m
+Received: [31m"This domain [7mis for use in documentation examples without needing permission. Avoid use in operations[27m."[39m
+Timeout:  3000ms
+
+Call log:
+[2m  - Expect "toHaveText" with timeout </pre>
+          </div>
+          <div class="th-run ">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">#2</span>
+              <span class="branch-tag">develop</span>
+              <span class="th-run-date">2026-03-05 05:21 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22703581171/index.html" target="_blank">Report →</a>
+            </div>
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+Locator: locator('p').first()
+Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
+Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
+Timeout: 5000ms
+
+Call log:</pre>
+          </div>
+          <div class="th-run ">
+            <div class="th-run-meta">
+              <span class="th-run-badge">FAIL</span>
+              <span class="th-run-num">#3</span>
+              <span class="branch-tag">develop</span>
+              <span class="th-run-date">2026-03-05 05:17 UTC</span>
+              <a class="view-btn view-btn-sm" href="reports/develop/22703475018/index.html" target="_blank">Report →</a>
+            </div>
+            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
+
+Locator:  locator('p').first()
+Expected: [32m"This domain [7mdoes not exist[27m."[39m
+Received: [31m"This domain [7mis for use in documentation examples without needing permission. Avoid use in operations[27m."[39m
+Timeout:  3000ms
+
+Call log:
+[2m  - Expect "toHaveText" with timeout </pre>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="th-card" id="thcard_FLAKY___random_failure_50__of_the_time" data-branch="" data-title="FLAKY - random failure 50% of the time">
       <div class="th-card-header" onclick="toggleTestHistory('FLAKY___random_failure_50__of_the_time')">
         <div class="th-card-left">
@@ -6114,7 +6160,7 @@ Call log:</pre>
           <div class="th-title">FLAKY - random failure 50% of the time</div>
         </div>
         <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-pass" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-pass" title="Run 22665827"></span><span class="trend-dot trend-pass" title="Run 22665464"></span><span class="trend-dot trend-pass" title="Run 22661111"></span><span class="trend-dot trend-pass" title="Run 22660196"></span><span class="trend-dot trend-pass" title="Run 22659706"></span><span class="trend-dot trend-pass" title="Run 22659705"></span></div>
+          <div class="th-trend"><span class="trend-dot trend-pass" title="Run 22703586"></span><span class="trend-dot trend-pass" title="Run 22703581"></span><span class="trend-dot trend-pass" title="Run 22703475"></span><span class="trend-dot trend-pass" title="Run 22666047"></span><span class="trend-dot trend-fail" title="Run 22665839"></span><span class="trend-dot trend-pass" title="Run 22665827"></span><span class="trend-dot trend-pass" title="Run 22665464"></span><span class="trend-dot trend-pass" title="Run 22661111"></span><span class="trend-dot trend-pass" title="Run 22660196"></span><span class="trend-dot trend-pass" title="Run 22659706"></span></div>
           <div class="th-stats">
             <span class="th-stat-fail" title="Total failures">✗ 3</span>
             <span class="th-stat-rate" title="Failure rate across archived runs">6%</span>
@@ -6171,7 +6217,7 @@ Call log:</pre>
               <span class="th-run-num">#3</span>
               <span class="branch-tag">develop</span>
               <span class="th-run-date">2026-03-04 07:43 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22659682162/index.html" target="_blank">Report →</a>
+              
             </div>
             <pre class="th-error">Error: Simulated transient failure — this test is intentionally flaky
 
@@ -6187,125 +6233,10 @@ Call log:</pre>
         </div>
       </div>
     </div>
-    <div class="th-card" id="thcard_example_com_page_loads_and_has_content" data-branch="" data-title="example.com page loads and has content">
-      <div class="th-card-header" onclick="toggleTestHistory('example_com_page_loads_and_has_content')">
-        <div class="th-card-left">
-          <span class="th-severity severity-medium">Medium</span>
-          <div class="th-title">example.com page loads and has content</div>
-        </div>
-        <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-fail" title="Run 22703581"></span><span class="trend-dot trend-fail" title="Run 22703475"></span><span class="trend-dot trend-pass" title="Run 22666047"></span><span class="trend-dot trend-pass" title="Run 22665839"></span><span class="trend-dot trend-pass" title="Run 22665827"></span><span class="trend-dot trend-pass" title="Run 22665464"></span><span class="trend-dot trend-pass" title="Run 22661111"></span><span class="trend-dot trend-pass" title="Run 22660196"></span><span class="trend-dot trend-pass" title="Run 22659706"></span><span class="trend-dot trend-pass" title="Run 22659705"></span></div>
-          <div class="th-stats">
-            <span class="th-stat-fail" title="Total failures">✗ 2</span>
-            <span class="th-stat-rate" title="Failure rate across archived runs">4%</span>
-            <span class="th-stat-date" title="Last failed">2026-03-05 05:21 UTC</span>
-          </div>
-          <span class="th-toggle-icon" id="thicon_example_com_page_loads_and_has_content">▸</span>
-        </div>
-      </div>
-      <div class="th-card-body" id="thbody_example_com_page_loads_and_has_content" style="display:none">
-        <div class="th-timeline-label">Run-by-run history (newest first)</div>
-        <div class="th-timeline">
-          
-          <div class="th-run th-run-latest">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">Latest</span>
-              <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-05 05:21 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22703581171/index.html" target="_blank">Report →</a>
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator: locator('p').first()
-Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
-Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
-Timeout: 5000ms
-
-Call log:</pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#2</span>
-              <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-05 05:17 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22703475018/index.html" target="_blank">Report →</a>
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator: locator('p').first()
-Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
-Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
-Timeout: 5000ms
-
-Call log:</pre>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="th-card" id="thcard_FLAKY___random_assertion_failure" data-branch="" data-title="FLAKY - random assertion failure">
-      <div class="th-card-header" onclick="toggleTestHistory('FLAKY___random_assertion_failure')">
-        <div class="th-card-left">
-          <span class="th-severity severity-medium">Medium</span>
-          <div class="th-title">FLAKY - random assertion failure</div>
-        </div>
-        <div class="th-card-right">
-          <div class="th-trend"><span class="trend-dot trend-fail" title="Run 22703581"></span><span class="trend-dot trend-fail" title="Run 22703475"></span><span class="trend-dot trend-pass" title="Run 22666047"></span><span class="trend-dot trend-pass" title="Run 22665839"></span><span class="trend-dot trend-pass" title="Run 22665827"></span><span class="trend-dot trend-pass" title="Run 22665464"></span><span class="trend-dot trend-pass" title="Run 22661111"></span><span class="trend-dot trend-pass" title="Run 22660196"></span><span class="trend-dot trend-pass" title="Run 22659706"></span><span class="trend-dot trend-pass" title="Run 22659705"></span></div>
-          <div class="th-stats">
-            <span class="th-stat-fail" title="Total failures">✗ 2</span>
-            <span class="th-stat-rate" title="Failure rate across archived runs">4%</span>
-            <span class="th-stat-date" title="Last failed">2026-03-05 05:21 UTC</span>
-          </div>
-          <span class="th-toggle-icon" id="thicon_FLAKY___random_assertion_failure">▸</span>
-        </div>
-      </div>
-      <div class="th-card-body" id="thbody_FLAKY___random_assertion_failure" style="display:none">
-        <div class="th-timeline-label">Run-by-run history (newest first)</div>
-        <div class="th-timeline">
-          
-          <div class="th-run th-run-latest">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">Latest</span>
-              <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-05 05:21 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22703581171/index.html" target="_blank">Report →</a>
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator: locator('p').first()
-Expected substring: [32m"[7millustr[27mati[7mve[27m examples"[39m
-Received string:    [31m"[7mThis domain is for use in document[27mati[7mon[27m examples[7m without needing permission. Avoid use in operations.[27m"[39m
-Timeout: 5000ms
-
-Call log:</pre>
-          </div>
-          <div class="th-run ">
-            <div class="th-run-meta">
-              <span class="th-run-badge">FAIL</span>
-              <span class="th-run-num">#2</span>
-              <span class="branch-tag">develop</span>
-              <span class="th-run-date">2026-03-05 05:17 UTC</span>
-              <a class="view-btn view-btn-sm" href="reports/develop/22703475018/index.html" target="_blank">Report →</a>
-            </div>
-            <pre class="th-error">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator:  locator('p').first()
-Expected: [32m"This domain [7mdoes not exist[27m."[39m
-Received: [31m"This domain [7mis for use in documentation examples without needing permission. Avoid use in operations[27m."[39m
-Timeout:  3000ms
-
-Call log:
-[2m  - Expect "toHaveText" with timeout </pre>
-          </div>
-        </div>
-      </div>
-    </div>
     </div>
   </div>
 
-    <footer>Generated by playwright-demo-js · 2026-03-05 05:21:36 UTC</footer>
+    <footer>Generated by playwright-demo-js · 2026-03-05 05:24:02 UTC</footer>
   </div>
 
   <script>

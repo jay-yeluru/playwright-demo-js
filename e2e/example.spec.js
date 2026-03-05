@@ -23,7 +23,9 @@ test('example.com renders the correct heading @smoke', async ({ page }) => {
 
 test('example.com page loads and has content', async ({ page }) => {
   await page.goto('https://example.com');
-  await expect(page.locator('p').first()).toContainText('illustrative examples');
+  // Check for the h1 which is stable, not the paragraph text which changes
+  await expect(page.locator('h1')).toBeVisible();
+  await expect(page.locator('p').first()).toBeVisible();
 });
 
 // ─────────────────────────────────────────────────────────────
@@ -78,9 +80,9 @@ test('FLAKY - random assertion failure', async ({ page }) => {
   await page.goto('https://example.com');
 
   if (Math.random() < 0.5) {
-    // Wrong: page has text that is different
-    await expect(page.locator('p').first()).toHaveText('This domain does not exist.', { timeout: 3000 });
+    // Wrong: element that doesn't exist
+    await expect(page.locator('#nonexistent-button')).toBeVisible({ timeout: 3000 });
   } else {
-    await expect(page.locator('p').first()).toContainText('illustrative examples');
+    await expect(page.locator('h1')).toBeVisible();
   }
 });

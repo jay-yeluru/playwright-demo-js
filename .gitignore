@@ -1,13 +1,24 @@
+# Dependencies
 node_modules/
-/allure-report/
-/allure-results/
-/my-allure-results/
-/test-results/
-/playwright-report/
-/playwright/.cache/
-/test-results/
-/playwright-report/
-/playwright/.cache/
+
+# Allure Reports
+allure-report/
+allure-results/
+my-allure-results/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
 test-artifacts/
 reports/
-test-artifacts/
+
+# macOS
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
